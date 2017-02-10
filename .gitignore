@@ -1,0 +1,10 @@
+*.class
+*.pyc
+*.pyo
+.project
+.pydevproject
+local_settings.py
+*.*~
+export/media/*
+export/static/*
+export/wsgi.py
