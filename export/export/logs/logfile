@@ -1,0 +1,609 @@
+[13/Feb/2017 15:46:21] ERROR [django.request:213] Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/export/urls.py", line 3, in <module>
+    from nutep.views import index_page
+  File "/home/picasso/git/export/export/nutep/views.py", line 12
+SyntaxError: Non-ASCII character '\xd0' in file /home/picasso/git/export/export/nutep/views.py on line 12, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+[13/Feb/2017 15:49:26] ERROR [django.request:213] Internal Server Error: /admin/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 213, in wrapper
+    return self.admin_view(view, cacheable)(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 91, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 89, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 195, in inner
+    return self.login(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 89, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 326, in login
+    return login(request, **defaults)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/debug.py", line 75, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 91, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 89, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/views.py", line 53, in login
+    current_site = get_current_site(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/sites/models.py", line 92, in get_current_site
+    current_site = Site.objects.get_current()
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/sites/models.py", line 21, in get_current
+    raise ImproperlyConfigured("You're using the Django \"sites framework\" without having set the SITE_ID setting. Create a site in your database and set the SITE_ID setting to fix this error.")
+ImproperlyConfigured: You're using the Django "sites framework" without having set the SITE_ID setting. Create a site in your database and set the SITE_ID setting to fix this error.
+[13/Feb/2017 15:51:17] ERROR [django.request:213] Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 79, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 57, in resolve_template
+    return loader.get_template(template)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 145, in get_template
+    template, origin = find_template(template_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 138, in find_template
+    raise TemplateDoesNotExist(name)
+TemplateDoesNotExist: registration/login.html
+[14/Feb/2017 10:19:30] ERROR [django.request:213] Internal Server Error: /services/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 16, in services
+    return render(request, 'base.html', context)
+  File "/usr/local/lib/python2.7/dist-packages/django/shortcuts/__init__.py", line 44, in render
+    return HttpResponse(loader.render_to_string(*args, **kwargs),
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 169, in render_to_string
+    t = get_template(template_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 145, in get_template
+    template, origin = find_template(template_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 134, in find_template
+    source, display_name = loader(name, dirs)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 42, in __call__
+    return self.load_template(template_name, template_dirs)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 48, in load_template
+    template = get_template_from_string(source, origin, template_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 156, in get_template_from_string
+    return Template(source, origin, name)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 125, in __init__
+    self.nodelist = compile_string(template_string, origin)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 153, in compile_string
+    return parser.parse()
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 246, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 346, in compile_filter
+    return FilterExpression(token, self)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 563, in __init__
+    "from '%s'" % (token[upto:], token))
+TemplateSyntaxError: Could not parse the remainder: ' logout' from 'url logout'
+[14/Feb/2017 14:31:40] ERROR [django.request:213] Internal Server Error: /admin/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/export/urls.py", line 8, in <module>
+    admin.autodiscover()
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/nutep/admin.py", line 7, in <module>
+    admin.site.register(LogEntry,LogEntryAdmin)
+NameError: name 'LogEntry' is not defined
+[15/Feb/2017 10:15:51] ERROR [django.request:213] Internal Server Error: /services/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 19, in services
+    return render(request, 'base.html', context)
+  File "/usr/local/lib/python2.7/dist-packages/django/shortcuts/__init__.py", line 44, in render
+    return HttpResponse(loader.render_to_string(*args, **kwargs),
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 176, in render_to_string
+    return t.render(context_instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 426, in render
+    raise e
+NoReverseMatch: Reverse for 'upload' with arguments '()' and keyword arguments '{}' not found.
+[15/Feb/2017 11:06:58] ERROR [django.request:213] Internal Server Error: /upload/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 40, in upload_file
+    return HttpResponseRedirect(reverse('service'))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 502, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 422, in _reverse_with_prefix
+    "arguments '%s' not found." % (lookup_view_s, args, kwargs))
+NoReverseMatch: Reverse for 'service' with arguments '()' and keyword arguments '{}' not found.
+[15/Feb/2017 13:09:37] ERROR [django.request:213] Internal Server Error: /services/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 37, in services
+    return render(request, 'base.html', context)
+  File "/usr/local/lib/python2.7/dist-packages/django/shortcuts/__init__.py", line 44, in render
+    return HttpResponse(loader.render_to_string(*args, **kwargs),
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 176, in render_to_string
+    return t.render(context_instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 1178, in render
+    _dict = func(*resolved_args, **resolved_kwargs)
+  File "/home/picasso/git/export/export/nutep/templatetags/paginator.py", line 64, in bootstrap_paginator
+    base_result = base_paginator(context)
+  File "/home/picasso/git/export/export/nutep/templatetags/paginator.py", line 12, in base_paginator
+    paginator = context['paginator']
+  File "/usr/local/lib/python2.7/dist-packages/django/template/context.py", line 54, in __getitem__
+    raise KeyError(key)
+KeyError: 'paginator'
+[15/Feb/2017 15:18:46] ERROR [django.request:213] Internal Server Error: /services/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/export/urls.py", line 8, in <module>
+    admin.autodiscover()
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/nutep/admin.py", line 8, in <module>
+    admin.site.register(UploadedTemplate, UploadedTemplateAdmin)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    validate(admin_class, model)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 38, in validate
+    % (cls.__name__, idx, field, cls.__name__, model._meta.object_name))
+ImproperlyConfigured: UploadedTemplateAdmin.list_display[1], 'date' is not a callable or an attribute of 'UploadedTemplateAdmin' or found in the model 'UploadedTemplate'.
+[15/Feb/2017 15:19:31] ERROR [django.request:213] Internal Server Error: /services/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/export/urls.py", line 8, in <module>
+    admin.autodiscover()
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/nutep/admin.py", line 8, in <module>
+    admin.site.register(UploadedTemplate, UploadedTemplateAdmin)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    validate(admin_class, model)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 38, in validate
+    % (cls.__name__, idx, field, cls.__name__, model._meta.object_name))
+ImproperlyConfigured: UploadedTemplateAdmin.list_display[1], 'history__date' is not a callable or an attribute of 'UploadedTemplateAdmin' or found in the model 'UploadedTemplate'.
+[15/Feb/2017 15:19:32] ERROR [django.request:213] Internal Server Error: /services/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/export/urls.py", line 8, in <module>
+    admin.autodiscover()
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/__init__.py", line 29, in autodiscover
+    import_module('%s.admin' % app)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/nutep/admin.py", line 8, in <module>
+    admin.site.register(UploadedTemplate, UploadedTemplateAdmin)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 92, in register
+    validate(admin_class, model)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/validation.py", line 38, in validate
+    % (cls.__name__, idx, field, cls.__name__, model._meta.object_name))
+ImproperlyConfigured: UploadedTemplateAdmin.list_display[1], 'history__date' is not a callable or an attribute of 'UploadedTemplateAdmin' or found in the model 'UploadedTemplate'.
+[15/Feb/2017 15:27:43] ERROR [django.request:213] Internal Server Error: /admin/nutep/uploadedtemplate/6/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 399, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 91, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 89, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 196, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 91, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/transaction.py", line 224, in inner
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 1087, in change_view
+    self.save_model(request, new_object, form, True)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 742, in save_model
+    obj.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/lib/python2.7/dist-packages/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/home/picasso/git/export/export/nutep/signals.py", line 6, in prepare_history
+    if instance.client.history:
+AttributeError: 'UploadedTemplate' object has no attribute 'client'
+[15/Feb/2017 15:28:31] ERROR [django.request:213] Internal Server Error: /admin/nutep/uploadedtemplate/6/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 399, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 91, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/cache.py", line 89, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/sites.py", line 196, in inner
+    return view(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 91, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/transaction.py", line 224, in inner
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 1087, in change_view
+    self.save_model(request, new_object, form, True)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/admin/options.py", line 742, in save_model
+    obj.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/lib/python2.7/dist-packages/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/home/picasso/git/export/export/nutep/signals.py", line 6, in prepare_history
+    HistoryMeta.prepare(instance.history, instance.user_id)
+AttributeError: 'UploadedTemplate' object has no attribute 'user_id'
+[15/Feb/2017 16:37:09] ERROR [django.request:213] Internal Server Error: /services/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 55, in services
+    return render(request, 'base.html', context)
+  File "/usr/local/lib/python2.7/dist-packages/django/shortcuts/__init__.py", line 44, in render
+    return HttpResponse(loader.render_to_string(*args, **kwargs),
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 176, in render_to_string
+    return t.render(context_instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 186, in render
+    nodelist.append(node.render(context))
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    output = self.filter_expression.resolve(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 571, in resolve
+    obj = self.var.resolve(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 721, in resolve
+    value = self._resolve_lookup(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 772, in _resolve_lookup
+    current = current()
+  File "/home/picasso/git/export/export/nutep/models.py", line 66, in last_event
+    return self.history.all().order_by("-date").first()
+AttributeError: 'QuerySet' object has no attribute 'first'
+[15/Feb/2017 16:40:11] ERROR [django.request:213] Internal Server Error: /services/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 55, in services
+    return render(request, 'base.html', context)
+  File "/usr/local/lib/python2.7/dist-packages/django/shortcuts/__init__.py", line 44, in render
+    return HttpResponse(loader.render_to_string(*args, **kwargs),
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 176, in render_to_string
+    return t.render(context_instance)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 186, in render
+    nodelist.append(node.render(context))
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    output = self.filter_expression.resolve(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 571, in resolve
+    obj = self.var.resolve(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 721, in resolve
+    value = self._resolve_lookup(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 772, in _resolve_lookup
+    current = current()
+  File "/home/picasso/git/export/export/nutep/models.py", line 67, in last_event
+    return self.history.all().order_by("-date")[:1].get()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 361, in get
+    num = len(clone)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 85, in __len__
+    self._result_cache = list(self.iterator())
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 291, in iterator
+    for row in compiler.results_iter():
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 763, in results_iter
+    for rows in self.execute_sql(MULTI):
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 808, in execute_sql
+    sql, params = self.as_sql()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 72, in as_sql
+    ordering, ordering_group_by = self.get_ordering()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 401, in get_ordering
+    self.query.model._meta, default_order=asc):
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 427, in find_ordering_name
+    field, col, alias, joins, opts = self._setup_joins(pieces, opts, alias)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 460, in _setup_joins
+    opts, alias, False)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/query.py", line 1316, in setup_joins
+    "Choices are: %s" % (name, ", ".join(names)))
+FieldError: Cannot resolve keyword 'date' into field. Choices are: content_type, data, id, is_created, object_id, uploadedtemplate, user
+[15/Feb/2017 16:41:55] ERROR [django.request:213] Internal Server Error: /upload/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 83, in upload_file
+    template.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/lib/python2.7/dist-packages/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/home/picasso/git/export/export/nutep/signals.py", line 7, in prepare_history
+    HistoryMeta.objects.create(data=datetime.datetime.now(), content_object=instance, is_created=created)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 137, in create
+    return self.get_query_set().create(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 375, in create
+    obj = self.model(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 367, in __init__
+    raise TypeError("'%s' is an invalid keyword argument for this function" % kwargs.keys()[0])
+TypeError: 'data' is an invalid keyword argument for this function
+[15/Feb/2017 18:13:20] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'EstateDeleteView' object has no attribute 'user'
+[15/Feb/2017 18:13:33] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'EstateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:49:08] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'TemplateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:49:14] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'TemplateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:54:41] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'TemplateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:54:44] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'TemplateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:54:45] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'TemplateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:54:45] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'TemplateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:54:46] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'TemplateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:54:46] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'TemplateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:54:46] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'TemplateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:54:46] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 19, in _wrapped_view
+    if test_func(request.user):
+AttributeError: 'TemplateDeleteView' object has no attribute 'user'
+[16/Feb/2017 08:57:54] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 23, in dispatch
+    return super(DeleteMixin, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/edit.py", line 219, in post
+    return self.delete(*args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 25, in delete
+    self.object = self.get_object()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/detail.py", line 29, in get_object
+    queryset = self.get_queryset()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/detail.py", line 67, in get_queryset
+    'cls': self.__class__.__name__
+ImproperlyConfigured: TemplateDeleteView is missing a queryset. Define TemplateDeleteView.model, TemplateDeleteView.queryset, or override TemplateDeleteView.get_object().
+[16/Feb/2017 08:57:59] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 23, in dispatch
+    return super(DeleteMixin, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/detail.py", line 98, in get
+    self.object = self.get_object()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/detail.py", line 29, in get_object
+    queryset = self.get_queryset()
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/detail.py", line 67, in get_queryset
+    'cls': self.__class__.__name__
+ImproperlyConfigured: TemplateDeleteView is missing a queryset. Define TemplateDeleteView.model, TemplateDeleteView.queryset, or override TemplateDeleteView.get_object().
+[16/Feb/2017 08:58:46] ERROR [django.request:213] Internal Server Error: /deletetemplate/13
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 79, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 55, in resolve_template
+    return loader.select_template(template)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 193, in select_template
+    raise TemplateDoesNotExist(', '.join(not_found))
+TemplateDoesNotExist: nutep/uploadedtemplate_confirm_delete.html
+[16/Feb/2017 09:07:33] ERROR [django.request:213] Internal Server Error: /services/
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 41, in services
+    template_list = UploadedTemplate.objects.filter(history__user=request.user).distinct()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/models.py", line 28, in get_query_set
+    return super(BaseModelManager, self).get_queryset().filter(deleted=False)
+AttributeError: 'super' object has no attribute 'get_queryset'
