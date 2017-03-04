@@ -5265,3 +5265,11 @@ $(function() {
 });
 
 
+$(function() {
+	$('.datarow').on('dblclick', function (e) {
+	    e.preventDefault();
+	    var link = $( this ).data("link");
+	    window.location.href = link;	    
+	});
+});
+

@@ -1,10 +1,12 @@
-from django.conf.urls import patterns, include, url
 from django.conf import settings
-from nutep.views import services, landing, upload_file, TemplateDeleteView
+from django.conf.urls import patterns, include, url
+from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
+from nutep.views import landing, upload_file, TemplateDeleteView,\
+get_template_status, ServiceView, TemplateDetailView
 
-from django.contrib import admin
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -22,9 +24,11 @@ urlpatterns = patterns('',
 
 urlpatterns += patterns('', 
     url(r'^$', landing, name='landing'),
-    url(r'^services/$', services, name='services'),
+    url(r'^services/$', ServiceView.as_view(), name='services'),
     url(r'^upload/$', upload_file, name='upload'),
     url(r'^deletetemplate/(?P<pk>[0-9]+)$', TemplateDeleteView.as_view(), name='delete-template'),  
+    url(r'^gettemplate/(?P<pk>[0-9]+)$', get_template_status, name='get-template'),
+    url(r'^templatedetails/(?P<pk>[0-9]+)$', TemplateDetailView.as_view(), name='template-details'),
 )
 
 

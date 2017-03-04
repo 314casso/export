@@ -60,9 +60,28 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i> Сервисы <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{% url services %}">Поручения</a></li>                      
+                      <li><a href="{% url services %}"> Заявки</a></li>                      
                     </ul>
                   </li>                  
+                  
+                  <li><a><i class="fa fa-ship"></i> Рейсы <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                    	{% for vessel in vessels  %}
+                        
+                        <li><a> {{ vessel }}<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                          	{% for voyage in vessel.voyages.all  %}
+                            <li class="sub_menu"><a href="level2.html"> {{ voyage }}</a>
+                            </li>
+                            {% endfor %}                            
+                          </ul>
+                        </li>
+                        
+                        {% endfor %}
+                        
+                    </ul>
+                  </li>
+                  
                   <li><a><i class="fa fa-info-circle"></i>Информация <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="fixed_sidebar.html">Документация</a></li>
@@ -110,6 +129,7 @@
         <!-- /top navigation -->
 
         <!-- page content -->
+        {% block content %}
         <div class="right_col" role="main">
         
         	<div class="page-title">
@@ -130,7 +150,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Загруженные шаблоны <small>управление и статус обработки</small></h2>
+                    <h2>Заявки <small>управление и статус обработки</small></h2>
                                        
                     
                     <ul class="nav navbar-right panel_toolbox">
@@ -157,15 +177,16 @@
                         <tr>
                           <th>ID</th>
                           <th>Действие</th>
-                          <th>Создано</th>
+                          <th>Обновлено</th>
+                          <th>Рейс</th>
                           <th>Шаблон</th>
                           <th>Статус</th>                          
                         </tr>
                       </thead>
                       <tbody>
                       {% for template in templates %}
-                        <tr id="row-template-{{ template.id }}">
-                          <th scope="row">{{ template.id }}</th>
+                        <tr class="datarow" id="row-template-{{ template.id }}"  data-link="{% url template-details template.id %}">
+                          <th scope="row"><a href="{% url template-details template.id %}">{{ template.id }}</a></th>
                           
                           <td>
                             <div class="dropdown">
@@ -181,10 +202,10 @@
 							</div> 
                           </td>
                           
-                          <td>
-                          {{ template.last_event.date|date:"d.m.Y H:i" }}
-                          {{ template.last_event.user }}
+                          <td title="{{ template.last_event.user }}">
+                          {{ template.last_event.date|date:"d.m.Y H:i" }}                          
                           </td>
+                          <td>{{ template.voyage }}</td>
                           <td>{{ template.filename }}</td>
                           <td>{{ template.get_status_display }}</td>                          
                         </tr>                      
@@ -210,6 +231,7 @@
           
           
         </div>
+        {% endblock content %}
         <!-- /page content -->
 
         <!-- footer content -->

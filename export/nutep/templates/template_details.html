@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load paginator %}
+{% block content %}
+
+<div class="right_col" role="main">
+        
+        	<div class="page-title">
+              <div class="title_left">
+                <h3>Заявка <small>{{ template.pk }}</small></h3>
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+		
+		  <form enctype="multipart/form-data" action="{% url upload %}" method="post">  
+		  	   {% csrf_token %}
+    		   {{ template_form }}			   
+		  </form>
+          
+          <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Коносаменты</h2>
+                                       
+                    
+                    <ul class="nav navbar-right panel_toolbox">
+                      <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                      </li>
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <ul class="dropdown-menu" role="menu">
+                          <li><a href="#">Settings 1</a>
+                          </li>
+                          <li><a href="#">Settings 2</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li><a class="close-link"><i class="fa fa-close"></i></a>
+                      </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          	<th>Номер</th>
+							<th>Автор</th>
+							<th>Дата</th>
+							<th>Отправитель</th>
+							<th>Получатель</th>
+							<th>Рейс</th>
+							<th>Линия</th>
+							<th>Пункт назначения</th>
+							<th>POD</th>
+							<th>POL</th>
+							<th>Фин. статус</th>
+							<th>Статус</th>
+							<th>Проручение</th>
+							<th>Номер поручения</th>
+							<th>Уведомить</th>                          
+                        </tr>
+                      </thead>
+                      <tbody>
+                      {% for draft in template.drafts.all %}
+                        <tr data-toggle="collapse" data-target="#draft-details-{{ draft.id }}" class="accordion-toggle">
+                          <th scope="row"><a href="{% url template-details template.id %}">{{ draft.name }}</a></th>
+							<td>{{ draft.user }}</td>
+							<td>{{ draft.date }}</td>
+							<td>{{ draft.shipper }}</td>
+							<td>{{ draft.consignee }}</td>
+							<td>{{ draft.voyage }}</td>
+							<td>{{ draft.line }}</td>
+							<td>{{ draft.finalDestination }}</td>
+							<td>{{ draft.POD }}</td>
+							<td>{{ draft.POL }}</td>
+							<td>{{ draft.finstatus }}</td>
+							<td>{{ draft.status }}</td>
+							<td>{{ draft.poruchenie }}</td>
+							<td>{{ draft.poruchenieNums }}</td>
+							<td>{{ draft.notify }}</td>                                                  
+                        </tr>
+                        
+                         <tr>
+						    <td colspan="100%" class="hidden-row">
+						        <div class="accordion-body collapse" id="draft-details-{{ draft.id }}">
+						        
+						        	<table class="table">
+				                      <thead>
+				                        <tr>
+				                          <th>ID</th>
+				                          <th>Действие</th>
+				                          <th>Обновлено</th>
+				                          <th>Рейс</th>
+				                          <th>Шаблон</th>
+				                          <th>Статус</th>                          
+				                        </tr>
+				                      </thead>
+				                      <tbody>
+				                      	<tr>
+				                      	 <td>ID</td>
+				                         <td>ID</td>
+				                         <td>ID</td>
+				                         <td>ID</td>
+				                         <td>ID</td>
+				                         <td>ID</td>
+				                        </tr>  
+				               		 </tbody>
+				               		</table>
+				               
+						        
+						        </div>
+						    </td>
+						</tr>
+                                              
+                      {% endfor %}                        
+                      </tbody>
+                    </table>
+                    
+                    {% if is_paginated %}
+					<nav aria-label="Page navigation">
+					    {% bootstrap_paginator %}
+					</nav>
+					{% endif %}
+
+                  </div>
+                </div>
+              </div>
+
+
+              
+           </div>
+
+              <div class="clearfix"></div>
+          
+          
+        </div>
+
+
+{% endblock content %}
