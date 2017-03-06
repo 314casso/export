@@ -128,7 +128,7 @@ class Container(models.Model):
     SOC = models.BooleanField(default=False)
     size = models.CharField(max_length=2, db_index=True)
     type = models.CharField(max_length=3, db_index=True)
-    line = models.ForeignKey(Voyage)
+    line = models.ForeignKey(Line, null=True, blank=True)
     seal = models.CharField(max_length=150, null=True, blank=True)
     cargo = models.CharField(max_length=255, null=True, blank=True)
     netto = models.PositiveIntegerField(null=True, blank=True)
@@ -144,6 +144,19 @@ class Container(models.Model):
         verbose_name_plural = force_unicode('Контейнеры')
         ordering = ('name', ) 
                               
+
+class Readiness(models.Model):
+    size = models.CharField(max_length=2, db_index=True)
+    type = models.CharField(max_length=3, db_index=True)
+    ordered = models.PositiveIntegerField(null=True, blank=True)
+    done = models.PositiveIntegerField(null=True, blank=True)
+    draft = models.ForeignKey(Draft, related_name="readiness", on_delete=models.CASCADE)
+    def __unicode__(self):
+        return u'{0}'.format(self.id) 
+    class Meta:
+        verbose_name = force_unicode('Готовность')
+        verbose_name_plural = force_unicode('Готовность')
+        ordering = ('id', ) 
 
 class Contract(BaseModel):    
     line = models.ForeignKey(Line, related_name="contracts")
@@ -188,7 +201,7 @@ class UploadedTemplate(ProcessDeletedModel):
     status = models.IntegerField(choices=STATUS_CHOICES, default=NEW, db_index=True, blank=True)
     http_code = models.CharField('HTTP Код', max_length=50, null=True, blank=True)
     xml_response = models.TextField('XML ответ', null=True, blank=True)    
-    voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT)
+    voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT, related_name="templates")
     contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)
     #Изменения
     history = GenericRelation('HistoryMeta')

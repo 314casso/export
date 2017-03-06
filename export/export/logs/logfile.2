@@ -1,0 +1,669 @@
+[02/Mar/2017 13:30:10] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 34, in update_status
+    setattr(draft, field, getattr(xml_draft, field))
+AttributeError: 'tuple' object has no attribute 'date'
+[02/Mar/2017 13:30:51] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 87, in get_response
+    response = middleware_method(request)
+  File "/usr/local/lib/python2.7/dist-packages/django/middleware/common.py", line 67, in process_request
+    if (not urlresolvers.is_valid_path(request.path_info, urlconf) and
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 557, in is_valid_path
+    resolve(path, urlconf)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 446, in resolve
+    return get_resolver(urlconf).resolve(path)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/export/urls.py", line 6, in <module>
+    from nutep.views import services, landing, upload_file, TemplateDeleteView,\
+  File "/home/picasso/git/export/export/nutep/views.py", line 17, in <module>
+    from nutep.services import DraftService
+  File "/home/picasso/git/export/export/nutep/services.py", line 34
+    setattr(draft, field, xml_draft[field]))
+                                           ^
+SyntaxError: invalid syntax
+[02/Mar/2017 13:31:20] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 34, in update_status
+    setattr(draft, field, xml_draft[field])
+TypeError: tuple indices must be integers, not str
+[02/Mar/2017 13:33:53] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 42, in update_status
+    print xml_draft.draft
+AttributeError: 'tuple' object has no attribute 'draft'
+[02/Mar/2017 13:40:50] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 91, in get_template_status
+    return HttpResponse("<pre>%s</pre>" % status)
+TypeError: not all arguments converted during string formatting
+[02/Mar/2017 13:46:38] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 36, in update_status
+    draft.user = User.objects.get(profile__guid=draft.userguid)
+AttributeError: 'Draft' object has no attribute 'userguid'
+[02/Mar/2017 15:07:51] ERROR [django.request:213] Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 99, in get_response
+    request.path_info)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 317, in resolve
+    for pattern in self.url_patterns:
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 347, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/urlresolvers.py", line 342, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 35, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/export/urls.py", line 6, in <module>
+    from nutep.views import services, landing, upload_file, TemplateDeleteView,\
+  File "/home/picasso/git/export/export/nutep/views.py", line 17, in <module>
+    from nutep.services import DraftService
+  File "/home/picasso/git/export/export/nutep/services.py", line 39
+    draft.voyage =
+                  ^
+SyntaxError: invalid syntax
+[03/Mar/2017 09:01:14] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 36, in update_status
+    voyage = self.get_voyage(response.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 29, in get_voyage
+    voyage.name=xml_voyage.name
+AttributeError: 'tuple' object has no attribute 'name'
+[03/Mar/2017 09:02:03] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 36, in update_status
+    voyage = self.get_voyage(response.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 29, in get_voyage
+    voyage.name=xml_voyage.name
+AttributeError: 'tuple' object has no attribute 'name'
+[03/Mar/2017 09:03:30] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 37, in update_status
+    voyage = self.get_voyage(response.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 29, in get_voyage
+    voyage.name=xml_voyage.name
+AttributeError: 'tuple' object has no attribute 'name'
+[03/Mar/2017 09:05:05] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 50, in update_status
+    draft.voyage = voyage
+NameError: global name 'voyage' is not defined
+[03/Mar/2017 09:07:37] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 37, in update_status
+    voyage = self.get_voyage(response.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 29, in get_voyage
+    voyage.name=xml_voyage.name
+AttributeError: 'tuple' object has no attribute 'name'
+[03/Mar/2017 09:07:59] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 38, in update_status
+    voyage = self.get_voyage(response.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 30, in get_voyage
+    voyage.name=xml_voyage.name
+AttributeError: 'tuple' object has no attribute 'name'
+[03/Mar/2017 09:08:53] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 38, in update_status
+    voyage = self.get_voyage(response.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 30, in get_voyage
+    voyage.name=xml_voyage.name
+AttributeError: 'tuple' object has no attribute 'name'
+[03/Mar/2017 09:10:00] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 38, in update_status
+    voyage = self.get_voyage(response.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 30, in get_voyage
+    voyage.name=xml_voyage.name
+AttributeError: 'tuple' object has no attribute 'name'
+[03/Mar/2017 09:14:00] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 49, in update_status
+    draft.line = Line.objects.get(name=xml_draft.line)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 131, in get
+    return self.get_query_set().get(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 366, in get
+    % self.model._meta.object_name)
+DoesNotExist: Line matching query does not exist.
+[03/Mar/2017 09:41:10] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 61, in update_status
+    draft.voyage = self.get_line(response.voyage)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 366, in __set__
+    self.field.name, self.field.rel.to._meta.object_name))
+ValueError: Cannot assign "<Line: YMIRM099S>": "Draft.voyage" must be a "Voyage" instance.
+[03/Mar/2017 09:42:30] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 62, in update_status
+    draft.line = self.get_line(response.line)
+AttributeError: Data instance has no attribute 'line'
+[03/Mar/2017 09:43:25] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 60, in update_status
+    draft.voyage = self.get_voyage(xml_draft.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 29, in get_voyage
+    voyage.etd = xml_voyage.etd
+AttributeError: Voyage instance has no attribute 'etd'
+[03/Mar/2017 09:49:00] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 60, in update_status
+    draft.voyage = self.get_voyage(xml_draft.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 29, in get_voyage
+    voyage.etd = xml_voyage.etd
+AttributeError: Voyage instance has no attribute 'etd'
+[03/Mar/2017 09:50:54] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 60, in update_status
+    draft.voyage = self.get_voyage(xml_draft.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 29, in get_voyage
+    voyage.etd = xml_voyage.etd
+AttributeError: Voyage instance has no attribute 'etd'
+[03/Mar/2017 09:51:35] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 61, in update_status
+    draft.voyage = self.get_voyage(xml_draft.voyage)
+  File "/home/picasso/git/export/export/nutep/services.py", line 30, in get_voyage
+    print xml_voyage.etd
+AttributeError: Voyage instance has no attribute 'etd'
+[03/Mar/2017 09:56:57] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 46, in update_status
+    response = self._client.service.GetStatus(pk)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
+    return client.invoke(args, kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
+    result = self.send(soapenv)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 649, in send
+    result = self.failed(binding, e)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 702, in failed
+    r, p = binding.get_fault(reply)
+  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/binding.py", line 265, in get_fault
+    raise WebFault(p, faultroot)
+WebFault: Server raised fault: '\u041d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u0430\u044f \u043e\u0448\u0438\u0431\u043a\u0430. {Web\u0421\u0435\u0440\u0432\u0438\u0441.\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438\u0414\u0440\u0430\u0444\u0442\u043e\u0432.\u041c\u043e\u0434\u0443\u043b\u044c(962)}: \u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u0438 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u0430 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 (etd)
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+{Web\u0421\u0435\u0440\u0432\u0438\u0441.\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438\u0414\u0440\u0430\u0444\u0442\u043e\u0432.\u041c\u043e\u0434\u0443\u043b\u044c(962)}: \u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u0438 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u0430 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 (etd)
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+\u041d\u0435\u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u0442\u0438\u043f\u043e\u0432 XDTO
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+\u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u0434\u0430\u043d\u043d\u044b\u0445 XDTO:
+\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: '2017-02-27T00:00:00' \u043d\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u043f\u0440\u043e\u0441\u0442\u043e\u043c\u0443 \u0442\u0438\u043f\u0443: {http://www.w3.org/2001/XMLSchema}date
+\u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u0435\u043e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u043d\u0438\u044f \u0434\u0430\u043d\u043d\u044b\u0445 XML'
+[03/Mar/2017 11:16:58] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 55, in update_status
+    voyage = self.get_voyage(response.voyage)
+TypeError: get_voyage() takes exactly 3 arguments (2 given)
+[03/Mar/2017 11:17:19] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 67, in update_status
+    draft.vessel = self.get_voyage(xml_draft.vessel)
+TypeError: get_voyage() takes exactly 3 arguments (2 given)
+[03/Mar/2017 11:18:05] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 68, in update_status
+    draft.voyage = self.get_voyage(xml_draft.voyage, draft.vessel)
+  File "/home/picasso/git/export/export/nutep/services.py", line 31, in get_voyage
+    if getattr(voyage, field) != getattr(xml_voyage, field):
+AttributeError: Voyage instance has no attribute 'vessel'
+[03/Mar/2017 11:19:55] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 68, in update_status
+    draft.voyage = self.get_voyage(xml_draft.voyage, draft.vessel)
+  File "/home/picasso/git/export/export/nutep/services.py", line 36, in get_voyage
+    voyage.vessel = vessel
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 366, in __set__
+    self.field.name, self.field.rel.to._meta.object_name))
+ValueError: Cannot assign "<Line: YM INCREMENT>": "Voyage.vessel" must be a "Vessel" instance.
+[03/Mar/2017 11:29:11] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 54, in update_status
+    vessel = self.get_vessel(response.vessel)
+AttributeError: Data instance has no attribute 'vessel'
+[03/Mar/2017 11:42:48] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 61, in update_status
+    setattr(draft, field, xml_draft[field])
+  File "/usr/local/lib/python2.7/dist-packages/suds/sudsobject.py", line 154, in __getitem__
+    return getattr(self, name)
+AttributeError: Draft instance has no attribute 'vessel'
+[03/Mar/2017 11:46:30] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 61, in update_status
+    setattr(draft, field, xml_draft[field])
+  File "/usr/local/lib/python2.7/dist-packages/suds/sudsobject.py", line 154, in __getitem__
+    return getattr(self, name)
+AttributeError: Draft instance has no attribute 'vessel'
+[03/Mar/2017 14:20:01] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 70, in update_status
+    draft.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+IntegrityError: null value in column "date" violates not-null constraint
+
+[03/Mar/2017 14:22:30] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 70, in update_status
+    draft.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+IntegrityError: null value in column "date" violates not-null constraint
+
+[03/Mar/2017 14:23:23] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 70, in update_status
+    draft.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+IntegrityError: null value in column "date" violates not-null constraint
+
+[03/Mar/2017 14:24:14] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 70, in update_status
+    draft.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+IntegrityError: null value in column "date" violates not-null constraint
+
+[03/Mar/2017 14:24:27] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 70, in update_status
+    draft.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+IntegrityError: null value in column "date" violates not-null constraint
+
+[03/Mar/2017 14:24:53] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 73, in update_status
+    draft.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+IntegrityError: null value in column "date" violates not-null constraint
+
+[03/Mar/2017 14:26:17] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 74, in update_status
+    draft.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+IntegrityError: null value in column "date" violates not-null constraint
+
+[03/Mar/2017 14:38:12] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 91, in get_template_status
+    return HttpResponse("<pre>%s</pre>" % status)
+  File "/usr/local/lib/python2.7/dist-packages/suds/sudsobject.py", line 169, in __repr__
+    return str(self)
+  File "/usr/local/lib/python2.7/dist-packages/suds/sudsobject.py", line 172, in __str__
+    return unicode(self).encode('utf-8')
+  File "/usr/local/lib/python2.7/dist-packages/suds/sudsobject.py", line 175, in __unicode__
+    return self.__printer__.tostr(self)
+  File "/usr/local/lib/python2.7/dist-packages/suds/sudsobject.py", line 259, in tostr
+    return self.process(object, history, indent)
+  File "/usr/local/lib/python2.7/dist-packages/suds/sudsobject.py", line 269, in process
+    return self.print_object(object, h, n+2, nl)
+  File "/usr/local/lib/python2.7/dist-packages/suds/sudsobject.py", line 288, in print_object
+    md = d.__metadata__
+AttributeError: Metadata instance has no attribute '__metadata__'
+[03/Mar/2017 15:39:57] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
+    status = draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 53, in update_status
+    response = self._client.service.GetStatus(pk)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
+    return client.invoke(args, kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
+    result = self.send(soapenv)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 649, in send
+    result = self.failed(binding, e)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 702, in failed
+    r, p = binding.get_fault(reply)
+  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/binding.py", line 265, in get_fault
+    raise WebFault(p, faultroot)
+WebFault: Server raised fault: '\u041d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u0430\u044f \u043e\u0448\u0438\u0431\u043a\u0430. {Web\u0421\u0435\u0440\u0432\u0438\u0441.\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438\u0414\u0440\u0430\u0444\u0442\u043e\u0432.\u041c\u043e\u0434\u0443\u043b\u044c(903)}: \u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u0438 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u0430 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 (terminal)
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+{Web\u0421\u0435\u0440\u0432\u0438\u0441.\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438\u0414\u0440\u0430\u0444\u0442\u043e\u0432.\u041c\u043e\u0434\u0443\u043b\u044c(903)}: \u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u0438 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0435 \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u044f \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u0430 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 (terminal)
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+\u041d\u0435\u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0438\u0435 \u0442\u0438\u043f\u043e\u0432 XDTO:
+\u0422\u0438\u043f '{http://ruscon.gcs-group.ru/forclients/drafts}Terminal' \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d
+\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u043d\u0435 \u043c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u043e \u0441\u0432\u043e\u0439\u0441\u0442\u0432\u0443, \u0438\u043c\u0435\u044e\u0449\u0435\u043c\u0443 \u043e\u0431\u044a\u0435\u043a\u0442\u043d\u044b\u0439 \u0442\u0438\u043f'
+[03/Mar/2017 16:50:09] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 88, in get_template_status
+    draft_service = DraftService(WEB_SERVISES['draft'])
+  File "/home/picasso/git/export/export/nutep/services.py", line 12, in __init__
+    self.set_client(settings)
+  File "/home/picasso/git/export/export/nutep/services.py", line 22, in set_client
+    self._client = Client(self.url, headers=authenticationHeader, cache=NoCache())
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 112, in __init__
+    self.wsdl = reader.open(url)
+  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 152, in open
+    d = self.fn(url, self.options)
+  File "/usr/local/lib/python2.7/dist-packages/suds/wsdl.py", line 136, in __init__
+    d = reader.open(url)
+  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 79, in open
+    d = self.download(url)
+  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 95, in download
+    fp = self.options.transport.open(Request(url))
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 60, in open
+    return  HttpTransport.open(self, request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 64, in open
+    raise TransportError(str(e), e.code, e.fp)
+TransportError: HTTP Error 500: Internal server error

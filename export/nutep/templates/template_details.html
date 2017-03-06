@@ -10,6 +10,29 @@
               </div>
             </div>
 
+            <div class="clearfix"></div> 
+               
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  
+                  	<dl class="dl-horizontal">	
+					    <dt>Обновлено</dt>
+					    <dd>{{ template.last_event.date|date:"d.m.Y H:i" }} ({{ template.last_event.user }})</dd>
+					    <dt>Рейс</dt>
+					    <dd>{{ template.voyage }}</dd>
+					    <dt>Статус</dt>
+					    <dd>{{ template.get_status_display }}</dd>
+					    <dt>Договор</dt>
+					    <dd>{{ template.contract }}</dd>
+					    <dt>Файл</dt>
+					    <dd><a class="btn btn-info btn-sm" href="{{ template.attachment.url }}">{{ template.filename }}</a> {{ template.attachment.size|filesizeformat }}</dd>					    
+					</dl>
+					
+                 </div>
+                </div>
+               </div>
+
             <div class="clearfix"></div>
 
 		
@@ -47,75 +70,44 @@
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          	<th>Номер</th>
-							<th>Автор</th>
-							<th>Дата</th>
-							<th>Отправитель</th>
-							<th>Получатель</th>
+                          	<th>Номер</th>							
+							<th>Дата</th>							
 							<th>Рейс</th>
 							<th>Линия</th>
-							<th>Пункт назначения</th>
+							<th title="Пункт назначения">Назначение</th>
 							<th>POD</th>
 							<th>POL</th>
-							<th>Фин. статус</th>
+							<th>Фин.статус</th>
 							<th>Статус</th>
-							<th>Проручение</th>
-							<th>Номер поручения</th>
-							<th>Уведомить</th>                          
+							<th title="Поручение сформировано">Сформировано</th>
+							<th>Поручения</th>
+							<th>Отправитель</th>
+							<th>Получатель</th>
+							<th>Уведомить</th>
+							<th>Автор</th>                          
                         </tr>
                       </thead>
                       <tbody>
                       {% for draft in template.drafts.all %}
-                        <tr data-toggle="collapse" data-target="#draft-details-{{ draft.id }}" class="accordion-toggle">
-                          <th scope="row"><a href="{% url template-details template.id %}">{{ draft.name }}</a></th>
-							<td>{{ draft.user }}</td>
-							<td>{{ draft.date }}</td>
-							<td>{{ draft.shipper }}</td>
-							<td>{{ draft.consignee }}</td>
+                        <tr class="datarow" id="draft-details-{{ template.id }}"  data-link="{% url draft-details draft.id %}">
+                          <th scope="row"><a href="{% url draft-details draft.id %}">
+                          {{ draft.name }}
+                          </a></th>							
+							<td>{{ draft.date|date:"d.m.Y" }}</td>							
 							<td>{{ draft.voyage }}</td>
 							<td>{{ draft.line }}</td>
 							<td>{{ draft.finalDestination }}</td>
 							<td>{{ draft.POD }}</td>
 							<td>{{ draft.POL }}</td>
-							<td>{{ draft.finstatus }}</td>
-							<td>{{ draft.status }}</td>
-							<td>{{ draft.poruchenie }}</td>
-							<td>{{ draft.poruchenieNums }}</td>
-							<td>{{ draft.notify }}</td>                                                  
+							<td>{% if draft.finstatus %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>
+							<td>{% if draft.status %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>
+							<td>{% if draft.poruchenie %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>							
+							<td>{{ draft.poruchenieNums|default_if_none:"" }}</td>
+							<td>{{ draft.shipper }}</td>
+							<td>{{ draft.consignee }}</td>
+							<td>{{ draft.notify }}</td>
+							<td>{{ draft.user }}</td>                                                  
                         </tr>
-                        
-                         <tr>
-						    <td colspan="100%" class="hidden-row">
-						        <div class="accordion-body collapse" id="draft-details-{{ draft.id }}">
-						        
-						        	<table class="table">
-				                      <thead>
-				                        <tr>
-				                          <th>ID</th>
-				                          <th>Действие</th>
-				                          <th>Обновлено</th>
-				                          <th>Рейс</th>
-				                          <th>Шаблон</th>
-				                          <th>Статус</th>                          
-				                        </tr>
-				                      </thead>
-				                      <tbody>
-				                      	<tr>
-				                      	 <td>ID</td>
-				                         <td>ID</td>
-				                         <td>ID</td>
-				                         <td>ID</td>
-				                         <td>ID</td>
-				                         <td>ID</td>
-				                        </tr>  
-				               		 </tbody>
-				               		</table>
-				               
-						        
-						        </div>
-						    </td>
-						</tr>
-                                              
                       {% endfor %}                        
                       </tbody>
                     </table>

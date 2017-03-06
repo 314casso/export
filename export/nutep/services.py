@@ -4,8 +4,9 @@ from __builtin__ import setattr
 import base64
 from suds.cache import NoCache
 from nutep.models import Draft, UploadedTemplate, Voyage, Line, Vessel,\
-    Contract
+    Contract, Container, Readiness
 from django.contrib.auth.models import User
+from django.utils.encoding import force_unicode
 
 
 class BaseService():
@@ -57,9 +58,24 @@ class DraftService(BaseService):
             contract.guid = xml_contract.guid        
             contract.save()        
         return contract
+
+    def load_draft(self, template, user):
+        xml_template = self._client.factory.create('Template')
+        xml_template.id = template.id
+        xml_template.userguid = user.get_profile().guid        
+        xml_template.data = template.attachment.read().encode('base64')
+                
+        response = self._client.service.LoadDraft(xml_template)
+        print response        
+        #self.parse_response(response, template.id)
+        return response
                         
     def update_status(self, pk):
         response = self._client.service.GetStatus(pk)      
+        self.parse_response(response, pk)
+        return response
+    
+    def parse_response(self, response, pk):
         voyage = self.get_voyage(response.voyage)
         template = UploadedTemplate.objects.get(pk=pk)
         template.voyage = voyage 
@@ -67,23 +83,36 @@ class DraftService(BaseService):
         template.xml_response = response
         template.save()  
         self.delete_data(pk)        
-        for xml_draft in response.drafts.draft:
-            print xml_draft
+        for xml_draft in response.drafts.draft:            
             draft = Draft()
             fields = ['name','guid','date','shipper','consignee','finalDestination','POD','POL','finstatus','status','poruchenie','poruchenieNums','notify']
-            for field in fields:                        
-                setattr(draft, field, xml_draft[field])                
-                draft.user = User.objects.get(profile__guid=xml_draft.userguid)                                
-                draft.voyage = self.get_voyage(xml_draft.voyage) 
-                draft.line = self.get_line(xml_draft.line)
-                draft.template = template               
+            for field in fields:
+                value = u'%s' % xml_draft[field] if xml_draft[field] else xml_draft[field]                        
+                setattr(draft, field, value)                
+            draft.user = User.objects.get(profile__guid=xml_draft.userguid)                                
+            draft.voyage = self.get_voyage(xml_draft.voyage) 
+            draft.line = self.get_line(xml_draft.line)
+            draft.template = template               
             draft.save()
-        return response
-    
+            fields = ['name','SOC','size','type','seal','cargo','netto','gross','tare','package','quantity']
+            for xml_container in xml_draft.containers.container:
+                container = Container()
+                for field in fields:
+                    value = u'%s' % xml_container[field] if xml_container[field] else xml_container[field]  
+                    setattr(container, field, value)
+                container.line = self.get_line(xml_container.line)
+                container.draft = draft
+                container.save()
+            fields = ['size','type','ordered','done',]    
+            for xml_readiness in xml_draft.readiness.row:
+                readiness = Readiness()
+                for field in fields:                    
+                    setattr(readiness, field, xml_readiness[field])                
+                readiness.draft = draft
+                readiness.save()
+        
+            
     def delete_data(self, pk):
         template = UploadedTemplate.objects.get(pk=pk)
         drafts = Draft.objects.filter(template=template)
-        drafts.delete()
-                    
-    
-    
+        drafts.delete()                        

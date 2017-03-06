@@ -4,8 +4,8 @@ from django.utils.encoding import force_unicode
 from django.shortcuts import render
 import logging
 from django.contrib.auth.decorators import login_required
-from nutep.models import UploadedTemplate, Voyage, Vessel
-
+from nutep.models import UploadedTemplate, Voyage, Vessel,\
+    Draft
 from django.http import HttpResponseRedirect, HttpResponse
 from nutep.forms import TemplateForm
 from django.core.urlresolvers import reverse
@@ -95,11 +95,26 @@ class TemplateDetailView(BaseView):
     template_name = 'template_details.html'
     def get_context_data(self, **kwargs):
         pk = kwargs.get('pk')
+        draft_service = DraftService(WEB_SERVISES['draft'])    
+        draft_service.update_status(pk)
         template = UploadedTemplate.objects.get(pk=pk)
         context = super(TemplateDetailView, self).get_context_data(**kwargs)
         context.update({
                    'title' : force_unicode('Рускон Онлайн'),
                    'template' : template,
+                  })
+        return context
+
+
+class DraftDetailView(BaseView):
+    template_name = 'draft_details.html'
+    def get_context_data(self, **kwargs):
+        pk = kwargs.get('pk')
+        draft = Draft.objects.get(pk=pk)
+        context = super(DraftDetailView, self).get_context_data(**kwargs)
+        context.update({
+                   'title' : force_unicode('Рускон Онлайн'),
+                   'draft' : draft,
                   })
         return context
 
@@ -161,7 +176,7 @@ def upload_file(request):
             if not voyage_cell:
                 return HttpResponse(u'Неверный шаблон. Столбец Voyage не найден в файле', status=400)
             
-            rng = "%s%s:%s%s" % (voyage_cell.column, int(voyage_cell.row)+1,voyage_cell.column, ws.max_row)
+            rng = "%s%s:%s%s" % (voyage_cell.column, int(voyage_cell.row)+1,voyage_cell.column, int(voyage_cell.row)+1)
             voyages = set() 
             for row in ws.iter_rows(rng):
                 voyages.add(row[0].value)
@@ -183,9 +198,7 @@ def upload_file(request):
                 voyage = Voyage()
                 voyage.name = voyage_name
                 voyage.user = request.user
-                voyage.save()
-                
-            
+                voyage.save()            
             try:
                 form.instance = UploadedTemplate.objects.get(voyage=voyage)
             except UploadedTemplate.DoesNotExist:
@@ -195,4 +208,8 @@ def upload_file(request):
             template.user = request.user
             template.voyage = voyage 
             template.save()
+            
+            draft_service = DraftService(WEB_SERVISES['draft'])    
+            draft_service.load_draft(template, request.user)
+                        
             return HttpResponseRedirect(reverse('services'))

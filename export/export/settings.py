@@ -17,6 +17,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+AUTH_PROFILE_MODULE = "nutep.UserProfile"
+
 from local_settings import * #@UnusedWildImport
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
