@@ -1,228 +1,243 @@
-[03/Mar/2017 16:50:33] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+[05/Mar/2017 23:47:11] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
     return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 88, in get_template_status
-    draft_service = DraftService(WEB_SERVISES['draft'])
-  File "/home/picasso/git/export/export/nutep/services.py", line 12, in __init__
-    self.set_client(settings)
-  File "/home/picasso/git/export/export/nutep/services.py", line 22, in set_client
-    self._client = Client(self.url, headers=authenticationHeader, cache=NoCache())
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 112, in __init__
-    self.wsdl = reader.open(url)
-  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 152, in open
-    d = self.fn(url, self.options)
-  File "/usr/local/lib/python2.7/dist-packages/suds/wsdl.py", line 136, in __init__
-    d = reader.open(url)
-  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 79, in open
-    d = self.download(url)
-  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 95, in download
-    fp = self.options.transport.open(Request(url))
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 60, in open
-    return  HttpTransport.open(self, request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 64, in open
-    raise TransportError(str(e), e.code, e.fp)
-TransportError: HTTP Error 500: Internal server error
-[03/Mar/2017 16:50:34] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+    draft_service.load_draft(template, request.user)
+  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
+    response = self._client.service.LoadDraft(xml_template)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
+    return client.invoke(args, kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
+    result = self.send(soapenv)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
+    reply = transport.send(request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
+    return  HttpTransport.send(self, request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
+    fp = self.u2open(u2request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
+    return url.open(u2request, timeout=tm)
+  File "/usr/lib/python2.7/urllib2.py", line 401, in open
+    response = self._open(req, data)
+  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
+    '_open', req)
+  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
+    r = h.getresponse(buffering=True)
+  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
+    response.begin()
+  File "/usr/lib/python2.7/httplib.py", line 408, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
+    line = self.fp.readline()
+  File "/usr/lib/python2.7/socket.py", line 447, in readline
+    data = self._sock.recv(self._rbufsize)
+timeout: timed out
+[05/Mar/2017 23:52:08] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
     return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 88, in get_template_status
-    draft_service = DraftService(WEB_SERVISES['draft'])
-  File "/home/picasso/git/export/export/nutep/services.py", line 12, in __init__
-    self.set_client(settings)
-  File "/home/picasso/git/export/export/nutep/services.py", line 22, in set_client
-    self._client = Client(self.url, headers=authenticationHeader, cache=NoCache())
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 112, in __init__
-    self.wsdl = reader.open(url)
-  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 152, in open
-    d = self.fn(url, self.options)
-  File "/usr/local/lib/python2.7/dist-packages/suds/wsdl.py", line 136, in __init__
-    d = reader.open(url)
-  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 79, in open
-    d = self.download(url)
-  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 95, in download
-    fp = self.options.transport.open(Request(url))
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 60, in open
-    return  HttpTransport.open(self, request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 64, in open
-    raise TransportError(str(e), e.code, e.fp)
-TransportError: HTTP Error 500: Internal server error
-[03/Mar/2017 16:50:35] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+    draft_service.load_draft(template, request.user)
+  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
+    response = self._client.service.LoadDraft(xml_template)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
+    return client.invoke(args, kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
+    result = self.send(soapenv)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
+    reply = transport.send(request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
+    return  HttpTransport.send(self, request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
+    fp = self.u2open(u2request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
+    return url.open(u2request, timeout=tm)
+  File "/usr/lib/python2.7/urllib2.py", line 401, in open
+    response = self._open(req, data)
+  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
+    '_open', req)
+  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
+    r = h.getresponse(buffering=True)
+  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
+    response.begin()
+  File "/usr/lib/python2.7/httplib.py", line 408, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
+    line = self.fp.readline()
+  File "/usr/lib/python2.7/socket.py", line 447, in readline
+    data = self._sock.recv(self._rbufsize)
+timeout: timed out
+[06/Mar/2017 00:00:43] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
     return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 88, in get_template_status
-    draft_service = DraftService(WEB_SERVISES['draft'])
-  File "/home/picasso/git/export/export/nutep/services.py", line 12, in __init__
-    self.set_client(settings)
-  File "/home/picasso/git/export/export/nutep/services.py", line 22, in set_client
-    self._client = Client(self.url, headers=authenticationHeader, cache=NoCache())
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 112, in __init__
-    self.wsdl = reader.open(url)
-  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 152, in open
-    d = self.fn(url, self.options)
-  File "/usr/local/lib/python2.7/dist-packages/suds/wsdl.py", line 136, in __init__
-    d = reader.open(url)
-  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 79, in open
-    d = self.download(url)
-  File "/usr/local/lib/python2.7/dist-packages/suds/reader.py", line 95, in download
-    fp = self.options.transport.open(Request(url))
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 60, in open
-    return  HttpTransport.open(self, request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 64, in open
-    raise TransportError(str(e), e.code, e.fp)
-TransportError: HTTP Error 500: Internal server error
-[03/Mar/2017 16:55:09] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+    draft_service.load_draft(template, request.user)
+  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
+    response = self._client.service.LoadDraft(xml_template)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
+    return client.invoke(args, kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
+    result = self.send(soapenv)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
+    reply = transport.send(request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
+    return  HttpTransport.send(self, request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
+    fp = self.u2open(u2request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
+    return url.open(u2request, timeout=tm)
+  File "/usr/lib/python2.7/urllib2.py", line 401, in open
+    response = self._open(req, data)
+  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
+    '_open', req)
+  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
+    r = h.getresponse(buffering=True)
+  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
+    response.begin()
+  File "/usr/lib/python2.7/httplib.py", line 408, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
+    line = self.fp.readline()
+  File "/usr/lib/python2.7/socket.py", line 447, in readline
+    data = self._sock.recv(self._rbufsize)
+timeout: timed out
+[06/Mar/2017 00:27:19] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
     return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
-    status = draft_service.update_status(pk)
-  File "/home/picasso/git/export/export/nutep/services.py", line 65, in update_status
-    template.contract = self.get_contract(response.xml_contract)
-AttributeError: Data instance has no attribute 'xml_contract'
-[03/Mar/2017 16:55:40] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+    draft_service.load_draft(template, request.user)
+  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
+    response = self._client.service.LoadDraft(xml_template)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
+    return client.invoke(args, kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
+    result = self.send(soapenv)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
+    reply = transport.send(request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
+    return  HttpTransport.send(self, request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
+    fp = self.u2open(u2request)
+  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
+    return url.open(u2request, timeout=tm)
+  File "/usr/lib/python2.7/urllib2.py", line 401, in open
+    response = self._open(req, data)
+  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
+    '_open', req)
+  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
+    return self.do_open(httplib.HTTPConnection, req)
+  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
+    r = h.getresponse(buffering=True)
+  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
+    response.begin()
+  File "/usr/lib/python2.7/httplib.py", line 408, in begin
+    version, status, reason = self._read_status()
+  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
+    line = self.fp.readline()
+  File "/usr/lib/python2.7/socket.py", line 447, in readline
+    data = self._sock.recv(self._rbufsize)
+timeout: timed out
+[06/Mar/2017 00:40:54] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
     return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
-    status = draft_service.update_status(pk)
-  File "/home/picasso/git/export/export/nutep/services.py", line 65, in update_status
-    template.contract = self.get_contract(response.contract)
-  File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 366, in __set__
-    self.field.name, self.field.rel.to._meta.object_name))
-ValueError: Cannot assign "<Vessel: COSCO-10-2012>": "UploadedTemplate.contract" must be a "Contract" instance.
-[03/Mar/2017 16:56:50] ERROR [django.request:213] Internal Server Error: /gettemplate/32
+  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+    draft_service.load_draft(template, request.user)
+  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
+    response = self._client.service.LoadDraft(xml_template)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
+    return client.invoke(args, kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
+    result = self.send(soapenv)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 649, in send
+    result = self.failed(binding, e)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 702, in failed
+    r, p = binding.get_fault(reply)
+  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/binding.py", line 265, in get_fault
+    raise WebFault(p, faultroot)
+WebFault: Server raised fault: '\u041d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u0430\u044f \u043e\u0448\u0438\u0431\u043a\u0430. {Web\u0421\u0435\u0440\u0432\u0438\u0441.\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438\u0414\u0440\u0430\u0444\u0442\u043e\u0432.\u041c\u043e\u0434\u0443\u043b\u044c(21)}: \u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u0438 \u0432\u044b\u0437\u043e\u0432\u0435 \u043c\u0435\u0442\u043e\u0434\u0430 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 (\u041f\u043e\u043b\u0443\u0447\u0438\u0442\u044cCOM\u041e\u0431\u044a\u0435\u043a\u0442)
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+{Web\u0421\u0435\u0440\u0432\u0438\u0441.\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438\u0414\u0440\u0430\u0444\u0442\u043e\u0432.\u041c\u043e\u0434\u0443\u043b\u044c(21)}: \u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u0438 \u0432\u044b\u0437\u043e\u0432\u0435 \u043c\u0435\u0442\u043e\u0434\u0430 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 (\u041f\u043e\u043b\u0443\u0447\u0438\u0442\u044cCOM\u041e\u0431\u044a\u0435\u043a\u0442)
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+\u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u043e\u043b\u0443\u0447\u0435\u043d\u0438\u044f \u043e\u0431\u044a\u0435\u043a\u0442\u0430 COM: -2147024891(0x80070005): \u041e\u0442\u043a\u0430\u0437\u0430\u043d\u043e \u0432 \u0434\u043e\u0441\u0442\u0443\u043f\u0435. '
+[06/Mar/2017 00:43:13] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
     return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 90, in get_template_status
-    status = draft_service.update_status(pk)
-  File "/home/picasso/git/export/export/nutep/services.py", line 66, in update_status
-    template.contract = self.get_contract(response.contract)
-  File "/home/picasso/git/export/export/nutep/services.py", line 54, in get_contract
-    contract, created = Contract.objects.get_or_create(guid=xml_contract.guid,)  # @UnusedVariable
-  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 134, in get_or_create
-    return self.get_query_set().get_or_create(**kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 452, in get_or_create
-    obj.save(force_insert=True, using=self.db)
-  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
-    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
-  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
-    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
-  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
-    return insert_query(self.model, objs, fields, **kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
-    return query.get_compiler(using=using).execute_sql(return_id)
-  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
-    cursor.execute(sql, params)
-  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 40, in execute
-    return self.cursor.execute(sql, params)
-  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
-    return self.cursor.execute(query, args)
-IntegrityError: null value in column "line_id" violates not-null constraint
-
-[04/Mar/2017 18:52:33] ERROR [django.request:213] Internal Server Error: /templatedetails/32
+  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+    draft_service.load_draft(template, request.user)
+  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
+    response = self._client.service.LoadDraft(xml_template)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
+    return client.invoke(args, kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
+    result = self.send(soapenv)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 649, in send
+    result = self.failed(binding, e)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 702, in failed
+    r, p = binding.get_fault(reply)
+  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/binding.py", line 265, in get_fault
+    raise WebFault(p, faultroot)
+WebFault: Server raised fault: '\u041d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u0430\u044f \u043e\u0448\u0438\u0431\u043a\u0430. {Web\u0421\u0435\u0440\u0432\u0438\u0441.\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438\u0414\u0440\u0430\u0444\u0442\u043e\u0432.\u041c\u043e\u0434\u0443\u043b\u044c(21)}: \u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u0438 \u0432\u044b\u0437\u043e\u0432\u0435 \u043c\u0435\u0442\u043e\u0434\u0430 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 (\u041f\u043e\u043b\u0443\u0447\u0438\u0442\u044cCOM\u041e\u0431\u044a\u0435\u043a\u0442)
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+{Web\u0421\u0435\u0440\u0432\u0438\u0441.\u041e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0430\u0417\u0430\u0433\u0440\u0443\u0437\u043a\u0438\u0414\u0440\u0430\u0444\u0442\u043e\u0432.\u041c\u043e\u0434\u0443\u043b\u044c(21)}: \u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u0438 \u0432\u044b\u0437\u043e\u0432\u0435 \u043c\u0435\u0442\u043e\u0434\u0430 \u043a\u043e\u043d\u0442\u0435\u043a\u0441\u0442\u0430 (\u041f\u043e\u043b\u0443\u0447\u0438\u0442\u044cCOM\u041e\u0431\u044a\u0435\u043a\u0442)
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+\u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u043e\u043b\u0443\u0447\u0435\u043d\u0438\u044f \u043e\u0431\u044a\u0435\u043a\u0442\u0430 COM: -2147024891(0x80070005): \u041e\u0442\u043a\u0430\u0437\u0430\u043d\u043e \u0432 \u0434\u043e\u0441\u0442\u0443\u043f\u0435. '
+[06/Mar/2017 00:48:53] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 134, in get_response
-    response = response.render()
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 104, in render
-    self._set_content(self.rendered_content)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 79, in rendered_content
-    template = self.resolve_template(self.template_name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 55, in resolve_template
-    return loader.select_template(template)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 193, in select_template
-    raise TemplateDoesNotExist(', '.join(not_found))
-TemplateDoesNotExist: template_detail.html
-[04/Mar/2017 18:52:56] ERROR [django.request:213] Internal Server Error: /templatedetails/32
-Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 134, in get_response
-    response = response.render()
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 104, in render
-    self._set_content(self.rendered_content)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 79, in rendered_content
-    template = self.resolve_template(self.template_name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 55, in resolve_template
-    return loader.select_template(template)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 187, in select_template
-    return get_template(template_name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 145, in get_template
-    template, origin = find_template(template_name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 134, in find_template
-    source, display_name = loader(name, dirs)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 42, in __call__
-    return self.load_template(template_name, template_dirs)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 48, in load_template
-    template = get_template_from_string(source, origin, template_name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 156, in get_template_from_string
-    return Template(source, origin, name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 125, in __init__
-    self.nodelist = compile_string(template_string, origin)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 153, in compile_string
-    return parser.parse()
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 265, in parse
-    self.invalid_block_tag(token, command, parse_until)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 321, in invalid_block_tag
-    raise self.error(token, "Invalid block tag: '%s'" % command)
-TemplateSyntaxError: Invalid block tag: 'extend'
-[04/Mar/2017 20:12:05] ERROR [django.request:213] Internal Server Error: /templatedetails/32
-Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 134, in get_response
-    response = response.render()
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 104, in render
-    self._set_content(self.rendered_content)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 79, in rendered_content
-    template = self.resolve_template(self.template_name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 55, in resolve_template
-    return loader.select_template(template)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 187, in select_template
-    return get_template(template_name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 145, in get_template
-    template, origin = find_template(template_name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 134, in find_template
-    source, display_name = loader(name, dirs)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 42, in __call__
-    return self.load_template(template_name, template_dirs)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 48, in load_template
-    template = get_template_from_string(source, origin, template_name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader.py", line 156, in get_template_from_string
-    return Template(source, origin, name)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 125, in __init__
-    self.nodelist = compile_string(template_string, origin)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 153, in compile_string
-    return parser.parse()
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 267, in parse
-    compiled_result = compile_func(self, token)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader_tags.py", line 214, in do_extends
-    nodelist = parser.parse()
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 267, in parse
-    compiled_result = compile_func(self, token)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader_tags.py", line 189, in do_block
-    nodelist = parser.parse(('endblock',))
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 267, in parse
-    compiled_result = compile_func(self, token)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 900, in do_if
-    nodelist = parser.parse(('elif', 'else', 'endif'))
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 265, in parse
-    self.invalid_block_tag(token, command, parse_until)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 320, in invalid_block_tag
-    (command, get_text_list(["'%s'" % p for p in parse_until])))
-TemplateSyntaxError: Invalid block tag: 'bootstrap_paginator', expected 'elif','else' \u0438\u043b\u0438 'endif'
-[05/Mar/2017 11:43:20] ERROR [django.request:213] Internal Server Error: /draftdetails/18
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+    draft_service.load_draft(template, request.user)
+  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
+    response = self._client.service.LoadDraft(xml_template)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
+    return client.invoke(args, kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
+    result = self.send(soapenv)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 649, in send
+    result = self.failed(binding, e)
+  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 702, in failed
+    r, p = binding.get_fault(reply)
+  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/binding.py", line 265, in get_fault
+    raise WebFault(p, faultroot)
+WebFault: Server raised fault: '\u041d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u0430\u044f \u043e\u0448\u0438\u0431\u043a\u0430. \u041e\u0448\u0438\u0431\u043a\u0430 \u0438\u043d\u0438\u0446\u0438\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u0438 \u043c\u043e\u0434\u0443\u043b\u044f: \u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a.\u0414\u0440\u0430\u0444\u0442\u043e\u0432\u044b\u0439\u041a\u043e\u043d\u043e\u0441\u0430\u043c\u0435\u043d\u0442.\u041c\u043e\u0434\u0443\u043b\u044c\u041e\u0431\u044a\u0435\u043a\u0442\u0430
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+\u041e\u0448\u0438\u0431\u043a\u0430 \u0438\u043d\u0438\u0446\u0438\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u0438 \u043c\u043e\u0434\u0443\u043b\u044f: \u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a.\u0414\u0440\u0430\u0444\u0442\u043e\u0432\u044b\u0439\u041a\u043e\u043d\u043e\u0441\u0430\u043c\u0435\u043d\u0442.\u041c\u043e\u0434\u0443\u043b\u044c\u041e\u0431\u044a\u0435\u043a\u0442\u0430
+\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
+{\u0421\u043f\u0440\u0430\u0432\u043e\u0447\u043d\u0438\u043a.\u0414\u0440\u0430\u0444\u0442\u043e\u0432\u044b\u0439\u041a\u043e\u043d\u043e\u0441\u0430\u043c\u0435\u043d\u0442.\u041c\u043e\u0434\u0443\u043b\u044c\u041e\u0431\u044a\u0435\u043a\u0442\u0430(464,28)}: \u041f\u0435\u0440\u0435\u043c\u0435\u043d\u043d\u0430\u044f \u043d\u0435 \u043e\u043f\u0440\u0435\u0434\u0435\u043b\u0435\u043d\u0430 (\u0420\u0435\u0436\u0438\u043c\u0414\u0438\u0430\u043b\u043e\u0433\u0430\u0412\u043e\u043f\u0440\u043e\u0441)'
+[06/Mar/2017 01:03:32] ERROR [django.request:213] Internal Server Error: /templatedetails/33
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
@@ -240,43 +255,234 @@ Traceback (most recent call last):
     return handler(request, *args, **kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 123, in get
     context = self.get_context_data(**kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 112, in get_context_data
-    context = super(TemplateDetailView, self).get_context_data(**kwargs)
-TypeError: super(type, obj): obj must be an instance or subtype of type
-[05/Mar/2017 12:07:39] ERROR [django.request:213] Internal Server Error: /draftdetails/18
+  File "/home/picasso/git/export/export/nutep/views.py", line 99, in get_context_data
+    draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 74, in update_status
+    self.parse_response(response, pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 102, in parse_response
+    container.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 49, in execute
+    logger.debug('(%.3f) %s; args=%s' % (duration, sql, params),
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-4: ordinal not in range(128)
+[06/Mar/2017 01:08:12] ERROR [django.request:213] Internal Server Error: /templatedetails/33
 Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 134, in get_response
-    response = response.render()
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 104, in render
-    self._set_content(self.rendered_content)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 81, in rendered_content
-    content = template.render(context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
-    return self._render(context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
-    return self.nodelist.render(context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 823, in render
-    bit = self.render_node(node, context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
-    return node.render(context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
-    return compiled_parent._render(context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
-    return self.nodelist.render(context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 823, in render
-    bit = self.render_node(node, context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
-    return node.render(context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
-    result = block.nodelist.render(context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 823, in render
-    bit = self.render_node(node, context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
-    return node.render(context)
-  File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 426, in render
-    raise e
-NoReverseMatch: Reverse for 'template-details' with arguments '('',)' and keyword arguments '{}' not found.
-[05/Mar/2017 12:37:55] ERROR [django.request:213] Internal Server Error: /draftdetails/18
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 53, in dispatch
+    return super(BaseView, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 123, in get
+    context = self.get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 99, in get_context_data
+    draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 75, in update_status
+    self.parse_response(response, pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 103, in parse_response
+    container.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 49, in execute
+    logger.debug('(%.3f) %s; args=%s' % (duration, sql, params),
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-4: ordinal not in range(128)
+[06/Mar/2017 01:10:08] ERROR [django.request:213] Internal Server Error: /templatedetails/33
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 53, in dispatch
+    return super(BaseView, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 123, in get
+    context = self.get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 99, in get_context_data
+    draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 75, in update_status
+    self.parse_response(response, pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 104, in parse_response
+    container.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 49, in execute
+    logger.debug('(%.3f) %s; args=%s' % (duration, sql, params),
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-4: ordinal not in range(128)
+[06/Mar/2017 01:10:54] ERROR [django.request:213] Internal Server Error: /templatedetails/33
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 53, in dispatch
+    return super(BaseView, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 123, in get
+    context = self.get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 99, in get_context_data
+    draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 75, in update_status
+    self.parse_response(response, pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 104, in parse_response
+    container.save()
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+IntegrityError: null value in column "SOC" violates not-null constraint
+
+[07/Mar/2017 11:59:31] ERROR [django.request:213] Internal Server Error: /templatedetails/33
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 53, in dispatch
+    return super(BaseView, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 123, in get
+    context = self.get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 99, in get_context_data
+    draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 76, in update_status
+    self.parse_response(response, pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 83, in parse_response
+    error = BaseError.objects.create(message="TEST")
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 137, in create
+    return self.get_query_set().create(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 377, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+IntegrityError: null value in column "content_type_id" violates not-null constraint
+
+[07/Mar/2017 12:02:47] ERROR [django.request:213] Internal Server Error: /templatedetails/33
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 53, in dispatch
+    return super(BaseView, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 123, in get
+    context = self.get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 99, in get_context_data
+    draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 76, in update_status
+    self.parse_response(response, pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 116, in parse_response
+    if len(template.errors):
+TypeError: object of type 'GenericRelatedObjectManager' has no len()
+[07/Mar/2017 12:03:22] ERROR [django.request:213] Internal Server Error: /templatedetails/33
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 53, in dispatch
+    return super(BaseView, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 123, in get
+    context = self.get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 99, in get_context_data
+    draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 76, in update_status
+    self.parse_response(response, pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 116, in parse_response
+    if len(template.errors.all):
+TypeError: object of type 'instancemethod' has no len()
+[07/Mar/2017 13:46:41] ERROR [django.request:213] Internal Server Error: /templatedetails/33
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 134, in get_response
     response = response.render()
@@ -308,417 +514,138 @@ Traceback (most recent call last):
     return node.render(context)
   File "/usr/local/lib/python2.7/dist-packages/django/template/defaulttags.py", line 145, in render
     values = list(values)
-TypeError: 'RelatedManager' object is not iterable
-[05/Mar/2017 22:26:58] ERROR [django.request:213] Internal Server Error: /upload/
+TypeError: 'GenericRelatedObjectManager' object is not iterable
+[07/Mar/2017 16:10:06] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
     return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 190, in upload_file
-    return HttpResponse(u'Неверный шаблон. Столбец Voyage содержит более одного рейса %s' % u','.join(voyages), status=400)
-TypeError: sequence item 1: expected string or Unicode, datetime.datetime found
-[05/Mar/2017 22:57:07] ERROR [django.request:213] Internal Server Error: /upload/
-Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
-    response = callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
-    return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+  File "/home/picasso/git/export/export/nutep/views.py", line 212, in upload_file
     draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 64, in load_draft
-    xml_template.id = user.profile.guid
-AttributeError: 'RelatedManager' object has no attribute 'guid'
-[05/Mar/2017 22:57:52] ERROR [django.request:213] Internal Server Error: /upload/
+  File "/home/picasso/git/export/export/nutep/services.py", line 69, in load_draft
+    self.parse_response(response, template.id)
+  File "/home/picasso/git/export/export/nutep/services.py", line 81, in parse_response
+    for xml_error in response.errors.error:
+AttributeError: 'Text' object has no attribute 'error'
+[07/Mar/2017 16:13:42] ERROR [django.request:213] Internal Server Error: /templatedetails/33
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 53, in dispatch
+    return super(BaseView, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 123, in get
+    context = self.get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 99, in get_context_data
+    draft_service.update_status(pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 74, in update_status
+    self.parse_response(response, pk)
+  File "/home/picasso/git/export/export/nutep/services.py", line 82, in parse_response
+    for xml_error in response.errors.error:
+AttributeError: 'Text' object has no attribute 'error'
+[07/Mar/2017 16:21:21] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
     return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+  File "/home/picasso/git/export/export/nutep/views.py", line 212, in upload_file
     draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 64, in load_draft
-    xml_template.id = user.get_profile().guid
-  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/models.py", line 385, in get_profile
-    'You need to set AUTH_PROFILE_MODULE in your project '
-SiteProfileNotAvailable: You need to set AUTH_PROFILE_MODULE in your project settings
-[05/Mar/2017 23:02:04] ERROR [django.request:213] Internal Server Error: /upload/
+  File "/home/picasso/git/export/export/nutep/services.py", line 69, in load_draft
+    self.parse_response(response, template.id)
+  File "/home/picasso/git/export/export/nutep/services.py", line 79, in parse_response
+    voyage = self.get_voyage(response.voyage)
+AttributeError: Data instance has no attribute 'voyage'
+[07/Mar/2017 16:23:20] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
     return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+  File "/home/picasso/git/export/export/nutep/views.py", line 212, in upload_file
     draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 65, in load_draft
-    response = self._client.service.LoadDraft(xml_template)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
-    return client.invoke(args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
-    result = self.send(soapenv)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 649, in send
-    result = self.failed(binding, e)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 702, in failed
-    r, p = binding.get_fault(reply)
-  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/binding.py", line 265, in get_fault
-    raise WebFault(p, faultroot)
-WebFault: Server raised fault: '\u041d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u0430\u044f \u043e\u0448\u0438\u0431\u043a\u0430. \u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u0434\u0430\u043d\u043d\u044b\u0445 XDTO:
-\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: '947002eb-c3ff-11e1-b440-000c29113788' \u043d\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u043f\u0440\u043e\u0441\u0442\u043e\u043c\u0443 \u0442\u0438\u043f\u0443: {http://www.w3.org/2001/XMLSchema}int
-\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
-\u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u0434\u0430\u043d\u043d\u044b\u0445 XDTO:
-\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: '947002eb-c3ff-11e1-b440-000c29113788' \u043d\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u043f\u0440\u043e\u0441\u0442\u043e\u043c\u0443 \u0442\u0438\u043f\u0443: {http://www.w3.org/2001/XMLSchema}int'
-[05/Mar/2017 23:04:40] ERROR [django.request:213] Internal Server Error: /upload/
+  File "/home/picasso/git/export/export/nutep/services.py", line 69, in load_draft
+    self.parse_response(response, template.id)
+  File "/home/picasso/git/export/export/nutep/services.py", line 83, in parse_response
+    BaseError.objects.create(content_object=template, message=xml_error.message, code=xml_error.code, field=xml_error.field)
+AttributeError: Error instance has no attribute 'code'
+[07/Mar/2017 16:26:40] ERROR [django.request:213] Internal Server Error: /upload/
 Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
     response = callback(request, *callback_args, **callback_kwargs)
   File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
     return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
+  File "/home/picasso/git/export/export/nutep/views.py", line 212, in upload_file
     draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 65, in load_draft
-    response = self._client.service.LoadDraft(xml_template)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
-    return client.invoke(args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
-    result = self.send(soapenv)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
-    reply = transport.send(request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
-    return  HttpTransport.send(self, request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
-    fp = self.u2open(u2request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
-    return url.open(u2request, timeout=tm)
-  File "/usr/lib/python2.7/urllib2.py", line 401, in open
-    response = self._open(req, data)
-  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
-    '_open', req)
-  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
-    result = func(*args)
-  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
-    return self.do_open(httplib.HTTPConnection, req)
-  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
-    r = h.getresponse(buffering=True)
-  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
-    response.begin()
-  File "/usr/lib/python2.7/httplib.py", line 408, in begin
-    version, status, reason = self._read_status()
-  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
-    line = self.fp.readline()
-  File "/usr/lib/python2.7/socket.py", line 447, in readline
-    data = self._sock.recv(self._rbufsize)
-timeout: timed out
-[05/Mar/2017 23:24:06] ERROR [django.request:213] Internal Server Error: /upload/
+  File "/home/picasso/git/export/export/nutep/services.py", line 69, in load_draft
+    self.parse_response(response, template.id)
+  File "/home/picasso/git/export/export/nutep/services.py", line 84, in parse_response
+    BaseError.objects.create(content_object=template, message=xml_error.message, field=xml_error.field)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 137, in create
+    return self.get_query_set().create(**kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 377, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/base.py", line 551, in save_base
+    result = manager._insert([self], fields=fields, return_id=update_pk, using=using, raw=raw)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/manager.py", line 203, in _insert
+    return insert_query(self.model, objs, fields, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/query.py", line 1593, in insert_query
+    return query.get_compiler(using=using).execute_sql(return_id)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/models/sql/compiler.py", line 912, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python2.7/dist-packages/django/db/backends/util.py", line 49, in execute
+    logger.debug('(%.3f) %s; args=%s' % (duration, sql, params),
+UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-7: ordinal not in range(128)
+[07/Mar/2017 16:32:20] ERROR [django.request:213] Internal Server Error: /templatedetails/34
 Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
-    response = callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
-    return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
-    draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 66, in load_draft
-    response = self._client.service.LoadDraft(xml_template)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
-    return client.invoke(args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
-    result = self.send(soapenv)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
-    reply = transport.send(request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
-    return  HttpTransport.send(self, request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
-    fp = self.u2open(u2request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
-    return url.open(u2request, timeout=tm)
-  File "/usr/lib/python2.7/urllib2.py", line 401, in open
-    response = self._open(req, data)
-  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
-    '_open', req)
-  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
-    result = func(*args)
-  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
-    return self.do_open(httplib.HTTPConnection, req)
-  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
-    r = h.getresponse(buffering=True)
-  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
-    response.begin()
-  File "/usr/lib/python2.7/httplib.py", line 408, in begin
-    version, status, reason = self._read_status()
-  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
-    line = self.fp.readline()
-  File "/usr/lib/python2.7/socket.py", line 447, in readline
-    data = self._sock.recv(self._rbufsize)
-timeout: timed out
-[05/Mar/2017 23:28:06] ERROR [django.request:213] Internal Server Error: /upload/
-Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
-    response = callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
-    return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
-    draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
-    response = self._client.service.LoadDraft(xml_template)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
-    return client.invoke(args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
-    result = self.send(soapenv)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
-    reply = transport.send(request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
-    return  HttpTransport.send(self, request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
-    fp = self.u2open(u2request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
-    return url.open(u2request, timeout=tm)
-  File "/usr/lib/python2.7/urllib2.py", line 401, in open
-    response = self._open(req, data)
-  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
-    '_open', req)
-  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
-    result = func(*args)
-  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
-    return self.do_open(httplib.HTTPConnection, req)
-  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
-    r = h.getresponse(buffering=True)
-  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
-    response.begin()
-  File "/usr/lib/python2.7/httplib.py", line 408, in begin
-    version, status, reason = self._read_status()
-  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
-    line = self.fp.readline()
-  File "/usr/lib/python2.7/socket.py", line 447, in readline
-    data = self._sock.recv(self._rbufsize)
-timeout: timed out
-[05/Mar/2017 23:32:00] ERROR [django.request:213] Internal Server Error: /upload/
-Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
-    response = callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
-    return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
-    draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
-    response = self._client.service.LoadDraft(xml_template)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
-    return client.invoke(args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
-    result = self.send(soapenv)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
-    reply = transport.send(request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
-    return  HttpTransport.send(self, request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
-    fp = self.u2open(u2request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
-    return url.open(u2request, timeout=tm)
-  File "/usr/lib/python2.7/urllib2.py", line 401, in open
-    response = self._open(req, data)
-  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
-    '_open', req)
-  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
-    result = func(*args)
-  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
-    return self.do_open(httplib.HTTPConnection, req)
-  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
-    r = h.getresponse(buffering=True)
-  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
-    response.begin()
-  File "/usr/lib/python2.7/httplib.py", line 408, in begin
-    version, status, reason = self._read_status()
-  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
-    line = self.fp.readline()
-  File "/usr/lib/python2.7/socket.py", line 447, in readline
-    data = self._sock.recv(self._rbufsize)
-timeout: timed out
-[05/Mar/2017 23:33:43] ERROR [django.request:213] Internal Server Error: /upload/
-Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
-    response = callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
-    return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
-    draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
-    response = self._client.service.LoadDraft(xml_template)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
-    return client.invoke(args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
-    result = self.send(soapenv)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
-    reply = transport.send(request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
-    return  HttpTransport.send(self, request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
-    fp = self.u2open(u2request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
-    return url.open(u2request, timeout=tm)
-  File "/usr/lib/python2.7/urllib2.py", line 401, in open
-    response = self._open(req, data)
-  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
-    '_open', req)
-  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
-    result = func(*args)
-  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
-    return self.do_open(httplib.HTTPConnection, req)
-  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
-    r = h.getresponse(buffering=True)
-  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
-    response.begin()
-  File "/usr/lib/python2.7/httplib.py", line 408, in begin
-    version, status, reason = self._read_status()
-  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
-    line = self.fp.readline()
-  File "/usr/lib/python2.7/socket.py", line 447, in readline
-    data = self._sock.recv(self._rbufsize)
-timeout: timed out
-[05/Mar/2017 23:35:41] ERROR [django.request:213] Internal Server Error: /upload/
-Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
-    response = callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
-    return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
-    draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
-    response = self._client.service.LoadDraft(xml_template)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
-    return client.invoke(args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
-    result = self.send(soapenv)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
-    reply = transport.send(request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
-    return  HttpTransport.send(self, request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
-    fp = self.u2open(u2request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
-    return url.open(u2request, timeout=tm)
-  File "/usr/lib/python2.7/urllib2.py", line 401, in open
-    response = self._open(req, data)
-  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
-    '_open', req)
-  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
-    result = func(*args)
-  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
-    return self.do_open(httplib.HTTPConnection, req)
-  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
-    r = h.getresponse(buffering=True)
-  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
-    response.begin()
-  File "/usr/lib/python2.7/httplib.py", line 408, in begin
-    version, status, reason = self._read_status()
-  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
-    line = self.fp.readline()
-  File "/usr/lib/python2.7/socket.py", line 447, in readline
-    data = self._sock.recv(self._rbufsize)
-timeout: timed out
-[05/Mar/2017 23:37:27] ERROR [django.request:213] Internal Server Error: /upload/
-Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
-    response = callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
-    return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
-    draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
-    response = self._client.service.LoadDraft(xml_template)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
-    return client.invoke(args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
-    result = self.send(soapenv)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 649, in send
-    result = self.failed(binding, e)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 702, in failed
-    r, p = binding.get_fault(reply)
-  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/binding.py", line 265, in get_fault
-    raise WebFault(p, faultroot)
-WebFault: Server raised fault: '\u041d\u0435\u0438\u0437\u0432\u0435\u0441\u0442\u043d\u0430\u044f \u043e\u0448\u0438\u0431\u043a\u0430. \u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u0434\u0430\u043d\u043d\u044b\u0445 XDTO:
-\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: '/home/picasso/git/export/export/export/media/attachments/2_2017/ExportBL_ekztkHb.xlsx' \u043d\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u043f\u0440\u043e\u0441\u0442\u043e\u043c\u0443 \u0442\u0438\u043f\u0443: {http://www.w3.org/2001/XMLSchema}base64Binary
-\u043f\u043e \u043f\u0440\u0438\u0447\u0438\u043d\u0435:
-\u041e\u0448\u0438\u0431\u043a\u0430 \u043f\u0440\u043e\u0432\u0435\u0440\u043a\u0438 \u0434\u0430\u043d\u043d\u044b\u0445 XDTO:
-\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435: '/home/picasso/git/export/export/export/media/attachments/2_2017/ExportBL_ekztkHb.xlsx' \u043d\u0435 \u0441\u043e\u043e\u0442\u0432\u0435\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u043f\u0440\u043e\u0441\u0442\u043e\u043c\u0443 \u0442\u0438\u043f\u0443: {http://www.w3.org/2001/XMLSchema}base64Binary'
-[05/Mar/2017 23:38:20] ERROR [django.request:213] Internal Server Error: /upload/
-Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
-    response = callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
-    return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
-    draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
-    response = self._client.service.LoadDraft(xml_template)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
-    return client.invoke(args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 595, in invoke
-    soapenv = binding.get_message(self.method, args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/binding.py", line 120, in get_message
-    content = self.bodycontent(method, args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/document.py", line 63, in bodycontent
-    p = self.mkparam(method, pd, value)
-  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/document.py", line 105, in mkparam
-    return Binding.mkparam(self, method, pdef, object)
-  File "/usr/local/lib/python2.7/dist-packages/suds/bindings/binding.py", line 287, in mkparam
-    return marshaller.process(content)
-  File "/usr/local/lib/python2.7/dist-packages/suds/mx/core.py", line 62, in process
-    self.append(document, content)
-  File "/usr/local/lib/python2.7/dist-packages/suds/mx/core.py", line 75, in append
-    self.appender.append(parent, content)
-  File "/usr/local/lib/python2.7/dist-packages/suds/mx/appender.py", line 102, in append
-    appender.append(parent, content)
-  File "/usr/local/lib/python2.7/dist-packages/suds/mx/appender.py", line 243, in append
-    Appender.append(self, child, cont)
-  File "/usr/local/lib/python2.7/dist-packages/suds/mx/appender.py", line 182, in append
-    self.marshaller.append(parent, content)
-  File "/usr/local/lib/python2.7/dist-packages/suds/mx/core.py", line 75, in append
-    self.appender.append(parent, content)
-  File "/usr/local/lib/python2.7/dist-packages/suds/mx/appender.py", line 102, in append
-    appender.append(parent, content)
-  File "/usr/local/lib/python2.7/dist-packages/suds/mx/appender.py", line 198, in append
-    child.setText(tostr(content.value))
-  File "/usr/local/lib/python2.7/dist-packages/suds/sax/element.py", line 251, in setText
-    self.text = Text(value)
-  File "/usr/local/lib/python2.7/dist-packages/suds/sax/text.py", line 43, in __new__
-    result = super(Text, cls).__new__(cls, *args, **kwargs)
-UnicodeDecodeError: 'ascii' codec can't decode byte 0x82 in position 16: ordinal not in range(128)
-[05/Mar/2017 23:40:45] ERROR [django.request:213] Internal Server Error: /upload/
-Traceback (most recent call last):
-  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
-    response = callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
-    return view_func(request, *args, **kwargs)
-  File "/home/picasso/git/export/export/nutep/views.py", line 213, in upload_file
-    draft_service.load_draft(template, request.user)
-  File "/home/picasso/git/export/export/nutep/services.py", line 67, in load_draft
-    response = self._client.service.LoadDraft(xml_template)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 542, in __call__
-    return client.invoke(args, kwargs)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 602, in invoke
-    result = self.send(soapenv)
-  File "/usr/local/lib/python2.7/dist-packages/suds/client.py", line 637, in send
-    reply = transport.send(request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/https.py", line 64, in send
-    return  HttpTransport.send(self, request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 77, in send
-    fp = self.u2open(u2request)
-  File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 118, in u2open
-    return url.open(u2request, timeout=tm)
-  File "/usr/lib/python2.7/urllib2.py", line 401, in open
-    response = self._open(req, data)
-  File "/usr/lib/python2.7/urllib2.py", line 419, in _open
-    '_open', req)
-  File "/usr/lib/python2.7/urllib2.py", line 379, in _call_chain
-    result = func(*args)
-  File "/usr/lib/python2.7/urllib2.py", line 1211, in http_open
-    return self.do_open(httplib.HTTPConnection, req)
-  File "/usr/lib/python2.7/urllib2.py", line 1184, in do_open
-    r = h.getresponse(buffering=True)
-  File "/usr/lib/python2.7/httplib.py", line 1072, in getresponse
-    response.begin()
-  File "/usr/lib/python2.7/httplib.py", line 408, in begin
-    version, status, reason = self._read_status()
-  File "/usr/lib/python2.7/httplib.py", line 366, in _read_status
-    line = self.fp.readline()
-  File "/usr/lib/python2.7/socket.py", line 447, in readline
-    data = self._sock.recv(self._rbufsize)
-timeout: timed out
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 134, in get_response
+    response = response.render()
+  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 104, in render
+    self._set_content(self.rendered_content)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/response.py", line 81, in rendered_content
+    content = template.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 140, in render
+    return self._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader_tags.py", line 123, in render
+    return compiled_parent._render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 134, in _render
+    return self.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/loader_tags.py", line 62, in render
+    result = block.nodelist.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 823, in render
+    bit = self.render_node(node, context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 74, in render_node
+    return node.render(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/debug.py", line 84, in render
+    output = self.filter_expression.resolve(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 571, in resolve
+    obj = self.var.resolve(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 721, in resolve
+    value = self._resolve_lookup(context)
+  File "/usr/local/lib/python2.7/dist-packages/django/template/base.py", line 772, in _resolve_lookup
+    current = current()
+  File "/home/picasso/git/export/export/nutep/models.py", line 228, in drafts_readiness
+    return int(done / total * 100)
+ZeroDivisionError: float division by zero

@@ -5205,6 +5205,7 @@ $(function() {
 	$(".fileupload").fileinput(
 			{
 				language: "ru",
+				allowedFileExtensions: ["xlsx"]
 			}
 	);
 });
@@ -5244,8 +5245,7 @@ $(function() {
 	        },
 	        title: "Удаление записи в корзину",
 	        message: message,
-	        callback: function (result) {
-	            console.log('This was logged in the callback!' + result + " " + csrftoken);
+	        callback: function (result) {	            
 	            if (result) {
 	            	$.post(
         			  "/deletetemplate/" + pk,
@@ -5272,4 +5272,43 @@ $(function() {
 	    window.location.href = link;	    
 	});
 });
+
+
+$(function() {
+	$('#template-status').on('click', function (e) {
+		e.preventDefault();
+		var pk = $( this ).data("pk");
+		var csrftoken = getCookie('csrftoken');
+		myApp.showPleaseWait();
+		$.post(
+		  "/gettemplate/" + pk,
+		  {
+			csrfmiddlewaretoken: csrftoken        			    
+		  },
+		  function (data) {			  
+			  if (data.status == true) {				  
+				  location.reload();
+			  }
+		  }
+		)
+		.fail(function(response) {
+			myApp.hidePleaseWait();
+		    alert('Ошибка обновления данных.');
+		});
+	});	
+});
+
+var myApp;
+myApp = myApp || (function () {
+    var pleaseWaitDiv = $('<div class="modal" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false"><div class="alert alert-info"><h1>Подождите, идет загрузка данных...</h1></div></div>');
+    return {
+        showPleaseWait: function() {
+            pleaseWaitDiv.modal();
+        },
+        hidePleaseWait: function () {
+            pleaseWaitDiv.modal('hide');
+        },
+
+    };
+})();
 

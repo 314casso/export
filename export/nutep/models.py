@@ -51,6 +51,27 @@ class HistoryMeta(models.Model):
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.PROTECT)         
     
 
+class BaseError(models.Model):
+    XML = 1
+    MODEL = 2
+    UNKNOWN = 3    
+    
+    TYPE_CHOICES = (
+        (XML, force_unicode('Ошибка учетной системы')),
+        (MODEL, force_unicode('Ошибка данных')),
+        (UNKNOWN, force_unicode('Ошибка')),
+             
+    )
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')   
+    date = models.DateTimeField(auto_now_add=True, blank=True)
+    code = models.CharField(max_length=50, db_index=True, blank=True, null=True)
+    field = models.CharField(max_length=50, db_index=True, blank=True, null=True)            
+    message = models.TextField()
+    type = models.IntegerField(choices=TYPE_CHOICES, default=UNKNOWN, db_index=True, blank=True)
+    
+
 class Vessel(BaseModel):   
     history = GenericRelation('HistoryMeta')
     def __unicode__(self):
@@ -171,19 +192,6 @@ class Contract(BaseModel):
         ordering = ('name', )
     
     
-class TemplateError():
-    message = models.CharField(max_length=150) 
-    code = models.CharField(max_length=50, db_index=True)
-    field = models.CharField()
-    template = models.ForeignKey("UploadedTemplate", related_name="errors")
-    def __unicode__(self):
-        return u'{0}'.format(self.message) 
-    class Meta:
-        verbose_name = force_unicode('Ошибка')
-        verbose_name_plural = force_unicode('Ошибки')
-        ordering = ('message', )
-    
-    
 class UploadedTemplate(ProcessDeletedModel):
     NEW = 1
     INPROCESS = 2
@@ -203,8 +211,32 @@ class UploadedTemplate(ProcessDeletedModel):
     xml_response = models.TextField('XML ответ', null=True, blank=True)    
     voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT, related_name="templates")
     contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)
-    #Изменения
+    
     history = GenericRelation('HistoryMeta')
+    
+    errors = GenericRelation('BaseError')
+    
+    def drafts_done(self):        
+        return self.drafts.filter(poruchenie=True)    
+        
+    def drafts_total(self):        
+        return self.drafts.all()
+        
+    def drafts_readiness(self):        
+        total = float(len(self.drafts_total()))
+        if not total:
+            return 0
+        done = float(len(self.drafts_done()))        
+        return int(done / total * 100)        
+    
+    def set_status(self):
+        if len(self.errors.all()):
+            self.status = UploadedTemplate.ERROR
+        elif self.drafts_readiness == 100:            
+            self.status = UploadedTemplate.PROCESSED
+        else:
+            self.status = UploadedTemplate.INPROCESS
+        self.save()
     
     def __unicode__(self):
         return u'{0}'.format(self.attachment.name)  

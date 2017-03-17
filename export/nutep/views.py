@@ -18,6 +18,7 @@ from django.core.files.base import ContentFile
 from nutep.services import DraftService
 from export.local_settings import WEB_SERVISES
 from django.views.generic.base import TemplateView
+from django.views.decorators.http import require_http_methods
 
 
 logger = logging.getLogger('django.request')
@@ -33,6 +34,7 @@ class DeleteMixin(SingleObjectMixin):
         self.object.deleted = True
         self.object.save()        
         return HttpResponse(json.dumps({'pk':self.object.id}), content_type="application/json") 
+        
         
 class TemplateDeleteView(DeleteMixin, DeleteView):   
     model = UploadedTemplate
@@ -94,9 +96,7 @@ class ServiceView(BaseView):
 class TemplateDetailView(BaseView):
     template_name = 'template_details.html'
     def get_context_data(self, **kwargs):
-        pk = kwargs.get('pk')
-        draft_service = DraftService(WEB_SERVISES['draft'])    
-        draft_service.update_status(pk)
+        pk = kwargs.get('pk')        
         template = UploadedTemplate.objects.get(pk=pk)
         context = super(TemplateDetailView, self).get_context_data(**kwargs)
         context.update({
@@ -138,15 +138,17 @@ def delete_template(request, template_id):
             return HttpResponse(u'Template id %s не найден' % template_id, status=404)
 
 
+@require_http_methods(["POST"])
 @login_required    
 def get_template_status(request, pk):
-    draft_service = DraftService(WEB_SERVISES['draft'])
-    #status = draft_service.get_status(pk)
-    status = draft_service.update_status(pk)        
-    return HttpResponse("<pre>%s</pre>" % status)
-    
-        
-    
+    if request.method == 'POST':
+        draft_service = DraftService(WEB_SERVISES['draft'])    
+        response = draft_service.update_status(pk)
+        status = True if response else False                
+        return HttpResponse(json.dumps({'status':status}), content_type="application/json")
+            
+
+@require_http_methods(["POST"])    
 @login_required
 def upload_file(request):
     if request.method == 'POST':
@@ -204,10 +206,13 @@ def upload_file(request):
             except UploadedTemplate.DoesNotExist:
                 pass
             
+            
             template = form.save(commit=False)            
             template.user = request.user
-            template.voyage = voyage 
+            template.voyage = voyage
+            template.attachment = form.cleaned_data['attachment']            
             template.save()
+            
             
             draft_service = DraftService(WEB_SERVISES['draft'])    
             draft_service.load_draft(template, request.user)

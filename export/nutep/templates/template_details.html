@@ -6,7 +6,7 @@
         
         	<div class="page-title">
               <div class="title_left">
-                <h3>Заявка <small>{{ template.pk }}</small></h3>
+                <h3>Заявка <small>{{ template.pk }}</small></h3>                
               </div>
             </div>
 
@@ -26,12 +26,72 @@
 					    <dt>Договор</dt>
 					    <dd>{{ template.contract }}</dd>
 					    <dt>Файл</dt>
-					    <dd><a class="btn btn-info btn-sm" href="{{ template.attachment.url }}">{{ template.filename }}</a> {{ template.attachment.size|filesizeformat }}</dd>					    
+					    <dd><a class="btn btn-default btn-sm" href="{{ template.attachment.url }}">{{ template.filename }}</a> {{ template.attachment.size|filesizeformat }}</dd>
+					    <dt>Готовность</dt>
+					    <dd>
+					    <div class="row">	
+					    	<div class="col-md-6 col-sm-6 col-xs-6">
+							    <div class="progress">
+		                        <div class="progress-bar progress-bar-success" data-transitiongoal="{{ template.drafts_readiness }}" aria-valuenow="{{ template.drafts_readiness }}" 
+		                        	style="width:{{ template.drafts_readiness }}%">{{ template.drafts_readiness }}%</div>	                        	
+		                      	</div>
+	                      	</div>
+	                    </div>
+					    </dd>
+					    
+					    <dt></dt>
+					    <dd><a id="template-status" class="btn btn-success" data-pk="{{ template.id }}" href="#">Обновить данные</a></dd>
+					    					    
 					</dl>
+					
+				    
 					
                  </div>
                 </div>
                </div>
+
+			<div class="clearfix"></div>
+			
+			{% if template.errors.all %} 
+			<div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Ошибки</h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  
+                  <div class="x_content">
+                  	{% for error in template.errors.all  %}				
+						
+					<div class="panel panel-danger">
+					  <div class="panel-heading"><strong>{{ error.get_type_display }}</strong>			  
+					  <div class="pull-right">
+					  	{% if error.code %}
+                      	<span class="badge" title="Код ошибки">
+                      		{{ error.code }}
+                        </span>       
+                        {% endif %}        
+                        {% if error.field %}       
+                        <span class="badge" title="Поле">
+                      		{{ error.field }}
+                        </span>
+                        {% endif %}
+                      </div>
+					  
+					  </div>
+					  <div class="panel-body">
+					  {{ error.message }}
+					  </div>
+					</div>
+					
+					{% endfor %}
+					</div>
+                  
+                </div>
+              </div>
+            </div>
+            {% endif %}        
 
             <div class="clearfix"></div>
 
@@ -41,6 +101,7 @@
     		   {{ template_form }}			   
 		  </form>
           
+          {% if template.drafts.all %}
           <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
@@ -125,6 +186,7 @@
 
               
            </div>
+           {% endif %}
 
               <div class="clearfix"></div>
           

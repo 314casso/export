@@ -4,10 +4,9 @@ from __builtin__ import setattr
 import base64
 from suds.cache import NoCache
 from nutep.models import Draft, UploadedTemplate, Voyage, Line, Vessel,\
-    Contract, Container, Readiness
+    Contract, Container, Readiness, BaseError
 from django.contrib.auth.models import User
-from django.utils.encoding import force_unicode
-
+ 
 
 class BaseService():
     def __init__(self, settings):
@@ -21,7 +20,7 @@ class BaseService():
             "SOAPAction" : "ActionName",
             "Authorization" : "Basic %s" % base64string
         }                
-        self._client = Client(self.url, headers=authenticationHeader, cache=NoCache())        
+        self._client = Client(self.url, headers=authenticationHeader, cache=NoCache(), timeout=500)        
         
 
 class DraftService(BaseService):       
@@ -63,26 +62,41 @@ class DraftService(BaseService):
         xml_template = self._client.factory.create('Template')
         xml_template.id = template.id
         xml_template.userguid = user.get_profile().guid        
-        xml_template.data = template.attachment.read().encode('base64')
-                
-        response = self._client.service.LoadDraft(xml_template)
-        print response        
-        #self.parse_response(response, template.id)
+        xml_template.data = template.attachment.read().encode('base64')                
+        response = self._client.service.LoadDraft(xml_template)                
+        self.parse_response(response, template)
         return response
                         
-    def update_status(self, pk):
+    def update_status(self, pk): 
+        template = UploadedTemplate.objects.get(pk=pk)
+        if template.errors.all():
+            return                   
         response = self._client.service.GetStatus(pk)      
-        self.parse_response(response, pk)
+        self.parse_response(response, template)
         return response
     
-    def parse_response(self, response, pk):
+    def parse_response(self, response, template):
+        self.delete_data(template)    
+        if response.errors:
+            fields = ['code','error','message']         
+            for xml_error in response.errors.error:                  
+                base_error = BaseError()
+                for field in fields:
+                    value = u'%s' % xml_error[field] if field in xml_error else None                        
+                    setattr(base_error, field, value)                
+                base_error.content_object = template
+                base_error.type = BaseError.XML
+                base_error.save()
+        
+        if template.errors.all():
+            template.set_status()
+            return response
+        
         voyage = self.get_voyage(response.voyage)
-        template = UploadedTemplate.objects.get(pk=pk)
         template.voyage = voyage 
         template.contract = self.get_contract(response.contract)
         template.xml_response = response
-        template.save()  
-        self.delete_data(pk)        
+        template.save() 
         for xml_draft in response.drafts.draft:            
             draft = Draft()
             fields = ['name','guid','date','shipper','consignee','finalDestination','POD','POL','finstatus','status','poruchenie','poruchenieNums','notify']
@@ -110,9 +124,10 @@ class DraftService(BaseService):
                     setattr(readiness, field, xml_readiness[field])                
                 readiness.draft = draft
                 readiness.save()
+        template.set_status()
         
             
-    def delete_data(self, pk):
-        template = UploadedTemplate.objects.get(pk=pk)
+    def delete_data(self, template):        
         drafts = Draft.objects.filter(template=template)
-        drafts.delete()                        
+        drafts.delete()
+        template.errors.all().delete()                        
