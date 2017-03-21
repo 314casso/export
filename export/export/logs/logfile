@@ -607,3 +607,51 @@ Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/suds/transport/http.py", line 64, in open
     raise TransportError(str(e), e.code, e.fp)
 TransportError: HTTP Error 502: Bad gateway
+[21/Mar/2017 12:47:19] ERROR [django.request:213] Internal Server Error: /templatedetails/34
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 58, in dispatch
+    return super(BaseView, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 123, in get
+    context = self.get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 104, in get_context_data
+    context = super(TemplateDetailView, self).get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 61, in get_context_data
+    vessels = Vessel.objects.filter(history__user__lines__in=self.request.user.lines.all()).distinct()
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/functional.py", line 185, in inner
+    return func(self._wrapped, *args)
+AttributeError: 'User' object has no attribute 'lines'
+[21/Mar/2017 12:47:56] ERROR [django.request:213] Internal Server Error: /templatedetails/34
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py", line 109, in get_response
+    response = callback(request, *callback_args, **callback_kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 48, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 25, in _wrapper
+    return bound_func(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/contrib/auth/decorators.py", line 20, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/decorators.py", line 21, in bound_func
+    return func(self, *args2, **kwargs2)
+  File "/home/picasso/git/export/export/nutep/views.py", line 58, in dispatch
+    return super(BaseView, self).dispatch(*args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 69, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py", line 123, in get
+    context = self.get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 104, in get_context_data
+    context = super(TemplateDetailView, self).get_context_data(**kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 61, in get_context_data
+    vessels = Vessel.objects.filter(history__user__profile__lines__in=self.request.user.profile.lines.all()).distinct()
+AttributeError: 'RelatedManager' object has no attribute 'lines'

@@ -54,10 +54,12 @@ class HistoryMeta(models.Model):
 class BaseError(models.Model):
     XML = 1
     MODEL = 2
-    UNKNOWN = 3    
+    UNKNOWN = 3 
+    WEBFAULT = 4   
     
     TYPE_CHOICES = (
         (XML, force_unicode('Ошибка учетной системы')),
+        (WEBFAULT, force_unicode('Ошибка обмена данных')),
         (MODEL, force_unicode('Ошибка данных')),
         (UNKNOWN, force_unicode('Ошибка')),
              

@@ -19,6 +19,9 @@ from nutep.services import DraftService
 from export.local_settings import WEB_SERVISES
 from django.views.generic.base import TemplateView
 from django.views.decorators.http import require_http_methods
+from nutep.models import BaseError
+import suds
+
 
 
 logger = logging.getLogger('django.request')
@@ -55,7 +58,7 @@ class BaseView(TemplateView):
         return super(BaseView, self).dispatch(*args, **kwargs)
     def get_context_data(self, **kwargs):
         context = super(BaseView, self).get_context_data(**kwargs)        
-        vessels = Vessel.objects.filter(history__user=self.request.user).distinct()       
+        vessels = Vessel.objects.filter(history__user__profile__lines__in=self.request.user.get_profile().lines.all()).distinct()       
         context.update({
                    'title' : force_unicode('Рускон Онлайн'),        
                    'vessels': vessels,                                             
@@ -68,7 +71,7 @@ class ServiceView(BaseView):
     def get_context_data(self, **kwargs):
         context = super(ServiceView, self).get_context_data(**kwargs)
         PER_PAGE = 10
-        template_list = UploadedTemplate.objects.filter(history__user=self.request.user).distinct()    
+        template_list = UploadedTemplate.objects.filter(history__user__profile__lines__in=self.request.user.get_profile().lines.all()).distinct()    
         
         page = self.request.GET.get('page', 1)
     
@@ -206,15 +209,26 @@ def upload_file(request):
             except UploadedTemplate.DoesNotExist:
                 pass
             
-            
             template = form.save(commit=False)            
             template.user = request.user
             template.voyage = voyage
             template.attachment = form.cleaned_data['attachment']            
             template.save()
             
-            
-            draft_service = DraftService(WEB_SERVISES['draft'])    
-            draft_service.load_draft(template, request.user)
-                        
+            try:
+                draft_service = DraftService(WEB_SERVISES['draft'])    
+                draft_service.load_draft(template, request.user)
+            except suds.WebFault, f:
+                base_error = BaseError()                                
+                base_error.content_object = template
+                base_error.type = BaseError.WEBFAULT
+                base_error.message = f.fault 
+                base_error.save()              
+            except Exception, e:
+                base_error = BaseError()                                
+                base_error.content_object = template
+                base_error.type = BaseError.UNKNOWN
+                base_error.message = e 
+                base_error.save()
+                                        
             return HttpResponseRedirect(reverse('services'))
