@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_unicode, force_text
 from django.shortcuts import render
 import logging
 from django.contrib.auth.decorators import login_required
@@ -15,11 +15,11 @@ from django.views.generic.edit import DeleteView
 from django.utils.decorators import method_decorator
 import json
 from django.core.files.base import ContentFile
-from nutep.services import DraftService
+from nutep.services import DraftService, ExcelHelper, TemplateException
 from export.local_settings import WEB_SERVISES
 from django.views.generic.base import TemplateView
 from django.views.decorators.http import require_http_methods
-from nutep.models import BaseError
+from nutep.models import BaseError, Contract
 import suds
 
 
@@ -58,7 +58,7 @@ class BaseView(TemplateView):
         return super(BaseView, self).dispatch(*args, **kwargs)
     def get_context_data(self, **kwargs):
         context = super(BaseView, self).get_context_data(**kwargs)        
-        vessels = Vessel.objects.filter(history__user__profile__lines__in=self.request.user.get_profile().lines.all()).distinct()       
+        vessels = Vessel.objects.filter(history__user__profile__lines__in=self.request.user.profile.lines.all()).distinct()       
         context.update({
                    'title' : force_unicode('Рускон Онлайн'),        
                    'vessels': vessels,                                             
@@ -71,7 +71,7 @@ class ServiceView(BaseView):
     def get_context_data(self, **kwargs):
         context = super(ServiceView, self).get_context_data(**kwargs)
         PER_PAGE = 10
-        template_list = UploadedTemplate.objects.filter(history__user__profile__lines__in=self.request.user.get_profile().lines.all()).distinct()    
+        template_list = UploadedTemplate.objects.filter(history__user__profile__lines__in=self.request.user.profile.lines.all()).distinct()    
         
         page = self.request.GET.get('page', 1)
     
@@ -83,7 +83,10 @@ class ServiceView(BaseView):
         except EmptyPage:
             templates = paginator.page(paginator.num_pages)
         
-        template_form = TemplateForm()    
+        template_form = TemplateForm()
+        template_form.fields['contract'].queryset = Contract.objects.filter(line__in=self.request.user.profile.lines.all())
+        template_form.title = force_text('Загрузка шаблона заявки')
+        template_form.key = 'templateupload'    
         context.update({
                    'title' : force_unicode('Рускон Онлайн'),
                    'templates' : templates,
@@ -146,10 +149,10 @@ def delete_template(request, template_id):
 def get_template_status(request, pk):
     if request.method == 'POST':
         draft_service = DraftService(WEB_SERVISES['draft'])    
-        response = draft_service.update_status(pk)
+        response = draft_service.update_status(pk, request.user)
         status = True if response else False                
         return HttpResponse(json.dumps({'status':status}), content_type="application/json")
-            
+         
 
 @require_http_methods(["POST"])    
 @login_required
@@ -157,46 +160,27 @@ def upload_file(request):
     if request.method == 'POST':
         form = TemplateForm(request.POST, request.FILES)
         if form.is_valid():     
-            filename = form.cleaned_data['attachment']
-                        
+            filename = form.cleaned_data['attachment']                       
             from openpyxl import load_workbook
+                       
             
             try:                         
                 wb = load_workbook(filename = ContentFile(filename.read()))
-            except Exception as e:
-                return HttpResponse(u'Неверный формат шаблона: %s' % e.message,  status=400)
+            except Exception as e:                
+                return HttpResponse(u'Неверный формат шаблона: %s' % e.message, status=400)
+               
+            try:
+                ws = wb.active                         
+                                
+                voyage_name = ExcelHelper.get_value(ws, 'VOYAGE')                  
+                #contract_name = ExcelHelper.get_value(ws, 'CONTRACT')
+                #contract = 
                 
-            ws = wb.active
-            
-            voyage_col_name = 'VOYAGE'
-            voyage_cell = None 
-            for row in ws.iter_rows(min_row=1, max_col=ws.max_column, max_row=ws.max_row):                
-                if voyage_cell:
-                    break
-                for cell in row:
-                    if cell.value and cell.value.upper() == voyage_col_name:
-                        voyage_cell = cell
-                        break                                  
-            
-            if not voyage_cell:
-                return HttpResponse(u'Неверный шаблон. Столбец Voyage не найден в файле', status=400)
-            
-            rng = "%s%s:%s%s" % (voyage_cell.column, int(voyage_cell.row)+1,voyage_cell.column, int(voyage_cell.row)+1)
-            voyages = set() 
-            for row in ws.iter_rows(rng):
-                voyages.add(row[0].value)
-        
-            voyage_name = None
-            if len(voyages) == 1:
-                voyage_name = voyages.pop()
-            elif len(voyages) == 0:                
-                return HttpResponse(u'Неверный шаблон. Столбец Voyage не заполнен', status=400)
-            else:
-                return HttpResponse(u'Неверный шаблон. Столбец Voyage содержит более одного рейса %s' % u','.join(voyages), status=400)
-            
-            voyage = None
+            except Exception as e:                
+                return HttpResponse(u'Шаблон заполнен некорректно: %s' % e.message, status=400)
             
             q = Voyage.objects.filter(name=voyage_name, history__user=request.user)[:1]
+            
             if q:
                 voyage = q.get()
             else:   

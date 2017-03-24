@@ -19,6 +19,8 @@
                   	<dl class="dl-horizontal">	
 					    <dt>Обновлено</dt>
 					    <dd>{{ template.last_event.date|date:"d.m.Y H:i" }} ({{ template.last_event.user }})</dd>
+					    <dt>Судно</dt>
+					    <dd>{{ template.voyage.vessel }}</dd>
 					    <dt>Рейс</dt>
 					    <dd>{{ template.voyage }}</dd>
 					    <dt>Статус</dt>
@@ -96,7 +98,7 @@
             <div class="clearfix"></div>
 
 		
-		  <form enctype="multipart/form-data" action="{% url upload %}" method="post">  
+		  <form enctype="multipart/form-data" action="{% url 'upload' %}" method="post">  
 		  	   {% csrf_token %}
     		   {{ template_form }}			   
 		  </form>
@@ -150,8 +152,8 @@
                       </thead>
                       <tbody>
                       {% for draft in template.drafts.all %}
-                        <tr class="datarow" id="draft-details-{{ template.id }}"  data-link="{% url draft-details draft.id %}">
-                          <th scope="row"><a href="{% url draft-details draft.id %}">
+                        <tr class="datarow" id="draft-details-{{ template.id }}"  data-link="{% url 'draft-details' draft.id %}">
+                          <th scope="row"><a href="{% url 'draft-details' draft.id %}">
                           {{ draft.name }}
                           </a></th>							
 							<td>{{ draft.date|date:"d.m.Y" }}</td>							

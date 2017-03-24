@@ -18,23 +18,25 @@
                   
                   	<dl class="dl-horizontal">	
 					    <dt>Дата</dt>
-					    <dd>{{ draft.date|date:"d.m.Y" }}</dd>
+					    <dd>{{ draft.date|date:"d.m.Y" }}</dd>					    
+					    <dt>Судно</dt>
+					    <dd>{{ draft.voyage.vessel }}</dd>					    
 					    <dt>Рейс</dt>
 					    <dd>{{ draft.voyage }}</dd>
 					    <dt>Линия</dt>
 					    <dd>{{ draft.line }}</dd>
 					    <dt>Пункт назначения</dt>
-					    <dd>{{ draft.finalDestination }}</dd>
+					    <dd>{{ draft.finalDestination|default_if_none:"" }}</dd>
 					    <dt>POD</dt>
 					    <dd>{{ draft.POD }}</dd>
 					    <dt>POL</dt>
 					    <dd>{{ draft.POL }}</dd>
 					    <dt>Фин. статус</dt>
-					    <dd>{% if draft.finstatus %}<i class="fa fa-check-square-o" aria-hidden="true"></i>{% else %}<i class="fa fa-square-o" aria-hidden="true"></i>{% endif %}</dd>
+					    <dd>{% if draft.finstatus %}<i class="fa fa-check" aria-hidden="true"></i>{% else %}<i class="fa" aria-hidden="true"></i>{% endif %}</dd>
 					    <dt>Статус</dt>
-					    <dd>{% if draft.status %}<i class="fa fa-check-square-o" aria-hidden="true"></i>{% else %}<i class="fa fa-square-o" aria-hidden="true"></i>{% endif %}</dd>
+					    <dd>{% if draft.status %}<i class="fa fa-check" aria-hidden="true"></i>{% else %}<i class="fa" aria-hidden="true"></i>{% endif %}</dd>
 					    <dt title="Поручение сформировано">Cформировано</dt>
-					    <dd>{% if draft.poruchenie %}<i class="fa fa-check-square-o" aria-hidden="true"></i>{% else %}<i class="fa fa-square-o" aria-hidden="true"></i>{% endif %}</dd>
+					    <dd>{% if draft.poruchenie %}<i class="fa fa-check" aria-hidden="true"></i>{% else %}<i class="fa" aria-hidden="true"></i>{% endif %}</dd>
 					    <dt>Список поручений</dt>
 					    <dd>{{ draft.poruchenieNums|default_if_none:"" }}</dd>
 					    <dt>Отправитель</dt>
@@ -119,6 +121,7 @@
                     <table class="table table-hover">
                       <thead>
                         <tr>
+                        	<th>#</th>
                           	<th>Номер</th>							
 							<th>SOC</th>							
 							<th>Размер</th>
@@ -136,8 +139,9 @@
                       <tbody>
                       {% for container in draft.containers.all %}
                         <tr>
+                        	<th scope="row">{{ forloop.counter }}</th>
                             <th scope="row">{{ container.name }}</th>						
-							<td>{% if container.SOC %}<i class="fa fa-check-square-o" aria-hidden="true"></i>{% else %}<i class="fa fa-square-o" aria-hidden="true"></i>{% endif %}</td>
+							<td>{% if container.SOC %}<i class="fa fa-check" aria-hidden="true"></i>{% else %}<i class="fa" aria-hidden="true"></i>{% endif %}</td>
 							<td>{{ container.size }}</td>
 							<td>{{ container.type }}</td>
 							<td>{{ container.line }}</td>

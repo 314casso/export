@@ -1,6 +1,6 @@
 eclipse.preferences.version=1
 encoding//export/export/settings.py=utf-8
-encoding//export/nutep/migrations/0009_auto__add_line__add_terminal__add_userprofile__add_contract.py=utf-8
+encoding//export/nutep/migrations/0001_initial.py=utf-8
 encoding//export/nutep/models.py=utf-8
 encoding//export/nutep/services.py=utf-8
 encoding//export/nutep/templatetags/paginator.py=utf-8

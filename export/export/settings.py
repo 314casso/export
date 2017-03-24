@@ -128,9 +128,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nutep',
-    'django.contrib.admin',
-    'south',
+    'django.contrib.admin',    
     'easy_thumbnails',
+    'django_select2',
 )
 
 # A sample logging configuration. The only tangible logging

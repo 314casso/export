@@ -5205,7 +5205,9 @@ $(function() {
 	$(".fileupload").fileinput(
 			{
 				language: "ru",
-				allowedFileExtensions: ["xlsx"]
+				allowedFileExtensions: ["xlsx"],
+				showUpload: false,
+				showPreview: false,
 			}
 	);
 });
@@ -5312,3 +5314,6 @@ myApp = myApp || (function () {
     };
 })();
 
+$(function() {
+	$('.django-select2').djangoSelect2();
+});

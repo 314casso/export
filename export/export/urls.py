@@ -32,6 +32,9 @@ urlpatterns += patterns('',
     url(r'^draftdetails/(?P<pk>[0-9]+)$', DraftDetailView.as_view(), name='draft-details'),
 )
 
+urlpatterns += patterns('',
+    url(r'^select2/', include('django_select2.urls')),
+)
 
 if settings.DEBUG:
     urlpatterns = patterns('',

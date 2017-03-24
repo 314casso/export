@@ -4,9 +4,9 @@ from django.utils.encoding import force_unicode
 import datetime
 import os
 from django.contrib.auth.models import User
-from django.contrib.contenttypes.generic import GenericForeignKey,\
-    GenericRelation
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey,\
+    GenericRelation
 
 
 def attachment_path(instance, filename):    
@@ -83,6 +83,7 @@ class Vessel(BaseModel):
         verbose_name_plural = force_unicode('Суда')
         ordering = ('name', )
     
+    
 class Voyage(BaseModel):        
     vessel = models.ForeignKey(Vessel, null=True, related_name="voyages")
     flag = models.CharField(max_length=100, null=True, blank=True) 
@@ -116,7 +117,7 @@ class Terminal(BaseModel):
 
 class UserProfile(models.Model):
     guid = models.CharField(max_length=50,null=True)
-    user = models.ForeignKey(User, unique=True, related_name='profile')
+    user = models.OneToOneField(User, unique=True, related_name='profile')
     lines = models.ManyToManyField(Line)
 
 

@@ -21,54 +21,51 @@ class BaseService():
             "Authorization" : "Basic %s" % base64string
         }                
         self._client = Client(self.url, headers=authenticationHeader, cache=NoCache(), timeout=500)        
-        
+                                      
 
 class DraftService(BaseService):       
     def get_voyage(self, xml_voyage):         
-        voyage, created = Voyage.objects.get_or_create(name=xml_voyage.name,)  # @UnusedVariable
-        if created or not voyage.guid:        
-            voyage.name = xml_voyage.name
-            voyage.guid = xml_voyage.guid 
-            voyage.etd = xml_voyage.etd
-            voyage.vessel = self.get_vessel(xml_voyage.vessel)         
-            voyage.save()        
+        voyage, created = Voyage.objects.get_or_create(guid=xml_voyage.guid,)  # @UnusedVariable                
+        voyage.name = xml_voyage.name
+        voyage.guid = xml_voyage.guid 
+        voyage.etd = xml_voyage.etd
+        voyage.vessel = self.get_vessel(xml_voyage.vessel)         
+        voyage.save()        
         return voyage
     
     def get_line(self, xml_line):         
         line, created = Line.objects.get_or_create(guid=xml_line.guid,)  # @UnusedVariable
-        if created or not line.guid:        
-            line.name = xml_line.name        
-            line.guid = xml_line.guid
-            line.save()        
+        line.name = xml_line.name        
+        line.guid = xml_line.guid
+        line.save()        
         return line
     
     def get_vessel(self, xml_vessel):         
         vessel, created = Vessel.objects.get_or_create(guid=xml_vessel.guid,)  # @UnusedVariable
-        if created or not vessel.guid:        
-            vessel.name = xml_vessel.name
-            vessel.guid = xml_vessel.guid        
-            vessel.save()        
+        vessel.name = xml_vessel.name
+        vessel.guid = xml_vessel.guid        
+        vessel.save()        
         return vessel
     
     def get_contract(self, xml_contract):         
-        contract, created = Contract.objects.get_or_create(guid=xml_contract.guid,)  # @UnusedVariable
-        if created or not xml_contract.guid:        
-            contract.name = xml_contract.name
-            contract.guid = xml_contract.guid        
-            contract.save()        
+        contract, created = Contract.objects.get_or_create(guid=xml_contract.guid,)  # @UnusedVariable                
+        contract.name = xml_contract.name
+        contract.guid = xml_contract.guid        
+        contract.save()        
         return contract
 
     def load_draft(self, template, user):
         xml_template = self._client.factory.create('Template')
         xml_template.id = template.id
-        xml_template.userguid = user.get_profile().guid        
+        xml_template.userguid = user.profile.guid        
         xml_template.data = template.attachment.read().encode('base64')                
         response = self._client.service.LoadDraft(xml_template)                
         self.parse_response(response, template)
         return response
                         
-    def update_status(self, pk): 
+    def update_status(self, pk, user): 
         template = UploadedTemplate.objects.get(pk=pk)
+        template.user = user 
         if template.errors.all():
             return                   
         response = self._client.service.GetStatus(pk)      
@@ -96,38 +93,72 @@ class DraftService(BaseService):
         template.voyage = voyage 
         template.contract = self.get_contract(response.contract)
         template.xml_response = response
-        template.save() 
-        for xml_draft in response.drafts.draft:            
-            draft = Draft()
-            fields = ['name','guid','date','shipper','consignee','finalDestination','POD','POL','finstatus','status','poruchenie','poruchenieNums','notify']
-            for field in fields:
-                value = u'%s' % xml_draft[field] if xml_draft[field] else xml_draft[field]                        
-                setattr(draft, field, value)                
-            draft.user = User.objects.get(profile__guid=xml_draft.userguid)                                
-            draft.voyage = self.get_voyage(xml_draft.voyage) 
-            draft.line = self.get_line(xml_draft.line)
-            draft.template = template               
-            draft.save()
-            fields = ['name','SOC','size','type','seal','cargo','netto','gross','tare','package','quantity']
-            for xml_container in xml_draft.containers.container:
-                container = Container()
+        template.save()  
+        if response.drafts:      
+            for xml_draft in response.drafts.draft:            
+                draft = Draft()
+                fields = ['name','guid','date','shipper','consignee','finalDestination','POD','POL','finstatus','status','poruchenie','poruchenieNums','notify']
                 for field in fields:
-                    value = u'%s' % xml_container[field] if xml_container[field] else xml_container[field]  
-                    setattr(container, field, value)
-                container.line = self.get_line(xml_container.line)
-                container.draft = draft
-                container.save()
-            fields = ['size','type','ordered','done',]    
-            for xml_readiness in xml_draft.readiness.row:
-                readiness = Readiness()
-                for field in fields:                    
-                    setattr(readiness, field, xml_readiness[field])                
-                readiness.draft = draft
-                readiness.save()
+                    value = u'%s' % xml_draft[field] if xml_draft[field] else xml_draft[field]                        
+                    setattr(draft, field, value)                
+                draft.user = User.objects.get(profile__guid=xml_draft.userguid)                                
+                draft.voyage = self.get_voyage(xml_draft.voyage) 
+                draft.line = self.get_line(xml_draft.line)
+                draft.template = template               
+                draft.save()
+                fields = ['name','SOC','size','type','seal','cargo','netto','gross','tare','package','quantity']
+                for xml_container in xml_draft.containers.container:
+                    container = Container()
+                    for field in fields:
+                        value = u'%s' % xml_container[field] if xml_container[field] else xml_container[field]  
+                        setattr(container, field, value)
+                    container.line = self.get_line(xml_container.line)
+                    container.draft = draft
+                    container.save()
+                fields = ['size','type','ordered','done',]    
+                for xml_readiness in xml_draft.readiness.row:
+                    readiness = Readiness()
+                    for field in fields:                    
+                        setattr(readiness, field, xml_readiness[field])                
+                    readiness.draft = draft
+                    readiness.save()
         template.set_status()
         
             
     def delete_data(self, template):        
         drafts = Draft.objects.filter(template=template)
         drafts.delete()
-        template.errors.all().delete()                        
+        template.errors.all().delete()
+   
+class TemplateException(Exception):
+    pass   
+        
+class ExcelHelper():    
+    @staticmethod            
+    def get_value(ws, col_name):
+        cell =  ExcelHelper.get_cell(ws, col_name)
+        return ExcelHelper.get_cell_value(ws, cell)
+            
+    @staticmethod
+    def get_cell(ws, col_name):        
+        for row in ws.iter_rows(min_row=1, max_col=ws.max_column, max_row=ws.max_row):               
+            for cell in row:
+                cval = u'%s' % cell.value
+                if cell.value and cval.upper() == col_name.upper():
+                    return cell
+        raise TemplateException(u'Столбец %s не найден' % col_name) 
+        
+    @staticmethod            
+    def get_cell_value(ws, cell):
+        rng = "%s%s:%s%s" % (cell.column, int(cell.row)+1,cell.column, int(cell.row)+1)
+        result = set() 
+        for row in ws.iter_rows(rng):
+            result.add(row[0].value)            
+        if len(result) == 1:
+            return result.pop()
+        elif len(result) == 0:
+            raise TemplateException(u'Столбец %s не заполнен' % cell.value)               
+        else:
+            raise TemplateException(u'Столбец %s содержит более одного рейса %s' % (cell.value, u','.join(result)))  
+        
+                                      

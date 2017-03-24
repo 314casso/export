@@ -1,4 +1,5 @@
 {% load paginator %}
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -23,7 +24,7 @@
 	<!-- Fileinput -->
 	<link href="{{ STATIC_URL }}/vendors/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
     
-	
+	{{ template_form.media.css }}
 
     <!-- Custom Theme Style -->
     <link href="{{ STATIC_URL }}build/css/custom.css" rel="stylesheet">
@@ -35,7 +36,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="{% url services %}" class="site_title"><i class="fa fa-ship"></i> <span>{{ title }}</span></a>
+              <a href="{% url 'services' %}" class="site_title"><i class="fa fa-ship"></i> <span>{{ title }}</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -47,7 +48,7 @@
               </div>
               <div class="profile_info">
               	{% if request.user.is_authenticated %} <span>Здравствуйте,</span> 
-			  	{% else %}<a href="{% url login %}">Войти</a>{% endif %}
+			  	{% else %}<a href="{% url 'login' %}">Войти</a>{% endif %}
                 <h2>{{ request.user.username }}</h2>
               </div>
             </div>
@@ -62,7 +63,7 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i> Сервисы <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{% url services %}"> Заявки</a></li>                      
+                      <li><a href="{% url 'services' %}"> Заявки</a></li>                      
                     </ul>
                   </li>                  
                   
@@ -74,7 +75,7 @@
                           <ul class="nav child_menu">
                           	{% for voyage in vessel.voyages.all  %}
                           		{% for template in voyage.templates.all  %}
-                            			<li class="sub_menu"><a href="{% url template-details template.id %}"> {{ voyage }}</a></li>
+                            			<li class="sub_menu"><a href="{% url 'template-details' template.id %}"> {{ voyage }}</a></li>
                             	{% endfor %}                            		
                             {% endfor %}                            
                           </ul>
@@ -98,7 +99,7 @@
 
             <!-- /menu footer buttons -->
             <div class="sidebar-footer hidden-small">              
-              <a data-toggle="tooltip" data-placement="top" title="Выйти" href="{% url logout %}">
+              <a data-toggle="tooltip" data-placement="top" title="Выйти" href="{% url 'logout' %}">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
               </a>
             </div>
@@ -122,7 +123,7 @@
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">                    
-                    <li><a href="{% url logout %}"><i class="fa fa-sign-out pull-right"></i> Выйти</a></li>
+                    <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out pull-right"></i> Выйти</a></li>
                   </ul>
                 </li>               
               </ul>
@@ -142,12 +143,9 @@
             </div>
 
             <div class="clearfix"></div>
-
 		
-		  <form enctype="multipart/form-data" action="{% url upload %}" method="post">  
-		  	   {% csrf_token %}
-    		   {{ template_form }}			   
-		  </form>
+		  <button type="button" class="btn btn-default btn-primary" data-toggle="modal" data-target="#modal-{{ template_form.key }}">
+		  <i class="fa fa-upload"></i> Загрузить шаблон</button>
           
           <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
@@ -181,6 +179,7 @@
                           <th>ID</th>
                           <th>Действие</th>
                           <th>Обновлено</th>
+                          <th>Судно</th>
                           <th>Рейс</th>
                           <th>Шаблон</th>
                           <th>Статус</th>                          
@@ -188,8 +187,8 @@
                       </thead>
                       <tbody>
                       {% for template in templates %}
-                        <tr class="datarow" id="row-template-{{ template.id }}"  data-link="{% url template-details template.id %}">
-                          <th scope="row"><a href="{% url template-details template.id %}">{{ template.id }}</a></th>
+                        <tr class="datarow" id="row-template-{{ template.id }}"  data-link="{% url 'template-details' template.id %}">
+                          <th scope="row"><a href="{% url 'template-details' template.id %}">{{ template.id }}</a></th>
                           
                           <td>
                             <div class="dropdown">
@@ -208,6 +207,7 @@
                           <td title="{{ template.last_event.user }}">
                           {{ template.last_event.date|date:"d.m.Y H:i" }}                          
                           </td>
+                          <td>{{ template.voyage.vessel }}</td>
                           <td>{{ template.voyage }}</td>
                           <td>{{ template.filename }}</td>
                           <td>{{ template.get_status_display }}</td>                          
@@ -242,6 +242,9 @@
       </div>
     </div>
 
+
+	{% include 'modals/file_upload.html' with form=template_form %}
+
     <!-- jQuery -->
     <script src="{{ STATIC_URL }}vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
@@ -259,6 +262,8 @@
     <script src="{{ STATIC_URL }}/vendors/bootstrap-fileinput/js/locales/ru.js"></script>
     
     <script src="{{ STATIC_URL }}/vendors/bootbox/bootbox.min.js"></script>
+    
+    {{ template_form.media.js }}
     
     <!-- Custom Theme Scripts -->
     <script src="{{ STATIC_URL }}build/js/custom.js"></script>
