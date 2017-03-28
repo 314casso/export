@@ -1,6 +1,6 @@
 from django.contrib import admin
 from nutep.models import UploadedTemplate, Voyage, UserProfile, Contract, Line,\
-    Terminal, Vessel, Draft, Container
+    Terminal, Vessel, Draft, Container, BaseError
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 
@@ -53,4 +53,5 @@ admin.site.register(Terminal, TerminalAdmin)
 admin.site.register(Vessel)
 admin.site.register(Draft)
 admin.site.register(Container)
+admin.site.register(BaseError)
 

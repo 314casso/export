@@ -36,6 +36,10 @@ urlpatterns += patterns('',
     url(r'^select2/', include('django_select2.urls')),
 )
 
+urlpatterns += patterns('',
+    url(r'^django-rq/', include('django_rq.urls')),
+)
+
 if settings.DEBUG:
     urlpatterns = patterns('',
         url(r'^media/(?P<path>.*)$', 'django.views.static.serve',

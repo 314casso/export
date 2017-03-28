@@ -21,6 +21,7 @@ from django.views.generic.base import TemplateView
 from django.views.decorators.http import require_http_methods
 from nutep.models import BaseError, Contract
 import suds
+from django_rq.decorators import job
 
 
 
@@ -198,21 +199,25 @@ def upload_file(request):
             template.voyage = voyage
             template.attachment = form.cleaned_data['attachment']            
             template.save()
-            
-            try:
-                draft_service = DraftService(WEB_SERVISES['draft'])    
-                draft_service.load_draft(template, request.user)
-            except suds.WebFault, f:
-                base_error = BaseError()                                
-                base_error.content_object = template
-                base_error.type = BaseError.WEBFAULT
-                base_error.message = f.fault 
-                base_error.save()              
-            except Exception, e:
-                base_error = BaseError()                                
-                base_error.content_object = template
-                base_error.type = BaseError.UNKNOWN
-                base_error.message = e 
-                base_error.save()
-                                        
+                
+            upload_template.delay(template, request.user)                            
             return HttpResponseRedirect(reverse('services'))
+
+
+@job
+def upload_template(template, user):
+    try:
+        draft_service = DraftService(WEB_SERVISES['draft'])    
+        draft_service.load_draft(template, user)
+    except suds.WebFault, f:
+        base_error = BaseError()                                
+        base_error.content_object = template
+        base_error.type = BaseError.WEBFAULT
+        base_error.message = f.fault 
+        base_error.save()              
+    except Exception, e:
+        base_error = BaseError()                                
+        base_error.content_object = template
+        base_error.type = BaseError.UNKNOWN
+        base_error.message = e 
+        base_error.save()

@@ -131,7 +131,19 @@ INSTALLED_APPS = (
     'django.contrib.admin',    
     'easy_thumbnails',
     'django_select2',
+    'django_rq',
 )
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,        
+        'DEFAULT_TIMEOUT': 360,
+    }, 
+}
+
+RQ_SHOW_ADMIN_LINK = True
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

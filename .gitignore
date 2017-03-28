@@ -8,3 +8,10 @@ local_settings.py
 export/media/*
 export/static/*
 export/wsgi.py
+bin
+include
+lib
+local
+pip-selfcheck.json
+README.md
+logs

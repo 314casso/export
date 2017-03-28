@@ -214,3 +214,49 @@ Traceback (most recent call last):
   File "/usr/local/lib/python2.7/dist-packages/django/db/models/fields/related.py", line 1727, in get_lookup_constraint
     raise exceptions.FieldError('Relation fields do not support nested lookups')
 FieldError: Relation fields do not support nested lookups
+[27/Mar/2017 21:13:59] ERROR [django.request:256] Internal Server Error: /ru/
+Traceback (most recent call last):
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 119, in get_response
+    resolver_match = resolver.resolve(request.path_info)
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 365, in resolve
+    for pattern in self.url_patterns:
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 401, in url_patterns
+    patterns = getattr(self.urlconf_module, "urlpatterns", self.urlconf_module)
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/django/core/urlresolvers.py", line 395, in urlconf_module
+    self._urlconf_module = import_module(self.urlconf_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/picasso/git/export/export/export/urls.py", line 6, in <module>
+    from nutep.views import landing, upload_file, TemplateDeleteView,\
+  File "/home/picasso/git/export/export/nutep/views.py", line 18, in <module>
+    from nutep.services import DraftService, ExcelHelper, TemplateException
+  File "/home/picasso/git/export/export/nutep/services.py", line 2, in <module>
+    from suds.client import Client
+ImportError: No module named suds.client
+[28/Mar/2017 17:00:31] ERROR [django.request:256] Internal Server Error: /upload/
+Traceback (most recent call last):
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/django/core/handlers/base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/django/views/decorators/http.py", line 45, in inner
+    return func(request, *args, **kwargs)
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/django/contrib/auth/decorators.py", line 22, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/picasso/git/export/export/nutep/views.py", line 203, in upload_file
+    upload_template.delay(template, request)
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/rq/decorators.py", line 43, in delay
+    ttl=self.ttl, depends_on=depends_on)
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/django_rq/queues.py", line 60, in enqueue_call
+    return self.original_enqueue_call(*args, **kwargs)
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/django_rq/queues.py", line 56, in original_enqueue_call
+    return super(DjangoRQ, self).enqueue_call(*args, **kwargs)
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/rq/queue.py", line 227, in enqueue_call
+    job = self.enqueue_job(job, at_front=at_front)
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/rq/queue.py", line 292, in enqueue_job
+    job.save(pipeline=pipe)
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/rq/job.py", line 465, in save
+    connection.hmset(key, self.to_dict())
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/rq/job.py", line 429, in to_dict
+    obj['data'] = self.data
+  File "/home/picasso/git/export/local/lib/python2.7/site-packages/rq/job.py", line 227, in data
+    self._data = dumps(job_tuple)
+PicklingError: Can't pickle <type 'cStringIO.StringO'>: attribute lookup cStringIO.StringO failed
