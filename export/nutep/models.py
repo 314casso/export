@@ -73,6 +73,13 @@ class BaseError(models.Model):
     message = models.TextField()
     type = models.IntegerField(choices=TYPE_CHOICES, default=UNKNOWN, db_index=True, blank=True)
     
+    def __unicode__(self):
+        return u'{0}'.format(self.code) 
+    class Meta:
+        verbose_name = force_unicode('Ошибка')
+        verbose_name_plural = force_unicode('Ошибки')
+        ordering = ('id', )
+    
 
 class Vessel(BaseModel):   
     history = GenericRelation('HistoryMeta')
