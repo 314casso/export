@@ -24,7 +24,6 @@ import suds
 from django_rq.decorators import job
 
 
-
 logger = logging.getLogger('django.request')
 
 
