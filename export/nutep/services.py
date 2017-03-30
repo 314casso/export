@@ -6,6 +6,7 @@ from suds.cache import NoCache
 from nutep.models import Draft, UploadedTemplate, Voyage, Line, Vessel,\
     Contract, Container, Readiness, BaseError
 from django.contrib.auth.models import User
+from django.apps import apps
  
 
 class BaseService():
@@ -24,14 +25,28 @@ class BaseService():
                                       
 
 class DraftService(BaseService):       
-    def get_voyage(self, xml_voyage):         
-        voyage, created = Voyage.objects.get_or_create(guid=xml_voyage.guid,)  # @UnusedVariable                
-        voyage.name = xml_voyage.name
-        voyage.guid = xml_voyage.guid 
-        voyage.etd = xml_voyage.etd
-        voyage.vessel = self.get_vessel(xml_voyage.vessel)         
-        voyage.save()        
-        return voyage
+    def get_voyage(self, xml_voyage):
+        vessel = self.get_value('Vessel', xml_voyage.vessel)        
+        model = Voyage
+        xml_value = xml_voyage
+        try:
+            value = model.objects.get(guid=xml_value.guid,)
+        except model.DoesNotExist:
+            value = None
+        if not value:
+            q = model.objects.filter(name=xml_value.name, vessel=vessel, guid__isnull=True)
+            if q:
+                value = q.first()
+                value.guid = xml_value.guid        
+                value.save()       
+        if not value:                      
+            value = model.objects.create(guid=xml_value.guid,)
+            value.name = xml_value.name
+            value.vessel = vessel
+            value.etd = xml_value.etd
+            value.guid = xml_value.guid        
+            value.save()        
+        return value
     
     def get_line(self, xml_line):         
         line, created = Line.objects.get_or_create(guid=xml_line.guid,)  # @UnusedVariable
@@ -40,12 +55,27 @@ class DraftService(BaseService):
         line.save()        
         return line
     
-    def get_vessel(self, xml_vessel):         
-        vessel, created = Vessel.objects.get_or_create(guid=xml_vessel.guid,)  # @UnusedVariable
-        vessel.name = xml_vessel.name
-        vessel.guid = xml_vessel.guid        
-        vessel.save()        
-        return vessel
+    def get_value(self, model_name, xml_value):
+        model = apps.get_model(app_label='nutep', model_name=model_name)
+        try:
+            value = model.objects.get(guid=xml_value.guid,)
+        except model.DoesNotExist:
+            value = None
+        if not value:
+            q = model.objects.filter(name=xml_value.name, guid__isnull=True)
+            if q:
+                value = q.first()
+                value.guid = xml_value.guid        
+                value.save()       
+        if not value:                      
+            value = model.objects.create(guid=xml_value.guid,)
+            value.name = xml_value.name
+            value.guid = xml_value.guid        
+            value.save()        
+        return value
+    
+    def get_vessel(self, xml_vessel):             
+        return self.get_value('Vessel', xml_vessel)
     
     def get_contract(self, xml_contract):         
         contract, created = Contract.objects.get_or_create(guid=xml_contract.guid,)  # @UnusedVariable                
@@ -57,7 +87,8 @@ class DraftService(BaseService):
     def load_draft(self, template, user):
         xml_template = self._client.factory.create('Template')
         xml_template.id = template.id
-        xml_template.userguid = user.profile.guid        
+        xml_template.userguid = user.profile.guid
+        xml_template.contractguid = template.contract.guid         
         xml_template.data = template.attachment.read().encode('base64')                
         response = self._client.service.LoadDraft(xml_template)                
         self.parse_response(response, template)

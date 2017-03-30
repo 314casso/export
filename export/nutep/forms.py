@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from nutep.models import UploadedTemplate, Contract
 from django.forms.models import ModelForm
 from django import forms
@@ -16,8 +18,9 @@ class ContractCustomWidget(ModelSelect2Widget):
     
 
 class TemplateForm(ModelForm):
-    contract = forms.ModelChoiceField(label="", widget=ContractCustomWidget(attrs={'style':'width:100%', 'required': None}), queryset=Contract.objects.all())
-    attachment = forms.FileField(label="", widget=forms.FileInput(attrs={'class':'fileupload', 'required': None}) )
+    contract = forms.ModelChoiceField(label=u"Договор", widget=ContractCustomWidget(attrs={'style':'width:100%', 'required': None}), queryset=Contract.objects.all())
+    attachment = forms.FileField(label=u"Шаблон", widget=forms.FileInput(attrs={'class':'fileupload', 'required': None}) )
+    is_override = forms.BooleanField(label=u"Режим замещения", widget=forms.CheckboxInput(attrs={'class':'flat'}), initial=False, required=False)
     class Meta:
         model = UploadedTemplate
         fields = ['contract', 'attachment']

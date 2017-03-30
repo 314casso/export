@@ -15,7 +15,7 @@ from django.views.generic.edit import DeleteView
 from django.utils.decorators import method_decorator
 import json
 from django.core.files.base import ContentFile
-from nutep.services import DraftService, ExcelHelper, TemplateException
+from nutep.services import DraftService, ExcelHelper
 from export.local_settings import WEB_SERVISES
 from django.views.generic.base import TemplateView
 from django.views.decorators.http import require_http_methods
@@ -72,7 +72,7 @@ class ServiceView(BaseView):
         context = super(ServiceView, self).get_context_data(**kwargs)
         PER_PAGE = 10
         template_list = UploadedTemplate.objects.filter(history__user__profile__lines__in=self.request.user.profile.lines.all()).distinct()    
-        
+                
         page = self.request.GET.get('page', 1)
     
         paginator = Paginator(template_list, PER_PAGE)
@@ -173,6 +173,7 @@ def upload_file(request):
                 ws = wb.active                         
                                 
                 voyage_name = ExcelHelper.get_value(ws, 'VOYAGE')                  
+                vessel_name = ExcelHelper.get_value(ws, 'VESSEL')
                 #contract_name = ExcelHelper.get_value(ws, 'CONTRACT')
                 #contract = 
                 
@@ -187,6 +188,7 @@ def upload_file(request):
                 voyage = Voyage()
                 voyage.name = voyage_name
                 voyage.user = request.user
+                voyage.vessel, created = Vessel.objects.get_or_create(name=vessel_name)  # @UnusedVariable
                 voyage.save()            
             try:
                 form.instance = UploadedTemplate.objects.get(voyage=voyage)
@@ -196,11 +198,12 @@ def upload_file(request):
             template = form.save(commit=False)            
             template.user = request.user
             template.voyage = voyage
-            template.attachment = form.cleaned_data['attachment']            
+#             template.attachment = form.cleaned_data['attachment']            
             template.save()
                 
             upload_template.delay(template, request.user)                            
-            return HttpResponseRedirect(reverse('services'))
+            return HttpResponseRedirect(reverse('services'))        
+        return HttpResponse(u'Неверный формат шаблона: %s' % u''.join([u'%s: %s' % (key, val) for key, val in form.errors.items()]), status=400)
 
 
 @job
@@ -213,10 +216,12 @@ def upload_template(template, user):
         base_error.content_object = template
         base_error.type = BaseError.WEBFAULT
         base_error.message = f.fault 
-        base_error.save()              
+        base_error.save() 
+        template.set_status()
     except Exception, e:
         base_error = BaseError()                                
         base_error.content_object = template
         base_error.type = BaseError.UNKNOWN
         base_error.message = e 
         base_error.save()
+        template.set_status()

@@ -2,7 +2,7 @@
 <div class="modal fade" id="modal-{{ form.key }}" tabindex="-1" role="dialog" aria-labelledby="modal-{{ form.key }}Label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-    <form enctype="multipart/form-data" action="{% url 'upload' %}" method="post" name="sentMessage" id="form-{{ form.key }}">    
+    <form enctype="multipart/form-data" action="{% url 'upload' %}" method="post" name="sentMessage" id="form-{{ form.key }}" class="form-horizontal form-label-left">    
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="modal-{{ form.key }}Label">{{ form.title }}</h4>

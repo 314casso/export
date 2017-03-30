@@ -9,6 +9,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey,\
     GenericRelation
 
 
+
 def attachment_path(instance, filename):    
     from django.conf import settings
     os.umask(0)
@@ -81,11 +82,11 @@ class BaseError(models.Model):
         ordering = ('id', )
     
 
-class Vessel(BaseModel):   
+class Vessel(BaseModel):
     history = GenericRelation('HistoryMeta')
     def __unicode__(self):
         return u'{0}'.format(self.name) 
-    class Meta:
+    class Meta:        
         verbose_name = force_unicode('Судно')
         verbose_name_plural = force_unicode('Суда')
         ordering = ('name', )

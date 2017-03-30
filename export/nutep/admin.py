@@ -45,7 +45,7 @@ class UserProfileAdmin(UserAdmin):
 
 
 admin.site.register(User, UserProfileAdmin)
-admin.site.register(UploadedTemplate, UploadedTemplateAdmin)
+admin.site.register(UploadedTemplate)
 admin.site.register(Voyage, VoyageAdmin)
 admin.site.register(Contract, ContractAdmin)
 admin.site.register(Line, LineAdmin)
