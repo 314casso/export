@@ -5317,3 +5317,29 @@ myApp = myApp || (function () {
 $(function() {
 	$('.django-select2').djangoSelect2();
 });
+
+$(function() {
+	$('#uploadtemplate').on('click', function (e) {
+		e.preventDefault();
+		return;
+		var pk = $( this ).data("pk");
+		var csrftoken = getCookie('csrftoken');
+		myApp.showPleaseWait();
+		$.post(
+		  "/gettemplate/" + pk,
+		  {
+			csrfmiddlewaretoken: csrftoken        			    
+		  },
+		  function (data) {			  
+			  if (data.status == true) {				  
+				  location.reload();
+			  }
+		  }
+		)
+		.fail(function(response) {
+			myApp.hidePleaseWait();
+		    alert('Ошибка обновления данных.');
+		});
+	});
+});
+

@@ -257,6 +257,15 @@ class UploadedTemplate(ProcessDeletedModel):
     def filename(self):
         return os.path.basename(self.attachment.name)
     
+    def status_class(self):
+        mapper = {
+                 self.NEW : 'new',
+                 self.PROCESSED : 'success',
+                 self.INPROCESS : 'info',
+                 self.ERROR : 'danger',
+                 }
+        return mapper.get(self.status)
+    
     class Meta:
         verbose_name = force_unicode('Шаблон')
         verbose_name_plural = force_unicode('Шаблоны')

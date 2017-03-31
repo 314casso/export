@@ -210,7 +210,7 @@
                           <td>{{ template.voyage.vessel }}</td>
                           <td>{{ template.voyage }}</td>
                           <td>{{ template.filename }}</td>
-                          <td>{{ template.get_status_display }}</td>                          
+                          <td class="{{ template.status_class }}">{{ template.get_status_display }}</td>                          
                         </tr>                      
                       {% endfor %}                        
                       </tbody>
