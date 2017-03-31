@@ -245,7 +245,7 @@ class UploadedTemplate(ProcessDeletedModel):
     def set_status(self):
         if len(self.errors.all()):
             self.status = UploadedTemplate.ERROR
-        elif self.drafts_readiness == 100:            
+        elif self.drafts_readiness() == 100:            
             self.status = UploadedTemplate.PROCESSED
         else:
             self.status = UploadedTemplate.INPROCESS
