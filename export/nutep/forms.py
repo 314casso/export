@@ -8,11 +8,11 @@ from django.utils.encoding import force_text
 
 
 class ContractCustomWidget(ModelSelect2Widget):
-    model = Contract.objects.all()
+    #get_current_user()
+    queryset = Contract.objects.all()
     search_fields = [
         'name__icontains'
     ]
-
     def label_from_instance(self, obj):
         return force_text(obj.name).upper()  
     

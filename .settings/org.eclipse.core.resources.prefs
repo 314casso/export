@@ -1,9 +1,11 @@
 eclipse.preferences.version=1
 encoding//export/export/settings.py=utf-8
 encoding//export/nutep/forms.py=utf-8
+encoding//export/nutep/middleware.py=utf-8
 encoding//export/nutep/migrations/0001_initial.py=utf-8
 encoding//export/nutep/models.py=utf-8
 encoding//export/nutep/services.py=utf-8
 encoding//export/nutep/templatetags/paginator.py=utf-8
 encoding//export/nutep/views.py=utf-8
+encoding//lib/python2.7/site-packages/django_select2/forms.py=utf-8
 encoding//lib/python2.7/site-packages/rq/job.py=utf-8

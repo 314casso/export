@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey,\
     GenericRelation
+from nutep.middleware import get_current_user
 
 
 
@@ -21,8 +22,9 @@ def attachment_path(instance, filename):
 
 
 class BaseModelManager(models.Manager):    
-    def get_query_set(self):
-        return super(BaseModelManager, self).get_query_set().filter(deleted=False)
+    def get_queryset(self):
+        #print get_current_user()
+        return super(BaseModelManager, self).get_queryset().filter(deleted=False)
 
 
 class ProcessDeletedModel(models.Model):    
