@@ -159,10 +159,9 @@
                       </li>
                       <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                          <li><a href="#">Settings 1</a>
-                          </li>
-                          <li><a href="#">Settings 2</a>
+                        <ul class="dropdown-menu" role="menu" id="app-settings">
+                          <li>
+                            <a v-on:click="refresh" href="#"> Обновить</a>
                           </li>
                         </ul>
                       </li>
@@ -173,61 +172,59 @@
                   </div>
                   <div class="x_content">
 
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>ID</th>
-                          <th>Действие</th>
-                          <th>Обновлено</th>
-                          <th>Судно</th>
-                          <th>Рейс</th>
-                          <th>Шаблон</th>
-                          <th>Статус</th>                          
-                        </tr>
-                      </thead>
-                      <tbody>
-                      {% for template in templates %}
-                        <tr class="datarow" id="row-template-{{ template.id }}"  data-link="{% url 'template-details' template.id %}">
-                          <th scope="row"><a href="{% url 'template-details' template.id %}">{{ template.id }}</a></th>
-                          
-                          <td>
-                            <div class="dropdown">
-                            
-                              <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                              	<i class="fa fa-bars fa-fw" aria-hidden="true"></i>
-                              </a>
-                            						  
-							  <ul class="dropdown-menu dropdown-usermenu">                    
-			                    <li><a class="confirm" data-pk="{{ template.id }}" data-model="template" data-message="Удалить загруженный шаблон <b>{{ template.id }}</b>?" href="#"><i class="fa fa-trash fa-fw"></i> Удалить</a></li>
-			                    		                    
-			                  </ul>
-							</div> 
-                          </td>
-                          
-                          <td title="{{ template.last_event.user }}">
-                          {{ template.last_event.date|date:"d.m.Y H:i" }}                          
-                          </td>
-                          <td>{{ template.voyage.vessel }}</td>
-                          <td>{{ template.voyage }}</td>
-                          <td>{{ template.filename }}</td>
-                          <td class="{{ template.status_class }}">{{ template.get_status_display }}</td>                          
-                        </tr>                      
-                      {% endfor %}                        
-                      </tbody>
-                    </table>
-                    
-                    {% if is_paginated %}
-					<nav aria-label="Page navigation">
-					    {% bootstrap_paginator %}
-					</nav>
-					{% endif %}
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Действие</th>
+                        <th>Обновлено</th>
+                        <th>Судно</th>
+                        <th>Рейс</th>
+                        <th>Шаблон</th>
+                        <th>Статус</th>
+                      </tr>
+                    </thead>
+                    <tbody id="app-templates">
+                      <tr class="datarow" v-for="item in items" v-on:dblclick="open(item.url)">
+                        <th scope="row"><a :href="item.url"><% item.id %></a></th>
 
+                        <td>
+                          <div class="dropdown">
+
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                              <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-usermenu">
+                              <li>
+                                <a v-on:click="refresh(item.id)" href="#">
+                                  <i class="fa fa-refresh fa-fw"></i> Обновить
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </td>
+
+                        <td :title="item.user">
+                          <% item.updated %>
+                        </td>
+                        <td><% item.vessel %></td>
+                        <td><% item.voyage %></td>
+                        <td><% item.filename %></td>
+                        <td :id="item.status_id" :class="item.status_class">
+                          <div v-html="item.load_image"></div>
+                          <% item.status %>
+                        </td>
+                      </tr>                    
+                    </tbody>
+                  </table>
                   </div>
                 </div>
               </div>
            </div>
               <div class="clearfix"></div>
         </div>
+        {% include 'modals/file_upload.html' with form=template_form %}
         {% endblock content %}
         <!-- /page content -->
 
@@ -241,9 +238,6 @@
         <!-- /footer content -->
       </div>
     </div>
-
-
-	{% include 'modals/file_upload.html' with form=template_form %}
 
     <!-- jQuery -->
     <script src="{{ STATIC_URL }}vendors/jquery/dist/jquery.min.js"></script>
@@ -263,6 +257,8 @@
     
     <script src="{{ STATIC_URL }}/vendors/bootbox/bootbox.min.js"></script>
     
+    <script src="https://unpkg.com/vue"></script>
+
     {{ template_form.media.js }}
     
     <!-- Custom Theme Scripts -->

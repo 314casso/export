@@ -7,9 +7,12 @@ from nutep.models import Draft, UploadedTemplate, Voyage, Line, Vessel,\
     Contract, Container, Readiness, BaseError
 from django.contrib.auth.models import User
 from django.apps import apps
- 
+
 
 class BaseService():
+    username = None
+    password = None
+    url = None
     def __init__(self, settings):
         self.set_client(settings)
             
@@ -20,9 +23,9 @@ class BaseService():
         authenticationHeader = {
             "SOAPAction" : "ActionName",
             "Authorization" : "Basic %s" % base64string
-        }                
+        } 
         self._client = Client(self.url, headers=authenticationHeader, cache=NoCache(), timeout=500)        
-                                      
+                                     
 
 class DraftService(BaseService):       
     def get_voyage(self, xml_voyage):
@@ -98,7 +101,7 @@ class DraftService(BaseService):
         template = UploadedTemplate.objects.get(pk=pk)
         template.user = user 
         if template.errors.all():
-            return                   
+            raise Exception(u"Шаблон содержит ошибки, обновление новозможно")
         response = self._client.service.GetStatus(pk)      
         self.parse_response(response, template)
         return response
@@ -166,9 +169,12 @@ class TemplateException(Exception):
         
 class ExcelHelper():    
     @staticmethod            
-    def get_value(ws, col_name):
+    def get_value(ws, col_name, required=False):
         cell =  ExcelHelper.get_cell(ws, col_name)
-        return ExcelHelper.get_cell_value(ws, cell)
+        value = ExcelHelper.get_cell_value(ws, cell)
+        if required and not value:
+            raise TemplateException(u'Столбец %s не может быть пустым' % col_name) 
+        return value
             
     @staticmethod
     def get_cell(ws, col_name):        

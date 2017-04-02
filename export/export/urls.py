@@ -4,7 +4,8 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
 from nutep.views import landing, upload_file, TemplateDeleteView,\
-get_template_status, ServiceView, TemplateDetailView, DraftDetailView
+get_template_status, ServiceView, TemplateDetailView, DraftDetailView,\
+get_active_templates
 
 
 admin.autodiscover()
@@ -38,6 +39,10 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('',
     url(r'^django-rq/', include('django_rq.urls')),
+)
+
+urlpatterns += patterns('',
+    url(r'^activetemplates/', get_active_templates, name="active-templates"),
 )
 
 if settings.DEBUG:

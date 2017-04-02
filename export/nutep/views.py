@@ -1,28 +1,29 @@
 # -*- coding: utf-8 -*-
 
-from django.utils.encoding import force_unicode, force_text
-from django.shortcuts import render
+import json
 import logging
+
+import suds
 from django.contrib.auth.decorators import login_required
-from nutep.models import UploadedTemplate, Voyage, Vessel,\
-    Draft
-from django.http import HttpResponseRedirect, HttpResponse
-from nutep.forms import TemplateForm
+from django.core.files.base import ContentFile
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.core.urlresolvers import reverse
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
+from django.utils.encoding import force_text, force_unicode
+from django.views.decorators.http import require_http_methods
+from django.views.generic.base import TemplateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views.generic.edit import DeleteView
-from django.utils.decorators import method_decorator
-import json
-from django.core.files.base import ContentFile
-from nutep.services import DraftService, ExcelHelper
-from export.local_settings import WEB_SERVISES
-from django.views.generic.base import TemplateView
-from django.views.decorators.http import require_http_methods
-from nutep.models import BaseError, Contract
-import suds
 from django_rq.decorators import job
 
+from export.local_settings import WEB_SERVISES
+from nutep.forms import TemplateForm
+from nutep.models import (BaseError, Contract, Draft, UploadedTemplate, Vessel,
+                          Voyage)
+from nutep.services import DraftService, ExcelHelper
+from time import sleep
 
 logger = logging.getLogger('django.request')
 
@@ -99,6 +100,14 @@ class ServiceView(BaseView):
         return context   
 
 
+@login_required
+def get_active_templates(request):
+    from django.core.serializers import serialize
+    active_templates = UploadedTemplate.objects.filter(history__user__profile__lines__in=request.user.profile.lines.all(), 
+        status__in=(UploadedTemplate.ERROR, UploadedTemplate.INPROCESS)).distinct()    
+    return JsonResponse([ obj.as_dict() for obj in active_templates ], safe=False)
+    
+
 class TemplateDetailView(BaseView):
     template_name = 'template_details.html'
     def get_context_data(self, **kwargs):
@@ -125,7 +134,18 @@ class DraftDetailView(BaseView):
         return context
 
 
-def landing(request):
+def landing(request):    
+    # import django_rq
+    # from rq.registry import (DeferredJobRegistry, FinishedJobRegistry,
+    #                      StartedJobRegistry)
+    
+    # connection = django_rq.get_connection('default')
+    # queue = django_rq.get_queue('default')
+    
+    # finished_job_registry = FinishedJobRegistry(queue.name, connection)
+    # print vars(finished_job_registry)    
+    if request.user.is_authenticated():
+        return redirect('services')
     context = {
                'title' : force_unicode('Рускон'),                                             
               }     
@@ -148,10 +168,14 @@ def delete_template(request, template_id):
 @login_required    
 def get_template_status(request, pk):
     if request.method == 'POST':
-        draft_service = DraftService(WEB_SERVISES['draft'])    
-        response = draft_service.update_status(pk, request.user)
-        status = True if response else False                
-        return HttpResponse(json.dumps({'status':status}), content_type="application/json")
+        sleep(5)
+        try:
+            draft_service = DraftService(WEB_SERVISES['draft'])            
+            response = draft_service.update_status(pk, request.user)
+            status = True if response else False                
+            return HttpResponse(json.dumps({'status':status}), content_type="application/json")
+        except Exception as e:
+            return HttpResponse(force_text(e), status=400)
          
 
 @require_http_methods(["POST"])    
@@ -160,23 +184,18 @@ def upload_file(request):
     if request.method == 'POST':
         form = TemplateForm(request.POST, request.FILES)
         if form.is_valid():     
-            filename = form.cleaned_data['attachment']                       
+            filename = form.cleaned_data['attachment']                                   
             from openpyxl import load_workbook
-                       
-            
             try:                         
                 wb = load_workbook(filename = ContentFile(filename.read()))
             except Exception as e:                
-                return HttpResponse(u'Неверный формат шаблона: %s' % e.message, status=400)
-               
+                return HttpResponse(u'Неверный формат шаблона: %s' % e.message, status=400)               
             try:
-                ws = wb.active                         
-                                
-                voyage_name = ExcelHelper.get_value(ws, 'VOYAGE')                  
-                vessel_name = ExcelHelper.get_value(ws, 'VESSEL')
+                ws = wb.active                                                         
+                vessel_name = ExcelHelper.get_value(ws, 'VESSEL', True)
+                voyage_name = ExcelHelper.get_value(ws, 'VOYAGE', True)                                  
                 #contract_name = ExcelHelper.get_value(ws, 'CONTRACT')
-                #contract = 
-                
+                #contract =                 
             except Exception as e:                
                 return HttpResponse(u'Шаблон заполнен некорректно: %s' % e.message, status=400)
             

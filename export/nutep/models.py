@@ -8,7 +8,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey,\
     GenericRelation
 from nutep.middleware import get_current_user
-
+from django.utils.encoding import force_text
+from django.core.urlresolvers import reverse
+from django.utils.formats import date_format
+from django.utils import timezone
 
 
 def attachment_path(instance, filename):    
@@ -28,12 +31,15 @@ class BaseModelManager(models.Manager):
 
 
 class ProcessDeletedModel(models.Model):    
+    _last_event = None
     objects = BaseModelManager()
     all_objects = models.Manager()
     deleted = models.BooleanField('Пометка удаления', default=False)
     def last_event(self):
-        if self.history:
-            return self.history.all().order_by("-date")[:1].get()
+        if not self._last_event:
+            if self.history:
+                self._last_event = self.history.all().order_by("-date")[:1].get()
+        return self._last_event
     class Meta:
         abstract = True 
 
@@ -204,7 +210,7 @@ class Contract(BaseModel):
         verbose_name_plural = force_unicode('Договоры')
         ordering = ('name', )
     
-    
+        
 class UploadedTemplate(ProcessDeletedModel):
     NEW = 1
     INPROCESS = 2
@@ -243,7 +249,7 @@ class UploadedTemplate(ProcessDeletedModel):
         return int(done / total * 100)        
     
     def set_status(self):
-        if len(self.errors.all()):
+        if len(self.errors.all()): # pylint: disable=E1101
             self.status = UploadedTemplate.ERROR
         elif self.drafts_readiness() == 100:            
             self.status = UploadedTemplate.PROCESSED
@@ -266,6 +272,23 @@ class UploadedTemplate(ProcessDeletedModel):
                  }
         return mapper.get(self.status)
     
+
+    def as_dict(self):
+        return {
+            "id": self.id,            
+            "status": self.get_status_display(),
+            "vessel": force_text(self.voyage.vessel),
+            "voyage": force_text(self.voyage),
+            "contract": force_text(self.contract),
+            "line": force_text(self.contract.line),
+            "filename": force_text(self.filename()),
+            "updated":  date_format(timezone.localtime(self.last_event().date), "d.m.Y H:i"),
+            "user": force_text(self.last_event().user),
+            "url": reverse('template-details', kwargs={'pk': self.pk}),
+            "status_class": self.status_class(),
+            "status_id": "%s-status" % self.id            
+        }
+
     class Meta:
         verbose_name = force_unicode('Шаблон')
         verbose_name_plural = force_unicode('Шаблоны')

@@ -5314,12 +5314,14 @@ myApp = myApp || (function () {
     };
 })();
 
+/*
 $(function() {
 	$('.django-select2').djangoSelect2();
 });
+*/
 
 $(function() {
-	$('#uploadtemplate').on('click', function (e) {
+	$('#uploadtemplate1').on('click', function (e) {
 		e.preventDefault();
 		return;
 		var pk = $( this ).data("pk");
@@ -5342,4 +5344,77 @@ $(function() {
 		});
 	});
 });
+
+$(function() {
+	var appTemplates = new Vue({
+		el: '#app-templates',
+		data: {
+			items: [
+			]
+		},
+		delimiters: ["<%", "%>"],
+
+		methods: {
+			fetchData: function () {
+				var xhr = new XMLHttpRequest()
+				var self = this;
+				xhr.open('GET', '/activetemplates/');
+				xhr.onload = function () {
+					self.items = JSON.parse(xhr.responseText);
+				}
+				xhr.send()
+			},
+			open: function (url) {
+				window.location.href = url;
+			},
+			refresh: function (id) {
+				var self = this;
+				var obj = self.items.filter(function (obj) {
+							return obj.id === id;
+						})[0];
+				obj.status = "";				
+				obj.status_class = "";				
+				obj.load_image = "<div class='cssload-jumping'><span></span><span></span><span></span><span></span><span></span></div>"
+				$.post(					
+					"/gettemplate/" + id,
+					{
+						csrfmiddlewaretoken: getCookie('csrftoken'),
+					},
+					function (data) {
+						if (data.status == true) {
+							self.fetchData();
+						}
+					}
+				)
+					.fail(function (response) {						
+						obj.status = response.responseText;						
+						obj.status_class = "danger";
+						obj.load_image = ""
+					});
+			},
+		}
+	})
+	appTemplates.fetchData();
+
+	
+	var appSettings = new Vue({
+		el: '#app-settings',
+		data: {
+			
+		},
+		delimiters: ["<%", "%>"],
+
+		methods: {
+			refresh: function () {
+				appTemplates.fetchData();
+			},
+		},
+	});
+
+
+
+});
+
+
+
 
