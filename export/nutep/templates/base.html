@@ -184,7 +184,7 @@
                         <th>Статус</th>
                       </tr>
                     </thead>
-                    <tbody id="app-templates">
+                    <tbody id="app-templates" v-cloak>
                       <tr class="datarow" v-for="item in items" v-on:dblclick="open(item.url)">
                         <th scope="row"><a :href="item.url"><% item.id %></a></th>
 

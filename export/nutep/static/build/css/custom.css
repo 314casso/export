@@ -4310,3 +4310,7 @@ body.landing {
 		transform: scale(0);
 	}
 }
+
+[v-cloak] {
+    display: none;
+}
