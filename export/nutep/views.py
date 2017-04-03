@@ -101,10 +101,9 @@ class ServiceView(BaseView):
 
 
 @login_required
-def get_active_templates(request):
-    from django.core.serializers import serialize
+def get_active_templates(request):    
     active_templates = UploadedTemplate.objects.filter(history__user__profile__lines__in=request.user.profile.lines.all(), 
-        status__in=(UploadedTemplate.ERROR, UploadedTemplate.INPROCESS)).distinct()    
+        status__in=(UploadedTemplate.ERROR, UploadedTemplate.INPROCESS, UploadedTemplate.REFRESH)).distinct()    
     return JsonResponse([ obj.as_dict() for obj in active_templates ], safe=False)
     
 
@@ -168,7 +167,6 @@ def delete_template(request, template_id):
 @login_required    
 def get_template_status(request, pk):
     if request.method == 'POST':
-        sleep(5)
         try:
             draft_service = DraftService(WEB_SERVISES['draft'])            
             response = draft_service.update_status(pk, request.user)
@@ -217,9 +215,9 @@ def upload_file(request):
             template = form.save(commit=False)            
             template.user = request.user
             template.voyage = voyage
-#             template.attachment = form.cleaned_data['attachment']            
-            template.save()
-                
+            template.status = UploadedTemplate.REFRESH
+            template.attachment = form.cleaned_data['attachment']            
+            template.save()                
             upload_template.delay(template, request.user)                            
             return HttpResponseRedirect(reverse('services'))        
         return HttpResponse(u'Неверный формат шаблона: %s' % u''.join([u'%s: %s' % (key, val) for key, val in form.errors.items()]), status=400)

@@ -5321,29 +5321,14 @@ $(function() {
 */
 
 $(function() {
-	$('#uploadtemplate1').on('click', function (e) {
+	$('#uploadtemplate').on('click', function (e) {
 		e.preventDefault();
-		return;
-		var pk = $( this ).data("pk");
-		var csrftoken = getCookie('csrftoken');
-		myApp.showPleaseWait();
-		$.post(
-		  "/gettemplate/" + pk,
-		  {
-			csrfmiddlewaretoken: csrftoken        			    
-		  },
-		  function (data) {			  
-			  if (data.status == true) {				  
-				  location.reload();
-			  }
-		  }
-		)
-		.fail(function(response) {
-			myApp.hidePleaseWait();
-		    alert('Ошибка обновления данных.');
-		});
+		var form = $('#form-templateupload');
+		form.submit();
+		$('#modal-templateupload').modal('toggle');		
 	});
 });
+
 
 $(function() {
 	var appTemplates = new Vue({
@@ -5355,12 +5340,30 @@ $(function() {
 		delimiters: ["<%", "%>"],
 
 		methods: {
+			setItemLoading: function (item) {
+				item.status = "";				
+				item.status_class = "";				
+				item.load_image = "<div class='cssload-jumping'><span></span><span></span><span></span><span></span><span></span></div>";
+			},
 			fetchData: function () {
 				var xhr = new XMLHttpRequest()
 				var self = this;
 				xhr.open('GET', '/activetemplates/');
 				xhr.onload = function () {
 					self.items = JSON.parse(xhr.responseText);
+					
+					
+					var do_refresh = false;
+					self.items.forEach(function (item, i, arr) {		
+						if (item.refreshing) {
+							do_refresh = true;
+							self.setItemLoading(item);
+						}
+					});
+					
+					if (do_refresh) {						
+						setTimeout(self.fetchData, 1000);
+					}
 				}
 				xhr.send()
 			},
@@ -5372,9 +5375,7 @@ $(function() {
 				var obj = self.items.filter(function (obj) {
 							return obj.id === id;
 						})[0];
-				obj.status = "";				
-				obj.status_class = "";				
-				obj.load_image = "<div class='cssload-jumping'><span></span><span></span><span></span><span></span><span></span></div>"
+				self.setItemLoading(obj);
 				$.post(					
 					"/gettemplate/" + id,
 					{
@@ -5393,9 +5394,8 @@ $(function() {
 					});
 			},
 		}
-	})
-	appTemplates.fetchData();
-
+	});
+	
 	
 	var appSettings = new Vue({
 		el: '#app-settings',
@@ -5410,10 +5410,12 @@ $(function() {
 			},
 		},
 	});
-
-
-
+	
+	appTemplates.fetchData();
+		
+		
 });
+
 
 
 

@@ -215,6 +215,7 @@ class UploadedTemplate(ProcessDeletedModel):
     NEW = 1
     INPROCESS = 2
     PROCESSED = 3
+    REFRESH = 4
     ERROR = 500
     
     STATUS_CHOICES = (
@@ -222,6 +223,7 @@ class UploadedTemplate(ProcessDeletedModel):
         (INPROCESS, force_unicode('В обработке')),
         (PROCESSED, force_unicode('Обработан')),
         (ERROR, force_unicode('Ошибка')),     
+        (REFRESH, force_unicode('Обновление')),
     )
         
     attachment = models.FileField('Файл шаблона', upload_to=attachment_path) 
@@ -269,6 +271,7 @@ class UploadedTemplate(ProcessDeletedModel):
                  self.PROCESSED : 'success',
                  self.INPROCESS : 'info',
                  self.ERROR : 'danger',
+                 self.REFRESH : 'refresh',
                  }
         return mapper.get(self.status)
     
@@ -286,7 +289,8 @@ class UploadedTemplate(ProcessDeletedModel):
             "user": force_text(self.last_event().user),
             "url": reverse('template-details', kwargs={'pk': self.pk}),
             "status_class": self.status_class(),
-            "status_id": "%s-status" % self.id            
+            "status_id": "%s-status" % self.id,
+            "refreshing": self.status == self.REFRESH,            
         }
 
     class Meta:

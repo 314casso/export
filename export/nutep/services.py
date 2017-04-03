@@ -198,4 +198,3 @@ class ExcelHelper():
         else:
             raise TemplateException(u'Столбец %s содержит более одного рейса %s' % (cell.value, u','.join(result)))  
         
-                                      
