@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
-from django.db import models
-from django.utils.encoding import force_unicode
 import datetime
 import os
+
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.fields import (GenericForeignKey,
+                                                GenericRelation)
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey,\
-    GenericRelation
-from nutep.middleware import get_current_user
-from django.utils.encoding import force_text
 from django.core.urlresolvers import reverse
-from django.utils.formats import date_format
+from django.db import models
 from django.utils import timezone
+from django.utils.encoding import force_text, force_unicode
+from django.utils.formats import date_format
+
+from nutep.middleware import get_current_user
 
 
 def attachment_path(instance, filename):    
@@ -24,17 +25,24 @@ def attachment_path(instance, filename):
     return os.path.join(path, filename)
 
 
+class Team(models.Model):
+    name = models.CharField('Наименование', max_length=150, db_index=True)
+    users = models.ManyToManyField(User, blank=True)
+    def __unicode__(self):
+        return u'{0}'.format(self.name) 
+
+
 class BaseModelManager(models.Manager):    
     def get_queryset(self):
-        #print get_current_user()
-        return super(BaseModelManager, self).get_queryset().filter(deleted=False)
+        user = get_current_user()
+        return super(BaseModelManager, self).get_queryset().filter(deleted=False, team__users=user)
 
 
 class ProcessDeletedModel(models.Model):    
     _last_event = None
     objects = BaseModelManager()
     all_objects = models.Manager()
-    deleted = models.BooleanField('Пометка удаления', default=False)
+    deleted = models.BooleanField('Пометка удаления', default=False)    
     def last_event(self):
         if not self._last_event:
             if self.history:
@@ -44,9 +52,25 @@ class ProcessDeletedModel(models.Model):
         abstract = True 
 
 
+class PrivateModel(ProcessDeletedModel):
+    team = models.ForeignKey(Team, null=True, blank=True)
+    owner = models.ForeignKey(User, null=True, blank=True)
+    class Meta:
+        abstract = True
+
+
 class BaseModel(ProcessDeletedModel):
     name = models.CharField('Наименование', max_length=150, db_index=True)
     guid = models.CharField(max_length=50, null=True, db_index=True)
+    class Meta:
+        abstract = True
+
+
+class PrivateBaseModel(PrivateModel):
+    name = models.CharField('Наименование', max_length=150, db_index=True)
+    guid = models.CharField(max_length=50, null=True, db_index=True)
+    team = models.ForeignKey(Team, null=True, blank=True)
+    owner = models.ForeignKey(User, null=True, blank=True)
     class Meta:
         abstract = True
 
@@ -58,6 +82,8 @@ class HistoryMeta(models.Model):
     is_created = models.BooleanField(default=False)    
     date = models.DateTimeField(blank=True, null=True, db_index=True)
     user = models.ForeignKey(User, blank=True, null=True, on_delete=models.PROTECT)         
+    def __unicode__(self):
+        return u'{0}'.format(self.user) 
     
 
 class BaseError(models.Model):
@@ -113,7 +139,7 @@ class Voyage(BaseModel):
         ordering = ('name', )
     
     
-class Line(BaseModel):        
+class Line(PrivateBaseModel):        
     def __unicode__(self):
         return u'{0}'.format(self.name) 
     class Meta:
@@ -122,20 +148,35 @@ class Line(BaseModel):
         ordering = ('name', )
         
         
-class Terminal(BaseModel):        
+class Terminal(PrivateBaseModel):        
     def __unicode__(self):
         return u'{0}'.format(self.name) 
     class Meta:
         verbose_name = force_unicode('Терминал')
         verbose_name_plural = force_unicode('Терминалы')
         ordering = ('name', )           
-  
+
+
+class Contract(PrivateBaseModel):    
+    line = models.ForeignKey(Line, related_name="contracts")
+    terminal = models.ForeignKey(Terminal)
+    startdate = models.DateTimeField(db_index=True)
+    expired = models.DateTimeField(db_index=True)
+    def __unicode__(self):
+        return u'{0}'.format(self.name) 
+    class Meta:
+        verbose_name = force_unicode('Договор')
+        verbose_name_plural = force_unicode('Договоры')
+        ordering = ('name', )
+
 
 class UserProfile(models.Model):
-    guid = models.CharField(max_length=50,null=True)
+    guid = models.CharField(max_length=50, null=True)
     user = models.OneToOneField(User, unique=True, related_name='profile')
     lines = models.ManyToManyField(Line)
-
+    def __unicode__(self):
+        return u'{0}'.format(self.user) 
+    
 
 class Draft(models.Model):
     name = models.CharField('BL', max_length=150, db_index=True)        
@@ -197,21 +238,9 @@ class Readiness(models.Model):
         verbose_name = force_unicode('Готовность')
         verbose_name_plural = force_unicode('Готовность')
         ordering = ('id', ) 
-
-class Contract(BaseModel):    
-    line = models.ForeignKey(Line, related_name="contracts")
-    terminal = models.ForeignKey(Terminal)
-    startdate = models.DateTimeField(db_index=True)
-    expired = models.DateTimeField(db_index=True)
-    def __unicode__(self):
-        return u'{0}'.format(self.name) 
-    class Meta:
-        verbose_name = force_unicode('Договор')
-        verbose_name_plural = force_unicode('Договоры')
-        ordering = ('name', )
     
         
-class UploadedTemplate(ProcessDeletedModel):
+class UploadedTemplate(PrivateModel):
     NEW = 1
     INPROCESS = 2
     PROCESSED = 3
@@ -230,7 +259,8 @@ class UploadedTemplate(ProcessDeletedModel):
     status = models.IntegerField(choices=STATUS_CHOICES, default=NEW, db_index=True, blank=True)
     http_code = models.CharField('HTTP Код', max_length=50, null=True, blank=True)
     xml_response = models.TextField('XML ответ', null=True, blank=True)    
-    voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT, related_name="templates")
+    voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT,
+                               related_name="templates")
     contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)
     
     history = GenericRelation('HistoryMeta')
@@ -250,7 +280,7 @@ class UploadedTemplate(ProcessDeletedModel):
         done = float(len(self.drafts_done()))        
         return int(done / total * 100)        
     
-    def set_status(self):
+    def set_status(self):        
         if len(self.errors.all()): # pylint: disable=E1101
             self.status = UploadedTemplate.ERROR
         elif self.drafts_readiness() == 100:            
@@ -267,12 +297,12 @@ class UploadedTemplate(ProcessDeletedModel):
     
     def status_class(self):
         mapper = {
-                 self.NEW : 'new',
-                 self.PROCESSED : 'success',
-                 self.INPROCESS : 'info',
-                 self.ERROR : 'danger',
-                 self.REFRESH : 'refresh',
-                 }
+            self.NEW: 'new',
+            self.PROCESSED: 'success',
+            self.INPROCESS: 'info',
+            self.ERROR: 'danger',
+            self.REFRESH: 'refresh',
+        }
         return mapper.get(self.status)
     
 

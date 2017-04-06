@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-from suds.client import Client
-from __builtin__ import setattr
 import base64
-from suds.cache import NoCache
-from nutep.models import Draft, UploadedTemplate, Voyage, Line, Vessel,\
-    Contract, Container, Readiness, BaseError
-from django.contrib.auth.models import User
+
 from django.apps import apps
+from django.contrib.auth.models import User
+from suds.cache import NoCache
+from suds.client import Client
+
+from nutep.models import (BaseError, Container, Contract, Draft, Line,
+                          Readiness, UploadedTemplate, Voyage)
 
 
-class BaseService():
+class BaseService(object):
     username = None
     password = None
     url = None
@@ -19,7 +20,8 @@ class BaseService():
     def set_client(self, settings):
         for key in settings.iterkeys():             
             setattr(self, key, settings.get(key))   
-        base64string = base64.encodestring('%s:%s' % (self.username, self.password)).replace('\n', '')
+        base64string = base64.encodestring(
+            '%s:%s' % (self.username, self.password)).replace('\n', '')
         authenticationHeader = {
             "SOAPAction" : "ActionName",
             "Authorization" : "Basic %s" % base64string
@@ -52,7 +54,7 @@ class DraftService(BaseService):
         return value
     
     def get_line(self, xml_line):         
-        line, created = Line.objects.get_or_create(guid=xml_line.guid,)  # @UnusedVariable
+        line, created = Line.objects.get_or_create(guid=xml_line.guid,)  # pylint: disable=W0612
         line.name = xml_line.name        
         line.guid = xml_line.guid
         line.save()        
@@ -81,7 +83,8 @@ class DraftService(BaseService):
         return self.get_value('Vessel', xml_vessel)
     
     def get_contract(self, xml_contract):         
-        contract, created = Contract.objects.get_or_create(guid=xml_contract.guid,)  # @UnusedVariable                
+        contract, created = Contract.objects.get_or_create( # pylint: disable=W0612
+            guid=xml_contract.guid,)  
         contract.name = xml_contract.name
         contract.guid = xml_contract.guid        
         contract.save()        
@@ -109,7 +112,7 @@ class DraftService(BaseService):
     def parse_response(self, response, template):
         self.delete_data(template)    
         if response.errors:
-            fields = ['code','error','message']         
+            fields = ['code', 'error', 'message']
             for xml_error in response.errors.error:                  
                 base_error = BaseError()
                 for field in fields:
@@ -131,7 +134,8 @@ class DraftService(BaseService):
         if response.drafts:      
             for xml_draft in response.drafts.draft:            
                 draft = Draft()
-                fields = ['name','guid','date','shipper','consignee','finalDestination','POD','POL','finstatus','status','poruchenie','poruchenieNums','notify']
+                fields = ['name', 'guid', 'date', 'shipper', 'consignee', 'finalDestination',
+                          'POD', 'POL', 'finstatus', 'status', 'poruchenie', 'poruchenieNums', 'notify']
                 for field in fields:
                     value = u'%s' % xml_draft[field] if xml_draft[field] else xml_draft[field]                        
                     setattr(draft, field, value)                
@@ -140,16 +144,17 @@ class DraftService(BaseService):
                 draft.line = self.get_line(xml_draft.line)
                 draft.template = template               
                 draft.save()
-                fields = ['name','SOC','size','type','seal','cargo','netto','gross','tare','package','quantity']
+                fields = ['name', 'SOC', 'size', 'type', 'seal', 'cargo',
+                          'netto', 'gross', 'tare', 'package', 'quantity']
                 for xml_container in xml_draft.containers.container:
                     container = Container()
                     for field in fields:
-                        value = u'%s' % xml_container[field] if xml_container[field] else xml_container[field]  
+                        value = u'%s' % xml_container[field] if xml_container[field] else xml_container[field]
                         setattr(container, field, value)
                     container.line = self.get_line(xml_container.line)
                     container.draft = draft
                     container.save()
-                fields = ['size','type','ordered','done',]    
+                fields = ['size', 'type', 'ordered', 'done', ]
                 for xml_readiness in xml_draft.readiness.row:
                     readiness = Readiness()
                     for field in fields:                    
@@ -167,10 +172,10 @@ class DraftService(BaseService):
 class TemplateException(Exception):
     pass   
         
-class ExcelHelper():    
+class ExcelHelper(object):    
     @staticmethod            
     def get_value(ws, col_name, required=False):
-        cell =  ExcelHelper.get_cell(ws, col_name)
+        cell = ExcelHelper.get_cell(ws, col_name)
         value = ExcelHelper.get_cell_value(ws, cell)
         if required and not value:
             raise TemplateException(u'Столбец %s не может быть пустым' % col_name) 
@@ -187,7 +192,8 @@ class ExcelHelper():
         
     @staticmethod            
     def get_cell_value(ws, cell):
-        rng = "%s%s:%s%s" % (cell.column, int(cell.row)+1,cell.column, int(cell.row)+1)
+        rng = "%s%s:%s%s" % (cell.column, int(cell.row) + 1,
+                             cell.column, int(cell.row) + 1)
         result = set() 
         for row in ws.iter_rows(rng):
             result.add(row[0].value)            
@@ -197,4 +203,3 @@ class ExcelHelper():
             raise TemplateException(u'Столбец %s не заполнен' % cell.value)               
         else:
             raise TemplateException(u'Столбец %s содержит более одного рейса %s' % (cell.value, u','.join(result)))  
-        

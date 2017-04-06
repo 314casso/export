@@ -7,7 +7,8 @@ from django.utils.timezone import now
 def prepare_history(sender, instance, created, **kwargs): 
     if not hasattr(instance, 'user'):
         instance.user = User.objects.get(pk=1)   
-    HistoryMeta.objects.create(date=now(), content_object=instance, is_created=created, user=instance.user)    
+    HistoryMeta.objects.create(date=now(), content_object=instance,
+                               is_created=created, user=instance.user)
     
 
 def connect_signals():
