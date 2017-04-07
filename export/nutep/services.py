@@ -54,7 +54,7 @@ class DraftService(BaseService):
         return value
     
     def get_line(self, xml_line):         
-        line, created = Line.objects.get_or_create(guid=xml_line.guid,)  # pylint: disable=W0612
+        line, created = Line.all_objects.get_or_create(guid=xml_line.guid,)  # pylint: disable=W0612
         line.name = xml_line.name        
         line.guid = xml_line.guid
         line.save()        
@@ -83,8 +83,7 @@ class DraftService(BaseService):
         return self.get_value('Vessel', xml_vessel)
     
     def get_contract(self, xml_contract):         
-        contract, created = Contract.objects.get_or_create( # pylint: disable=W0612
-            guid=xml_contract.guid,)  
+        contract, created = Contract.all_objects.get_or_create(guid=xml_contract.guid,)  
         contract.name = xml_contract.name
         contract.guid = xml_contract.guid        
         contract.save()        
@@ -101,10 +100,10 @@ class DraftService(BaseService):
         return response
                         
     def update_status(self, pk, user): 
-        template = UploadedTemplate.objects.get(pk=pk)
+        template = UploadedTemplate.all_objects.get(pk=pk)
         template.user = user 
-        if template.errors.all():
-            raise Exception(u"Шаблон содержит ошибки, обновление новозможно")
+        #if template.errors.all():
+        #    raise Exception(u"Шаблон содержит ошибки, обновление новозможно")
         response = self._client.service.GetStatus(pk)      
         self.parse_response(response, template)
         return response

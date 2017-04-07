@@ -27,34 +27,52 @@ def attachment_path(instance, filename):
 
 class Team(models.Model):
     name = models.CharField('Наименование', max_length=150, db_index=True)
-    users = models.ManyToManyField(User, blank=True)
+    users = models.ManyToManyField(User, blank=True, related_name="teams")
     def __unicode__(self):
         return u'{0}'.format(self.name) 
 
 
 class BaseModelManager(models.Manager):    
+    def get_queryset(self):        
+        return super(BaseModelManager, self).get_queryset().filter(deleted=False)
+
+
+class PrivateModelManager(BaseModelManager):    
     def get_queryset(self):
-        user = get_current_user()
-        return super(BaseModelManager, self).get_queryset().filter(deleted=False, team__users=user)
+        user = get_current_user()        
+        if not user or not user.is_authenticated():
+            return super(PrivateModelManager, self).get_queryset().none()        
+        return super(PrivateModelManager, self).get_queryset().filter(models.Q(teams__users=user) | models.Q(owner=user)).distinct()
+        #return super(PrivateModelManager, self).get_queryset()                    
 
 
 class ProcessDeletedModel(models.Model):    
     _last_event = None
+    _first_event = None
     objects = BaseModelManager()
     all_objects = models.Manager()
     deleted = models.BooleanField('Пометка удаления', default=False)    
+           
     def last_event(self):
         if not self._last_event:
             if self.history:
-                self._last_event = self.history.all().order_by("-date")[:1].get()
+                self._last_event = self.history.all().order_by("-date").first()
         return self._last_event
+    
+    def first_event(self):
+        if not self._first_event:
+            if self.history:
+                self._first_event = self.history.all().order_by("date")[:1].first()
+        return self._first_event
+    
     class Meta:
         abstract = True 
 
 
 class PrivateModel(ProcessDeletedModel):
-    team = models.ForeignKey(Team, null=True, blank=True)
+    teams = models.ManyToManyField(Team, blank=True)
     owner = models.ForeignKey(User, null=True, blank=True)
+    objects = PrivateModelManager()    
     class Meta:
         abstract = True
 
@@ -64,16 +82,7 @@ class BaseModel(ProcessDeletedModel):
     guid = models.CharField(max_length=50, null=True, db_index=True)
     class Meta:
         abstract = True
-
-
-class PrivateBaseModel(PrivateModel):
-    name = models.CharField('Наименование', max_length=150, db_index=True)
-    guid = models.CharField(max_length=50, null=True, db_index=True)
-    team = models.ForeignKey(Team, null=True, blank=True)
-    owner = models.ForeignKey(User, null=True, blank=True)
-    class Meta:
-        abstract = True
-
+        
 
 class HistoryMeta(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -139,7 +148,9 @@ class Voyage(BaseModel):
         ordering = ('name', )
     
     
-class Line(PrivateBaseModel):        
+class Line(PrivateModel): 
+    name = models.CharField('Наименование', max_length=150, db_index=True)
+    guid = models.CharField(max_length=50, null=True, db_index=True)       
     def __unicode__(self):
         return u'{0}'.format(self.name) 
     class Meta:
@@ -148,7 +159,7 @@ class Line(PrivateBaseModel):
         ordering = ('name', )
         
         
-class Terminal(PrivateBaseModel):        
+class Terminal(BaseModel):        
     def __unicode__(self):
         return u'{0}'.format(self.name) 
     class Meta:
@@ -157,11 +168,13 @@ class Terminal(PrivateBaseModel):
         ordering = ('name', )           
 
 
-class Contract(PrivateBaseModel):    
+class Contract(PrivateModel):
+    name = models.CharField('Наименование', max_length=150, db_index=True)
+    guid = models.CharField(max_length=50, null=True, db_index=True)    
     line = models.ForeignKey(Line, related_name="contracts")
     terminal = models.ForeignKey(Terminal)
     startdate = models.DateTimeField(db_index=True)
-    expired = models.DateTimeField(db_index=True)
+    expired = models.DateTimeField(db_index=True)    
     def __unicode__(self):
         return u'{0}'.format(self.name) 
     class Meta:
@@ -173,7 +186,7 @@ class Contract(PrivateBaseModel):
 class UserProfile(models.Model):
     guid = models.CharField(max_length=50, null=True)
     user = models.OneToOneField(User, unique=True, related_name='profile')
-    lines = models.ManyToManyField(Line)
+    lines = models.ManyToManyField(Line)    
     def __unicode__(self):
         return u'{0}'.format(self.user) 
     
@@ -238,7 +251,7 @@ class Readiness(models.Model):
         verbose_name = force_unicode('Готовность')
         verbose_name_plural = force_unicode('Готовность')
         ordering = ('id', ) 
-    
+   
         
 class UploadedTemplate(PrivateModel):
     NEW = 1

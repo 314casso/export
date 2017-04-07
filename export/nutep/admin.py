@@ -4,15 +4,14 @@ from django.contrib.auth.models import User
 
 from nutep.models import (BaseError, Container, Contract, Draft, Line,
                           Terminal, UploadedTemplate, UserProfile, Vessel,
-                          Voyage)
+                          Voyage, Team)
 
 admin.site.unregister(User)
 
 
 class UploadedTemplateAdmin(admin.ModelAdmin):
-    list_display = ('attachment', 'history')
-
-    def queryset(self, request):
+    #list_display = ('attachment', 'history')
+    def get_queryset(self, request):
         return UploadedTemplate.all_objects.all()  # pylint: disable=E1101
 
 
@@ -32,6 +31,8 @@ class ContractInline(admin.TabularInline):
 class LineAdmin(admin.ModelAdmin):
     list_display = ('name', )
     inlines = [ContractInline, ]
+    def get_queryset(self, request):
+        return Line.all_objects.all()  # pylint: disable=E1101
 
 
 class TerminalAdmin(admin.ModelAdmin):
@@ -45,9 +46,11 @@ class UserProfileInline(admin.StackedInline):
 class UserProfileAdmin(UserAdmin):
     inlines = [UserProfileInline, ]
 
+class TeamAdmin(admin.ModelAdmin):
+    pass
+
 
 admin.site.register(User, UserProfileAdmin)
-admin.site.register(UploadedTemplate)
 admin.site.register(Voyage, VoyageAdmin)
 admin.site.register(Contract, ContractAdmin)
 admin.site.register(Line, LineAdmin)
@@ -56,3 +59,5 @@ admin.site.register(Vessel)
 admin.site.register(Draft)
 admin.site.register(Container)
 admin.site.register(BaseError)
+admin.site.register(UploadedTemplate, UploadedTemplateAdmin)
+admin.site.register(Team, TeamAdmin)

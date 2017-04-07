@@ -76,8 +76,7 @@ class ServiceView(BaseView):
     def get_context_data(self, **kwargs):
         context = super(ServiceView, self).get_context_data(**kwargs)
         PER_PAGE = 10
-        template_list = UploadedTemplate.objects.filter(
-            history__user__profile__lines__in=self.request.user.profile.lines.all()).distinct()
+        template_list = UploadedTemplate.objects.all()
 
         page = self.request.GET.get('page', 1)
 
@@ -109,9 +108,8 @@ class ServiceView(BaseView):
 @login_required
 def get_active_templates(request):
     active_templates = UploadedTemplate.objects.filter(
-        history__user__profile__lines__in=request.user.profile.lines.all(),
-        status__in=(UploadedTemplate.ERROR, UploadedTemplate.INPROCESS,
-                    UploadedTemplate.REFRESH)).distinct()
+                                                       status__in=(UploadedTemplate.ERROR, UploadedTemplate.INPROCESS,
+                                                                   UploadedTemplate.REFRESH)).distinct()
     return JsonResponse([obj.as_dict() for obj in active_templates], safe=False)
 
 
