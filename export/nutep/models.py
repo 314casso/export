@@ -12,8 +12,6 @@ from django.utils import timezone
 from django.utils.encoding import force_text, force_unicode
 from django.utils.formats import date_format
 
-from nutep.middleware import get_current_user
-
 
 def attachment_path(instance, filename):    
     from django.conf import settings
@@ -38,12 +36,10 @@ class BaseModelManager(models.Manager):
 
 
 class PrivateModelManager(BaseModelManager):    
-    def get_queryset(self):
-        user = get_current_user()        
-        if not user or not user.is_authenticated():
-            return super(PrivateModelManager, self).get_queryset().none()        
+    def for_user(self, user):
+        if not user:
+            return super(PrivateModelManager, self).get_queryset().none()
         return super(PrivateModelManager, self).get_queryset().filter(models.Q(teams__users=user) | models.Q(owner=user)).distinct()
-        #return super(PrivateModelManager, self).get_queryset()                    
 
 
 class ProcessDeletedModel(models.Model):    
@@ -274,11 +270,11 @@ class UploadedTemplate(PrivateModel):
     xml_response = models.TextField('XML ответ', null=True, blank=True)    
     voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT,
                                related_name="templates")
-    contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)
-    
-    history = GenericRelation('HistoryMeta')
-    
+    contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)    
+    history = GenericRelation('HistoryMeta')    
     errors = GenericRelation('BaseError')
+    md5_hash = models.CharField('md5 hash', max_length=32, null=True, blank=True, db_index=True)
+    is_override = models.BooleanField(default=False)
     
     def drafts_done(self):        
         return self.drafts.filter(poruchenie=True)    

@@ -1,7 +1,8 @@
-from nutep.models import HistoryMeta, UploadedTemplate, Voyage, Vessel, Line
 from django.db.models.signals import post_save, pre_save
-from django.utils.timezone import now 
+from django.utils.timezone import now
+
 from nutep.middleware import get_current_user
+from nutep.models import HistoryMeta, Line, UploadedTemplate, Vessel, Voyage
 
 
 def prepare_history(sender, instance, created, **kwargs): 

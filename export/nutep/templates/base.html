@@ -74,9 +74,7 @@
                         <li><a> {{ vessel }}<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                           	{% for voyage in vessel.voyages.all  %}
-                          		{% for template in voyage.templates.all  %}
-                            			<li class="sub_menu"><a href="{% url 'template-details' template.id %}"> {{ voyage }}</a></li>
-                            	{% endfor %}                            		
+                              <li class="sub_menu"><a href="{% url 'drafts' voyage.pk %}"> {{ voyage }}</a></li>
                             {% endfor %}                            
                           </ul>
                         </li>
@@ -140,13 +138,15 @@
               <div class="title_left">
                 <h3>Поручения <small>сервис по оформлению экспортных документов</small></h3>
               </div>
-            </div>
+          </div>
 
-            <div class="clearfix"></div>
+          <div class="clearfix"></div>
 		
-		  <button type="button" class="btn btn-default btn-primary" data-toggle="modal" data-target="#modal-{{ template_form.key }}">
-		  <i class="fa fa-upload"></i> Загрузить шаблон</button>
-          
+          <p>
+            <button type="button" class="btn btn-default btn-primary" data-toggle="modal" data-target="#modal-{{ template_form.key }}">
+            <i class="fa fa-upload"></i> Загрузить шаблон</button>
+          </p>
+
           <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">

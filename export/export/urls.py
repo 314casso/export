@@ -1,12 +1,12 @@
 from django.conf import settings
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, patterns, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
-from nutep.views import landing, upload_file, TemplateDeleteView,\
-get_template_status, ServiceView, TemplateDetailView, DraftDetailView,\
-get_active_templates
-
+from nutep.views import (DraftDetailView, DraftListView, ServiceView,
+                         TemplateDeleteView, TemplateDetailView,
+                         get_active_templates, get_template_status, landing,
+                         upload_file)
 
 admin.autodiscover()
 
@@ -30,6 +30,7 @@ urlpatterns += patterns('',
     url(r'^deletetemplate/(?P<pk>[0-9]+)$', TemplateDeleteView.as_view(), name='delete-template'),  
     url(r'^gettemplate/(?P<pk>[0-9]+)$', get_template_status, name='get-template'),
     url(r'^templatedetails/(?P<pk>[0-9]+)$', TemplateDetailView.as_view(), name='template-details'),
+    url(r'^drafts/(?P<voyage>[0-9]+)$', DraftListView.as_view(), name='drafts'),
     url(r'^draftdetails/(?P<pk>[0-9]+)$', DraftDetailView.as_view(), name='draft-details'),
 )
 

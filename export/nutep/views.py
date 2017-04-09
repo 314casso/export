@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+
 import json
 import logging
-from time import sleep
 
 import suds
 from django.contrib.auth.decorators import login_required
@@ -24,6 +25,7 @@ from nutep.forms import TemplateForm
 from nutep.models import (BaseError, Contract, Draft, UploadedTemplate, Vessel,
                           Voyage)
 from nutep.services import DraftService, ExcelHelper
+import hashlib
 
 logger = logging.getLogger('django.request')
 
@@ -61,8 +63,8 @@ class BaseView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(BaseView, self).get_context_data(**kwargs)
-        vessels = Vessel.objects.filter(
-            history__user__profile__lines__in=self.request.user.profile.lines.all()).distinct()
+        vessel_list = UploadedTemplate.objects.for_user(self.request.user).values_list('voyage__vessel', flat=True).distinct()        
+        vessels = Vessel.objects.filter(id__in=set(vessel_list)).order_by('name')
         context.update({
             'title': force_unicode('Рускон Онлайн'),
             'vessels': vessels,
@@ -79,7 +81,6 @@ class ServiceView(BaseView):
         template_list = UploadedTemplate.objects.all()
 
         page = self.request.GET.get('page', 1)
-
         paginator = Paginator(template_list, PER_PAGE)
         try:
             templates = paginator.page(page)
@@ -88,9 +89,9 @@ class ServiceView(BaseView):
         except EmptyPage:
             templates = paginator.page(paginator.num_pages)
 
-        template_form = TemplateForm()
-        template_form.fields['contract'].queryset = Contract.objects.filter(
-            line__in=self.request.user.profile.lines.all())
+        template_form = TemplateForm(user=self.request.user)
+        template_form.fields['contract'].queryset = Contract.objects.for_user(
+            self.request.user)
         template_form.title = force_text('Загрузка шаблона заявки')
         template_form.key = 'templateupload'
         context.update({
@@ -107,9 +108,9 @@ class ServiceView(BaseView):
 
 @login_required
 def get_active_templates(request):
-    active_templates = UploadedTemplate.objects.filter(
-                                                       status__in=(UploadedTemplate.ERROR, UploadedTemplate.INPROCESS,
-                                                                   UploadedTemplate.REFRESH)).distinct()
+    active_templates = UploadedTemplate.objects.for_user(request.user).filter(
+        status__in=(UploadedTemplate.ERROR, UploadedTemplate.INPROCESS,
+                    UploadedTemplate.REFRESH)).distinct()
     return JsonResponse([obj.as_dict() for obj in active_templates], safe=False)
 
 
@@ -123,6 +124,41 @@ class TemplateDetailView(BaseView):
         context.update({
             'title': force_unicode('Рускон Онлайн'),
             'template': template,
+        })
+        return context
+
+
+class DraftListView(BaseView):
+    template_name = 'drafts_list.html'
+    def get_context_data(self, **kwargs):
+        PER_PAGE = 10
+        voyage_id = kwargs.get('voyage')
+        voyage = Voyage.objects.get(pk=voyage_id)
+        draft_queryset = Draft.objects.filter(voyage=voyage)
+        total = len(draft_queryset)
+        rediness = 0        
+        if total:            
+            rediness = int(len(draft_queryset.filter(poruchenie=True)) / total * 100)            
+            print rediness
+
+        page = self.request.GET.get('page', 1)
+        paginator = Paginator(draft_queryset, PER_PAGE)
+        try:
+            drafts = paginator.page(page)
+        except PageNotAnInteger:
+            drafts = paginator.page(1)
+        except EmptyPage:
+            drafts = paginator.page(paginator.num_pages)
+
+        context = super(DraftListView, self).get_context_data(**kwargs)
+        context.update({
+            'title': force_unicode('Рускон Онлайн'),            
+            'paginator': paginator,
+            'page_obj': drafts,
+            'is_paginated': drafts.has_other_pages(),
+            'object_list': drafts.object_list,
+            'voyage': voyage,
+            'rediness': rediness,
         })
         return context
 
@@ -184,15 +220,15 @@ def upload_file(request):
             filename = form.cleaned_data['attachment']
             from openpyxl import load_workbook
             try:
-                wb = load_workbook(filename=ContentFile(filename.read()))
+                file_data = filename.read()
+                md5_hash = hashlib.md5(file_data).hexdigest()
+                wb = load_workbook(filename=ContentFile(file_data))
             except Exception as e:
                 return HttpResponse(u'Неверный формат шаблона: %s' % e.message, status=400)
             try:
                 ws = wb.active
                 vessel_name = ExcelHelper.get_value(ws, 'VESSEL', True)
                 voyage_name = ExcelHelper.get_value(ws, 'VOYAGE', True)
-                #contract_name = ExcelHelper.get_value(ws, 'CONTRACT')
-                #contract =
             except Exception as e:
                 return HttpResponse(u'Шаблон заполнен некорректно: %s' % e.message, status=400)
 
@@ -205,15 +241,16 @@ def upload_file(request):
                 voyage = Voyage()
                 voyage.name = voyage_name
                 voyage.user = request.user
-                voyage.vessel, created = Vessel.objects.get_or_create(
-                    name=vessel_name)  
+                voyage.vessel, created = Vessel.objects.get_or_create(name=vessel_name)  # pylint: disable=W0612
                 voyage.save()
             try:
-                form.instance = UploadedTemplate.objects.get(voyage=voyage)
+                form.instance = UploadedTemplate.objects.get(voyage=voyage, md5_hash=md5_hash)
             except UploadedTemplate.DoesNotExist:
                 pass
 
             template = form.save(commit=False)
+            template.md5_hash = md5_hash
+            template.is_override = form.cleaned_data['is_override'] 
             template.user = request.user
             template.voyage = voyage
             template.status = UploadedTemplate.REFRESH
