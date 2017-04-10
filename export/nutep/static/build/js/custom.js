@@ -5400,19 +5400,43 @@ $(function() {
 	var appSettings = new Vue({
 		el: '#app-settings',
 		data: {
-			
+			error: '',
 		},
 		delimiters: ["<%", "%>"],
 
 		methods: {
-			refresh: function () {
+			fetchData: function () {
 				appTemplates.fetchData();
+			},
+			setItemLoading: function () {
+				 $(this.$el).find('.loading').fadeIn();				 
+				 this.error = "";
+				 $(this.$el).find('#error-message').fadeOut(); 
+			},
+			refresh: function (id) {
+				var self = this;
+				self.setItemLoading();
+				$.post(					
+					"/gettemplate/" + id,
+					{
+						csrfmiddlewaretoken: getCookie('csrftoken'),
+					},
+					function (data) {
+						if (data.status == true) {
+							location.reload();
+						}
+					}
+				)
+					.fail(function (response) {
+						$(self.$el).find('.loading').fadeOut();
+						self.error = response.responseText;						
+						$(self.$el).find('#error-message').fadeIn(); 
+					});
 			},
 		},
 	});
 	
 	appTemplates.fetchData();
-		
 		
 });
 

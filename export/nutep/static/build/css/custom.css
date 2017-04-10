@@ -4311,6 +4311,6 @@ body.landing {
 	}
 }
 
-[v-cloak] {
+[v-cloak] , .loading, #error-message {
     display: none;
 }

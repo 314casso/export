@@ -152,8 +152,6 @@
                 <div class="x_panel">
                   <div class="x_title">
                     <h2>Заявки <small>управление и статус обработки</small></h2>
-                                       
-                    
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -161,7 +159,7 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                         <ul class="dropdown-menu" role="menu" id="app-settings">
                           <li>
-                            <a v-on:click="refresh" href="#"> Обновить</a>
+                            <a v-on:click="fetchData" href="#"><i class="fa fa-refresh fa-fw"></i> Обновить</a>
                           </li>
                         </ul>
                       </li>
@@ -198,7 +196,7 @@
                             <ul class="dropdown-menu dropdown-usermenu">
                               <li>
                                 <a v-on:click="refresh(item.id)" href="#">
-                                  <i class="fa fa-refresh fa-fw"></i> Обновить
+                                  <i class="fa fa-spinner fa-fw"></i> Обновить
                                 </a>
                               </li>
                             </ul>
@@ -262,7 +260,7 @@
     {{ template_form.media.js }}
     
     <!-- Custom Theme Scripts -->
-    <script src="{{ STATIC_URL }}build/js/custom.js"></script>
+    <script src="{{ STATIC_URL }}build/js/custom.js?0.003"></script>
 	
   </body>
 </html>
