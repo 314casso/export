@@ -28,6 +28,10 @@ class Team(models.Model):
     users = models.ManyToManyField(User, blank=True, related_name="teams")
     def __unicode__(self):
         return u'{0}'.format(self.name) 
+    class Meta:
+        verbose_name = force_unicode('Рабочая группа')
+        verbose_name_plural = force_unicode('Рабочие группы')
+        ordering = ('name', )        
 
 
 class BaseModelManager(models.Manager):    
@@ -76,7 +80,10 @@ class PrivateModel(ProcessDeletedModel):
 class BaseModel(ProcessDeletedModel):
     name = models.CharField('Наименование', max_length=150, db_index=True)
     guid = models.CharField(max_length=50, null=True, db_index=True)
+    def __unicode__(self):
+        return u'{0}'.format(self.name) 
     class Meta:
+        ordering = ('name', )
         abstract = True
         
 
@@ -122,31 +129,39 @@ class BaseError(models.Model):
     
 
 class Vessel(BaseModel):
-    history = GenericRelation('HistoryMeta')
-    def __unicode__(self):
-        return u'{0}'.format(self.name) 
+    history = GenericRelation('HistoryMeta')    
     class Meta:        
         verbose_name = force_unicode('Судно')
-        verbose_name_plural = force_unicode('Суда')
-        ordering = ('name', )
+        verbose_name_plural = force_unicode('Суда')        
     
     
 class Voyage(BaseModel):        
     vessel = models.ForeignKey(Vessel, null=True, related_name="voyages")
     flag = models.CharField(max_length=100, null=True, blank=True) 
     etd = models.DateTimeField(null=True, blank=True)
-    history = GenericRelation('HistoryMeta')
-    def __unicode__(self):
-        return u'{0}'.format(self.name) 
+    history = GenericRelation('HistoryMeta')    
     class Meta:
         verbose_name = force_unicode('Рейс')
-        verbose_name_plural = force_unicode('Рейсы')
-        ordering = ('name', )
+        verbose_name_plural = force_unicode('Рейсы')        
+
+
+class ServiceProvided(models.Model):
+    PORUCHENIE = 1    
+    SERVICES = (
+        (PORUCHENIE, force_unicode('Экспортные поручения')),
+    )
+    service = models.IntegerField(choices=SERVICES, db_index=True, unique=True)
+    def __unicode__(self):
+        return u'{0}'.format(self.get_service_display()) 
+    class Meta:
+        verbose_name = force_unicode('Услуга')
+        verbose_name_plural = force_unicode('Услуги')
     
     
 class Line(PrivateModel): 
     name = models.CharField('Наименование', max_length=150, db_index=True)
-    guid = models.CharField(max_length=50, null=True, db_index=True)       
+    guid = models.CharField(max_length=50, null=True, db_index=True)
+    services = models.ManyToManyField(ServiceProvided, blank=True)       
     def __unicode__(self):
         return u'{0}'.format(self.name) 
     class Meta:
@@ -155,15 +170,12 @@ class Line(PrivateModel):
         ordering = ('name', )
         
         
-class Terminal(BaseModel):        
-    def __unicode__(self):
-        return u'{0}'.format(self.name) 
+class Terminal(BaseModel):       
     class Meta:
         verbose_name = force_unicode('Терминал')
         verbose_name_plural = force_unicode('Терминалы')
-        ordering = ('name', )           
 
-
+                   
 class Contract(PrivateModel):
     name = models.CharField('Наименование', max_length=150, db_index=True)
     guid = models.CharField(max_length=50, null=True, db_index=True)    
@@ -275,6 +287,7 @@ class UploadedTemplate(PrivateModel):
     errors = GenericRelation('BaseError')
     md5_hash = models.CharField('md5 hash', max_length=32, null=True, blank=True, db_index=True)
     is_override = models.BooleanField(default=False)
+    services = models.ManyToManyField(ServiceProvided, blank=True)
     
     def drafts_done(self):        
         return self.drafts.filter(poruchenie=True)    

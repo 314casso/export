@@ -249,6 +249,7 @@ def upload_file(request):
                 pass
 
             template = form.save(commit=False)
+            template.services = form.cleaned_data['contract'].line.services.values_list('id', flat=True)
             template.md5_hash = md5_hash
             template.is_override = form.cleaned_data['is_override'] 
             template.user = request.user
