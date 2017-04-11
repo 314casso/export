@@ -5423,6 +5423,7 @@ $(function() {
 					},
 					function (data) {
 						if (data.status == true) {
+							$(self.$el).find('.loading').hide();
 							location.reload();
 						}
 					}
