@@ -23,8 +23,8 @@ class TemplateForm(ModelForm):
                                           attrs={'style': 'width:100%', 'required': None}))
     attachment = forms.FileField(label=u"Шаблон", widget=forms.FileInput(
         attrs={'class': 'fileupload', 'required': None}))
-    is_override = forms.BooleanField(label=u"Режим замещения", widget=forms.CheckboxInput(
-        attrs={'class': 'flat'}), initial=False, required=False)
+#     is_override = forms.BooleanField(label=u"Режим замещения", widget=forms.CheckboxInput(
+#         attrs={'class': 'flat'}), initial=False, required=False)
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)

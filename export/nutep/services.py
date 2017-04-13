@@ -91,11 +91,24 @@ class DraftService(BaseService):
         return contract
 
     def load_draft(self, template, user):
-        xml_template = self._client.factory.create('Template')
+        xml_template = self._client.factory.create('ns0:Template')
         xml_template.id = template.id
         xml_template.userguid = user.profile.guid
         xml_template.contractguid = template.contract.guid         
-        xml_template.data = template.attachment.read().encode('base64')                
+        xml_template.data = template.attachment.read().encode('base64')
+        
+                        
+        xml_services = self._client.factory.create('ns0:Services')
+        
+        services = []  
+        for service in template.services.all():
+            xml_service = self._client.factory.create('ns0:Service')     
+            xml_service.id = service.service
+            services.append(xml_service)                    
+        xml_services.service = services
+        xml_template.services = xml_services 
+        
+                                
         response = self._client.service.LoadDraft(xml_template)                
         self.parse_response(response, template)
         return response

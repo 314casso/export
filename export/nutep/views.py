@@ -139,7 +139,7 @@ class DraftListView(BaseView):
         rediness = 0        
         if total:            
             rediness = int(len(draft_queryset.filter(poruchenie=True)) / total * 100)            
-            print rediness
+            
 
         page = self.request.GET.get('page', 1)
         paginator = Paginator(draft_queryset, PER_PAGE)
@@ -244,20 +244,21 @@ def upload_file(request):
                 voyage.vessel, created = Vessel.objects.get_or_create(name=vessel_name)  # pylint: disable=W0612
                 voyage.save()
             try:
-                form.instance = UploadedTemplate.objects.get(voyage=voyage, md5_hash=md5_hash)
+                form.instance = UploadedTemplate.objects.get(voyage=voyage)
             except UploadedTemplate.DoesNotExist:
                 pass
 
-            template = form.save(commit=False)
-            template.services = form.cleaned_data['contract'].line.services.values_list('id', flat=True)
+            template = form.save(commit=False)            
             template.md5_hash = md5_hash
-            template.is_override = form.cleaned_data['is_override'] 
+#             template.is_override = form.cleaned_data['is_override'] 
             template.user = request.user
             template.voyage = voyage
             template.status = UploadedTemplate.REFRESH
             template.attachment = form.cleaned_data['attachment']
             template.save()
+            template.services = form.cleaned_data['contract'].line.services.values_list('id', flat=True)
             upload_template.delay(template, request.user)
+#             upload_template(template, request.user)
             return HttpResponseRedirect(reverse('services'))
         return HttpResponse(u'Неверный формат шаблона: %s' %
                             u''.join([u'%s: %s' % (key, val) for key,

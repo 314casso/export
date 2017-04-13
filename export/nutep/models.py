@@ -146,11 +146,11 @@ class Voyage(BaseModel):
 
 
 class ServiceProvided(models.Model):
-    PORUCHENIE = 1    
+    PORUCHENIE = '00001'    
     SERVICES = (
         (PORUCHENIE, force_unicode('Экспортные поручения')),
     )
-    service = models.IntegerField(choices=SERVICES, db_index=True, unique=True)
+    service = models.CharField(choices=SERVICES, max_length=5, db_index=True, unique=True)
     def __unicode__(self):
         return u'{0}'.format(self.get_service_display()) 
     class Meta:
