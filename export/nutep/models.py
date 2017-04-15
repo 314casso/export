@@ -16,12 +16,21 @@ from django.utils.formats import date_format
 def attachment_path(instance, filename):    
     from django.conf import settings
     os.umask(0)
-    path = 'attachments/%s_%s' % (datetime.date.today().month, datetime.date.today().year,)
+    path = 'attachments/%s/%s_%s' % (instance.id, datetime.date.today().month, datetime.date.today().year,)
     att_path = os.path.join(settings.MEDIA_ROOT, path)
     if not os.path.exists(att_path):
         os.makedirs(att_path, 0777)
     return os.path.join(path, filename)
 
+class File(models.Model):
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+    title = models.CharField(blank=True, null=True, max_length=255)    
+    file = models.FileField(upload_to=attachment_path, blank=True, null=True,)
+        
+    def __unicode__(self):
+        return force_unicode(self.title) 
 
 class Team(models.Model):
     name = models.CharField('Наименование', max_length=150, db_index=True)
@@ -192,9 +201,9 @@ class Contract(PrivateModel):
 
 
 class UserProfile(models.Model):
-    guid = models.CharField(max_length=50, null=True)
+    guid = models.CharField(max_length=50, null=True, blank=True)
     user = models.OneToOneField(User, unique=True, related_name='profile')
-    lines = models.ManyToManyField(Line)    
+    lines = models.ManyToManyField(Line, blank=True)    
     def __unicode__(self):
         return u'{0}'.format(self.user) 
     
@@ -217,13 +226,28 @@ class Draft(models.Model):
     notify = models.CharField(max_length=255, null=True, blank=True)
     line = models.ForeignKey(Line)
     template = models.ForeignKey("UploadedTemplate", related_name='drafts')
+    
     def __unicode__(self):
         return u'{0}'.format(self.name) 
     class Meta:
         verbose_name = force_unicode('Коносамент')
         verbose_name_plural = force_unicode('Коносаменты')
         ordering = ('name', )  
-            
+
+
+class Mission(models.Model):
+    name = models.CharField(max_length=12, db_index=True)
+    guid = models.CharField(max_length=50)        
+    draft = models.ForeignKey(Draft, related_name="missions", on_delete=models.CASCADE)
+    files = GenericRelation(File)
+    
+    def __unicode__(self):
+        return u'{0}'.format(self.name) 
+    class Meta:
+        verbose_name = force_unicode('Поручение')
+        verbose_name_plural = force_unicode('Поручения')
+        ordering = ('name', )  
+
             
 class Container(models.Model):
     name = models.CharField(max_length=12, db_index=True)
@@ -259,8 +283,7 @@ class Readiness(models.Model):
         verbose_name = force_unicode('Готовность')
         verbose_name_plural = force_unicode('Готовность')
         ordering = ('id', ) 
-   
-        
+
 class UploadedTemplate(PrivateModel):
     NEW = 1
     INPROCESS = 2
@@ -326,7 +349,6 @@ class UploadedTemplate(PrivateModel):
             self.REFRESH: 'refresh',
         }
         return mapper.get(self.status)
-    
 
     def as_dict(self):
         return {

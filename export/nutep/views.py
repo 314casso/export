@@ -218,6 +218,7 @@ def upload_file(request):
         form = TemplateForm(request.POST, request.FILES)
         if form.is_valid():
             filename = form.cleaned_data['attachment']
+            contract = form.cleaned_data['contract']
             from openpyxl import load_workbook
             try:
                 file_data = filename.read()
@@ -244,7 +245,7 @@ def upload_file(request):
                 voyage.vessel, created = Vessel.objects.get_or_create(name=vessel_name)  # pylint: disable=W0612
                 voyage.save()
             try:
-                form.instance = UploadedTemplate.objects.get(voyage=voyage)
+                form.instance = UploadedTemplate.objects.get(voyage=voyage, contract=contract)
             except UploadedTemplate.DoesNotExist:
                 pass
 
@@ -256,7 +257,7 @@ def upload_file(request):
             template.status = UploadedTemplate.REFRESH
             template.attachment = form.cleaned_data['attachment']
             template.save()
-            template.services = form.cleaned_data['contract'].line.services.values_list('id', flat=True)
+            template.services = contract.line.services.values_list('id', flat=True)
             upload_template.delay(template, request.user)
 #             upload_template(template, request.user)
             return HttpResponseRedirect(reverse('services'))

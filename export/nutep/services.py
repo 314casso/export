@@ -6,9 +6,11 @@ from django.apps import apps
 from django.contrib.auth.models import User
 from suds.cache import NoCache
 from suds.client import Client
+from django.core.files.base import ContentFile
 
 from nutep.models import (BaseError, Container, Contract, Draft, Line,
-                          Readiness, UploadedTemplate, Voyage)
+                          Readiness, UploadedTemplate, Voyage, Mission,
+                          File)
 
 
 class BaseService(object):
@@ -31,6 +33,24 @@ class BaseService(object):
                                      
 
 class DraftService(BaseService):       
+    def update_voyage(self, template, xml_voyage):
+        vessel = self.get_value('Vessel', xml_voyage.vessel) 
+        value = template.voyage
+        is_diff = False
+        if not value.vessel == vessel:
+            value.vessel = vessel
+            is_diff = True
+
+        fields = ['name', 'etd', 'guid', 'flag']
+        for field in fields:  
+            if not getattr(value, field) == getattr(xml_voyage, field):
+                setattr(value, field, getattr(xml_voyage, field))
+                is_diff = True
+        
+        if is_diff == True:
+            value.save() 
+
+
     def get_voyage(self, xml_voyage):
         vessel = self.get_value('Vessel', xml_voyage.vessel)        
         model = Voyage
@@ -122,7 +142,7 @@ class DraftService(BaseService):
         self.parse_response(response, template)
         return response
     
-    def parse_response(self, response, template):
+    def parse_response(self, response, template):        
         self.delete_data(template)    
         if response.errors:
             fields = ['code', 'error', 'message']
@@ -138,13 +158,12 @@ class DraftService(BaseService):
         if template.errors.all():
             template.set_status()
             return response
-        
-        voyage = self.get_voyage(response.voyage)
-        template.voyage = voyage 
+                
+        self.update_voyage(template, response.voyage)        
         template.contract = self.get_contract(response.contract)
         template.xml_response = response
         template.save()  
-        if response.drafts:      
+        if response.drafts: 
             for xml_draft in response.drafts.draft:            
                 draft = Draft()
                 fields = ['name', 'guid', 'date', 'shipper', 'consignee', 'finalDestination',
@@ -173,14 +192,41 @@ class DraftService(BaseService):
                     for field in fields:                    
                         setattr(readiness, field, xml_readiness[field])                
                     readiness.draft = draft
-                    readiness.save()
+                    readiness.save()     
+                if xml_draft.missions:
+                    fields = ['name', 'guid']                
+                    for xml_mission in xml_draft.missions.mission:
+                        mission = Mission()
+                        for field in fields:                    
+                            setattr(mission, field, xml_mission[field])                                            
+                        mission.draft = draft
+                        mission.save()
+                        if xml_mission.attachments:
+                            for xml_attachment in xml_mission.attachments.attachment:
+                                filename = '%s.%s' %  (xml_attachment.name, xml_attachment.extension)
+                                file_store = File()
+                                file_store.content_object = mission
+                                file_store.title = filename
+                                file_store.file.save(filename, ContentFile(base64.b64decode(xml_attachment.data)))   
+                                
         template.set_status()
-        
             
     def delete_data(self, template):        
-        drafts = Draft.objects.filter(template=template)
+        drafts = Draft.objects.filter(template=template, poruchenie=False)
         drafts.delete()
         template.errors.all().delete()
+
+    # def load_documents(self, draft)        
+    #     result = self._client.service.getDocuments(draft.guid)
+    #     if hasattr(result, 'pictures') and result.pictures:           
+    #         moving_chain = MovingChain.objects.create(datein=result.pictures[0].datein, container_num=container_num)            
+    #         for p in result.pictures:           
+    #             filename = '%s.jpg' %  p.name       
+    #             file_store = FileStore()
+    #             file_store.moving_chain = moving_chain
+    #             file_store.file.save(filename, ContentFile(base64.b64decode(p.data)))                
+    #             file_store.save()
+    #         return moving_chain
    
 class TemplateException(Exception):
     pass   
