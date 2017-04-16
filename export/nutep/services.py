@@ -4,13 +4,12 @@ import base64
 
 from django.apps import apps
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from suds.cache import NoCache
 from suds.client import Client
-from django.core.files.base import ContentFile
 
-from nutep.models import (BaseError, Container, Contract, Draft, Line,
-                          Readiness, UploadedTemplate, Voyage, Mission,
-                          File)
+from nutep.models import (BaseError, Container, Contract, Draft, File, Line,
+                          Mission, Readiness, UploadedTemplate, Voyage)
 
 
 class BaseService(object):
@@ -47,9 +46,8 @@ class DraftService(BaseService):
                 setattr(value, field, getattr(xml_voyage, field))
                 is_diff = True
         
-        if is_diff == True:
+        if is_diff is True:
             value.save() 
-
 
     def get_voyage(self, xml_voyage):
         vessel = self.get_value('Vessel', xml_voyage.vessel)        
@@ -142,73 +140,89 @@ class DraftService(BaseService):
         self.parse_response(response, template)
         return response
     
+    def parse_errors(self, response, template):        
+        if not response.errors:
+            return
+        fields = ['code', 'error', 'message']
+        for xml_error in response.errors.error:                  
+            base_error = BaseError()
+            for field in fields:
+                value = u'%s' % xml_error[field] if field in xml_error else None                        
+                setattr(base_error, field, value)                
+            base_error.content_object = template
+            base_error.type = BaseError.XML
+            base_error.save()                
+
+    def parse_draft(self, response, template):
+        if not response.drafts: 
+            return
+        for xml_draft in response.drafts.draft:            
+            draft = Draft()
+            fields = ['name', 'guid', 'date', 'shipper', 'consignee', 'finalDestination',
+                        'POD', 'POL', 'finstatus', 'status', 'poruchenie', 'poruchenieNums', 'notify']
+            for field in fields:
+                value = u'%s' % xml_draft[field] if xml_draft[field] else xml_draft[field]                        
+                setattr(draft, field, value)                
+            draft.user = User.objects.get(profile__guid=xml_draft.userguid)                                
+            draft.voyage = self.get_voyage(xml_draft.voyage) 
+            draft.line = self.get_line(xml_draft.line)
+            draft.template = template               
+            draft.save()
+            
+            self.parse_container(xml_draft, draft)
+            self.parse_readiness(xml_draft, draft)
+            self.parse_missions(xml_draft, draft)        
+
+    def parse_container(self, xml_draft, draft):        
+        fields = ['name', 'SOC', 'size', 'type', 'seal', 'cargo',
+                          'netto', 'gross', 'tare', 'package', 'quantity']
+        for xml_container in xml_draft.containers.container:
+            container = Container()
+            for field in fields:
+                value = u'%s' % xml_container[field] if xml_container[field] else xml_container[field]
+                setattr(container, field, value)
+            container.line = self.get_line(xml_container.line)
+            container.draft = draft
+            container.save()            
+
+    def parse_readiness(self, xml_draft, draft):
+        fields = ['size', 'type', 'ordered', 'done', ]
+        for xml_readiness in xml_draft.readiness.row:
+            readiness = Readiness()
+            for field in fields:                    
+                setattr(readiness, field, xml_readiness[field])                
+            readiness.draft = draft
+            readiness.save()  
+
+    def parse_missions(self, xml_draft, draft): 
+        if not xml_draft.missions:
+            return
+        fields = ['name', 'guid']                
+        for xml_mission in xml_draft.missions.mission:
+            mission = Mission()
+            for field in fields:                    
+                setattr(mission, field, xml_mission[field])                                            
+            mission.draft = draft
+            mission.save()
+            if xml_mission.attachments:
+                for xml_attachment in xml_mission.attachments.attachment:
+                    filename = '%s.%s' %  (xml_attachment.name, xml_attachment.extension)
+                    file_store = File()
+                    file_store.content_object = mission
+                    file_store.title = filename
+                    file_store.file.save(filename, ContentFile(base64.b64decode(xml_attachment.data)))        
+
     def parse_response(self, response, template):        
         self.delete_data(template)    
-        if response.errors:
-            fields = ['code', 'error', 'message']
-            for xml_error in response.errors.error:                  
-                base_error = BaseError()
-                for field in fields:
-                    value = u'%s' % xml_error[field] if field in xml_error else None                        
-                    setattr(base_error, field, value)                
-                base_error.content_object = template
-                base_error.type = BaseError.XML
-                base_error.save()
-        
+        self.parse_errors(response, template)                
         if template.errors.all():
             template.set_status()
-            return response
-                
+            return response                
         self.update_voyage(template, response.voyage)        
         template.contract = self.get_contract(response.contract)
         template.xml_response = response
         template.save()  
-        if response.drafts: 
-            for xml_draft in response.drafts.draft:            
-                draft = Draft()
-                fields = ['name', 'guid', 'date', 'shipper', 'consignee', 'finalDestination',
-                          'POD', 'POL', 'finstatus', 'status', 'poruchenie', 'poruchenieNums', 'notify']
-                for field in fields:
-                    value = u'%s' % xml_draft[field] if xml_draft[field] else xml_draft[field]                        
-                    setattr(draft, field, value)                
-                draft.user = User.objects.get(profile__guid=xml_draft.userguid)                                
-                draft.voyage = self.get_voyage(xml_draft.voyage) 
-                draft.line = self.get_line(xml_draft.line)
-                draft.template = template               
-                draft.save()
-                fields = ['name', 'SOC', 'size', 'type', 'seal', 'cargo',
-                          'netto', 'gross', 'tare', 'package', 'quantity']
-                for xml_container in xml_draft.containers.container:
-                    container = Container()
-                    for field in fields:
-                        value = u'%s' % xml_container[field] if xml_container[field] else xml_container[field]
-                        setattr(container, field, value)
-                    container.line = self.get_line(xml_container.line)
-                    container.draft = draft
-                    container.save()
-                fields = ['size', 'type', 'ordered', 'done', ]
-                for xml_readiness in xml_draft.readiness.row:
-                    readiness = Readiness()
-                    for field in fields:                    
-                        setattr(readiness, field, xml_readiness[field])                
-                    readiness.draft = draft
-                    readiness.save()     
-                if xml_draft.missions:
-                    fields = ['name', 'guid']                
-                    for xml_mission in xml_draft.missions.mission:
-                        mission = Mission()
-                        for field in fields:                    
-                            setattr(mission, field, xml_mission[field])                                            
-                        mission.draft = draft
-                        mission.save()
-                        if xml_mission.attachments:
-                            for xml_attachment in xml_mission.attachments.attachment:
-                                filename = '%s.%s' %  (xml_attachment.name, xml_attachment.extension)
-                                file_store = File()
-                                file_store.content_object = mission
-                                file_store.title = filename
-                                file_store.file.save(filename, ContentFile(base64.b64decode(xml_attachment.data)))   
-                                
+        self.parse_draft(response, template)        
         template.set_status()
             
     def delete_data(self, template):        
@@ -216,21 +230,11 @@ class DraftService(BaseService):
         drafts.delete()
         template.errors.all().delete()
 
-    # def load_documents(self, draft)        
-    #     result = self._client.service.getDocuments(draft.guid)
-    #     if hasattr(result, 'pictures') and result.pictures:           
-    #         moving_chain = MovingChain.objects.create(datein=result.pictures[0].datein, container_num=container_num)            
-    #         for p in result.pictures:           
-    #             filename = '%s.jpg' %  p.name       
-    #             file_store = FileStore()
-    #             file_store.moving_chain = moving_chain
-    #             file_store.file.save(filename, ContentFile(base64.b64decode(p.data)))                
-    #             file_store.save()
-    #         return moving_chain
-   
+
 class TemplateException(Exception):
     pass   
-        
+
+
 class ExcelHelper(object):    
     @staticmethod            
     def get_value(ws, col_name, required=False):

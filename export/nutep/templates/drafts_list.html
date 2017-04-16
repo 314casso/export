@@ -98,7 +98,9 @@
                                 <td>{{ draft.poruchenieNums|default_if_none:"" }}
                                     {% for mission in draft.missions.all %}                                     
                                         {% for file in mission.files.all %}                                    
-                                            <a class="btn btn-default btn-sm" href="{{ file.file.url }}">{{ mission }} <small>{{ file.title }}</small></a>                                        
+                                            <a title="{{ file.title }}" class="btn btn-link" href="{{ file.file.url }}">{{ mission }}</a>
+										{% empty %}
+											{{ mission }}
                                         {% endfor %}    
                                     {% endfor %}
                                 </td>
