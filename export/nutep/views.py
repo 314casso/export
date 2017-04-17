@@ -285,3 +285,4 @@ def upload_template(template, user):
         base_error.message = e
         base_error.save()
         template.set_status()
+        logging.exception("Exception")
