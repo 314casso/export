@@ -279,10 +279,10 @@ def upload_template(template, user):
         base_error.save()
         template.set_status()        
     except Exception, e:
+        logging.exception("Exception")
         base_error = BaseError()
         base_error.content_object = template
         base_error.type = BaseError.UNKNOWN
         base_error.message = e
         base_error.save()
-        template.set_status()
-        logging.exception("Exception")
+        template.set_status()        
