@@ -156,8 +156,10 @@ class Voyage(BaseModel):
 
 class ServiceProvided(models.Model):
     PORUCHENIE = '00001'    
+    OTHERDOCS = '00002'
     SERVICES = (
         (PORUCHENIE, force_unicode('Экспортные поручения')),
+        (OTHERDOCS, force_unicode('Прочие документы')),
     )
     service = models.CharField(choices=SERVICES, max_length=5, db_index=True, unique=True)
     def __unicode__(self):
