@@ -9,7 +9,7 @@ from suds.cache import NoCache
 from suds.client import Client
 
 from nutep.models import (BaseError, Container, Contract, Draft, File, Line,
-                          Mission, Readiness, UploadedTemplate, Voyage)
+                          Mission, Readiness, UploadedTemplate, Voyage, Order)
 
 
 class BaseService(object):
@@ -110,7 +110,7 @@ class DraftService(BaseService):
 
     def load_draft(self, template, user):
         xml_template = self._client.factory.create('ns0:Template')
-        xml_template.id = template.id
+        xml_template.id = template.order.id
         xml_template.userguid = user.profile.guid
         xml_template.contractguid = template.contract.guid         
         xml_template.data = template.attachment.read().encode('base64')
@@ -153,7 +153,7 @@ class DraftService(BaseService):
             base_error.type = BaseError.XML
             base_error.save()                
 
-    def parse_draft(self, response, template):
+    def parse_draft(self, response, template):        
         if not response.drafts: 
             return
         for xml_draft in response.drafts.draft:            
@@ -166,7 +166,7 @@ class DraftService(BaseService):
             draft.user = User.objects.get(profile__guid=xml_draft.userguid)                                
             draft.voyage = self.get_voyage(xml_draft.voyage) 
             draft.line = self.get_line(xml_draft.line)
-            draft.template = template               
+            draft.order = template.order               
             draft.save()
             
             self.parse_container(xml_draft, draft)
@@ -218,15 +218,14 @@ class DraftService(BaseService):
         if template.errors.all():
             template.set_status()
             return response                
-        self.update_voyage(template, response.voyage)        
-        template.contract = self.get_contract(response.contract)
+        self.update_voyage(template, response.voyage)       
         template.xml_response = response
         template.save()  
         self.parse_draft(response, template)        
         template.set_status()
             
     def delete_data(self, template):        
-        drafts = Draft.objects.filter(template=template, poruchenie=False)
+        drafts = Draft.objects.filter(order=template.order)
         drafts.delete()
         template.errors.all().delete()
 

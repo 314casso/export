@@ -2,7 +2,7 @@ from django.db.models.signals import post_save, pre_save
 from django.utils.timezone import now
 
 from nutep.middleware import get_current_user
-from nutep.models import HistoryMeta, Line, UploadedTemplate, Vessel, Voyage
+from nutep.models import HistoryMeta, Line, UploadedTemplate, Vessel, Voyage, Order
 
 
 def prepare_history(sender, instance, created, **kwargs): 
@@ -30,6 +30,7 @@ def update_teams(sender, instance, created, **kwargs):
 def connect_signals():
     pre_save.connect(private_data, sender=UploadedTemplate)
     post_save.connect(update_teams, sender=UploadedTemplate)
+    post_save.connect(update_teams, sender=Order)
     post_save.connect(prepare_history, sender=UploadedTemplate)            
     post_save.connect(prepare_history, sender=Voyage)
     post_save.connect(prepare_history, sender=Vessel)

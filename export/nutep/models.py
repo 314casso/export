@@ -227,7 +227,7 @@ class Draft(models.Model):
     poruchenieNums = models.CharField(max_length=150, null=True, blank=True)
     notify = models.CharField(max_length=255, null=True, blank=True)
     line = models.ForeignKey(Line)
-    template = models.ForeignKey("UploadedTemplate", related_name='drafts')
+    order = models.ForeignKey("Order", related_name='drafts', blank=True, null=True)
     
     def __unicode__(self):
         return u'{0}'.format(self.name) 
@@ -286,6 +286,31 @@ class Readiness(models.Model):
         verbose_name_plural = force_unicode('Готовность')
         ordering = ('id', ) 
 
+
+class Order(PrivateModel):
+    voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT,
+                               related_name="orders")
+    contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)
+    
+    class Meta:
+        unique_together = ('voyage', 'contract')
+        verbose_name = force_unicode('Заявка')
+        verbose_name_plural = force_unicode('Заявки')
+    
+    def drafts_done(self):        
+        return self.drafts.filter(poruchenie=True)    
+        
+    def drafts_total(self):        
+        return self.drafts.all()
+        
+    def drafts_readiness(self):        
+        total = float(len(self.drafts_total()))
+        if not total:
+            return 0
+        done = float(len(self.drafts_done()))        
+        return int(done / total * 100) 
+    
+
 class UploadedTemplate(PrivateModel):
     NEW = 1
     INPROCESS = 2
@@ -305,33 +330,19 @@ class UploadedTemplate(PrivateModel):
     status = models.IntegerField(choices=STATUS_CHOICES, default=NEW, db_index=True, blank=True)
     http_code = models.CharField('HTTP Код', max_length=50, null=True, blank=True)
     xml_response = models.TextField('XML ответ', null=True, blank=True)    
-    voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT,
-                               related_name="templates")
-    contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)    
+    #voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT,
+    #                           related_name="templates")
+    #contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)
+    order = models.ForeignKey(Order, blank=True, null=True, on_delete=models.CASCADE)
     history = GenericRelation('HistoryMeta')    
     errors = GenericRelation('BaseError')
     md5_hash = models.CharField('md5 hash', max_length=32, null=True, blank=True, db_index=True)
     is_override = models.BooleanField(default=False)
     services = models.ManyToManyField(ServiceProvided, blank=True)
     
-    def drafts_done(self):        
-        return self.drafts.filter(poruchenie=True)    
-        
-    def drafts_total(self):        
-        return self.drafts.all()
-        
-    def drafts_readiness(self):        
-        total = float(len(self.drafts_total()))
-        if not total:
-            return 0
-        done = float(len(self.drafts_done()))        
-        return int(done / total * 100)        
-    
     def set_status(self):        
         if len(self.errors.all()): # pylint: disable=E1101
-            self.status = UploadedTemplate.ERROR
-        elif self.drafts_readiness() == 100:            
-            self.status = UploadedTemplate.PROCESSED
+            self.status = UploadedTemplate.ERROR        
         else:
             self.status = UploadedTemplate.INPROCESS
         self.save()
@@ -351,15 +362,31 @@ class UploadedTemplate(PrivateModel):
             self.REFRESH: 'refresh',
         }
         return mapper.get(self.status)
+    
+    @property
+    def voyage(self):
+        return self.order.voyage
+    
+    @property
+    def vessel(self):
+        return self.order.voyage.vessel
+    
+    @property
+    def contract(self):
+        return self.order.contract
+    
+    @property
+    def line(self):
+        return self.order.contract.line
 
     def as_dict(self):
         return {
             "id": self.id,            
             "status": self.get_status_display(),
-            "vessel": force_text(self.voyage.vessel),
+            "vessel": force_text(self.vessel),
             "voyage": force_text(self.voyage),
             "contract": force_text(self.contract),
-            "line": force_text(self.contract.line),
+            "line": force_text(self.line),
             "filename": force_text(self.filename()),
             "updated":  date_format(timezone.localtime(self.last_event().date), "d.m.Y H:i"),
             "user": force_text(self.last_event().user),

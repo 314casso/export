@@ -23,7 +23,7 @@ from django_rq.decorators import job
 from export.local_settings import WEB_SERVISES
 from nutep.forms import TemplateForm
 from nutep.models import (BaseError, Contract, Draft, UploadedTemplate, Vessel,
-                          Voyage)
+                          Voyage, Order)
 from nutep.services import DraftService, ExcelHelper
 import hashlib
 
@@ -63,7 +63,7 @@ class BaseView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(BaseView, self).get_context_data(**kwargs)
-        vessel_list = UploadedTemplate.objects.for_user(self.request.user).values_list('voyage__vessel', flat=True).distinct()        
+        vessel_list = Order.objects.for_user(self.request.user).values_list('voyage__vessel', flat=True).distinct()        
         vessels = Vessel.objects.filter(id__in=set(vessel_list)).order_by('name')
         context.update({
             'title': force_unicode('Рускон Онлайн'),
@@ -242,18 +242,22 @@ def upload_file(request):
                 voyage = Voyage()
                 voyage.name = voyage_name
                 voyage.user = request.user
-                voyage.vessel, created = Vessel.objects.get_or_create(name=vessel_name)  # pylint: disable=W0612
+                voyage.vessel, created = Vessel.objects.get_or_create(name=vessel_name)  # pylint: disable=W0612 @UnusedVariable
                 voyage.save()
+            
+            
+            order, created = Order.objects.get_or_create(voyage=voyage, contract=contract)  # @UnusedVariable
+                        
             try:
-                form.instance = UploadedTemplate.objects.get(voyage=voyage, contract=contract)
+                form.instance = UploadedTemplate.objects.get(order=order, md5_hash=md5_hash)
             except UploadedTemplate.DoesNotExist:
                 pass
 
             template = form.save(commit=False)            
             template.md5_hash = md5_hash
+            template.order = order
 #             template.is_override = form.cleaned_data['is_override'] 
-            template.user = request.user
-            template.voyage = voyage
+            template.user = request.user            
             template.status = UploadedTemplate.REFRESH
             template.attachment = form.cleaned_data['attachment']
             template.save()

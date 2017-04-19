@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 from nutep.models import (BaseError, Container, Contract, Draft, Line,
                           Terminal, UploadedTemplate, UserProfile, Vessel,
-                          Voyage, Team, ServiceProvided, Mission)
+                          Voyage, Team, ServiceProvided, Mission, Order)
 
 admin.site.unregister(User)
 
@@ -53,6 +53,9 @@ class ServiceAdmin(admin.ModelAdmin):
     pass
 
 class MissionAdmin(admin.ModelAdmin):
+    pass
+
+class OrderAdmin(admin.ModelAdmin):
     pass  
 
 
@@ -69,3 +72,4 @@ admin.site.register(UploadedTemplate, UploadedTemplateAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(ServiceProvided, ServiceAdmin)
 admin.site.register(Mission, MissionAdmin)
+admin.site.register(Order, OrderAdmin)
