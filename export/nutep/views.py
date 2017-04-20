@@ -233,8 +233,7 @@ def upload_file(request):
             except Exception as e:
                 return HttpResponse(u'Шаблон заполнен некорректно: %s' % e.message, status=400)
 
-            q = Voyage.objects.filter(
-                name=voyage_name, history__user=request.user)[:1]
+            q = Voyage.objects.filter(name=voyage_name, vessel__name=vessel_name)[:1]
 
             if q:
                 voyage = q.get()
