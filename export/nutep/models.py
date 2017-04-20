@@ -294,6 +294,9 @@ class Order(PrivateModel):
                                related_name="orders")
     contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)
     
+    def __unicode__(self):
+        return u'{0} {1} {2}'.format(self.voyage, self.contract, self.contract.line) 
+    
     class Meta:
         unique_together = ('voyage', 'contract')
         verbose_name = force_unicode('Заявка')
