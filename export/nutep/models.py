@@ -22,6 +22,7 @@ def attachment_path(instance, filename):
         os.makedirs(att_path, 0777)
     return os.path.join(path, filename)
 
+
 class File(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -31,6 +32,7 @@ class File(models.Model):
         
     def __unicode__(self):
         return force_unicode(self.title) 
+
 
 class Team(models.Model):
     name = models.CharField('Наименование', max_length=150, db_index=True)
@@ -147,7 +149,7 @@ class Vessel(BaseModel):
 class Voyage(BaseModel):        
     vessel = models.ForeignKey(Vessel, null=True, related_name="voyages")
     flag = models.CharField(max_length=100, null=True, blank=True) 
-    etd = models.DateTimeField(null=True, blank=True)
+    eta = models.DateTimeField(null=True, blank=True)
     history = GenericRelation('HistoryMeta')    
     class Meta:
         verbose_name = force_unicode('Рейс')
@@ -320,10 +322,10 @@ class UploadedTemplate(PrivateModel):
     
     STATUS_CHOICES = (
         (NEW, force_unicode('Новый')),
-        (INPROCESS, force_unicode('В обработке')),
+        (INPROCESS, force_unicode('Успешно загружен')),
         (PROCESSED, force_unicode('Обработан')),
         (ERROR, force_unicode('Ошибка')),     
-        (REFRESH, force_unicode('Обновление')),
+        (REFRESH, force_unicode('Обновление данных')),
     )
         
     attachment = models.FileField('Файл шаблона', upload_to=attachment_path) 
@@ -394,6 +396,7 @@ class UploadedTemplate(PrivateModel):
             "status_class": self.status_class(),
             "status_id": "%s-status" % self.id,
             "refreshing": self.status == self.REFRESH,            
+            "orderid": self.order.id,
         }
 
     class Meta:

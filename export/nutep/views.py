@@ -110,7 +110,7 @@ class ServiceView(BaseView):
 def get_active_templates(request):
     active_templates = UploadedTemplate.objects.for_user(request.user).filter(
         status__in=(UploadedTemplate.ERROR, UploadedTemplate.INPROCESS,
-                    UploadedTemplate.REFRESH)).distinct()
+                    UploadedTemplate.REFRESH)).distinct()[:10]
     return JsonResponse([obj.as_dict() for obj in active_templates], safe=False)
 
 
@@ -203,7 +203,7 @@ def delete_template(request, template_id):
 def get_template_status(request, pk):
     if request.method == 'POST':
         try:
-            draft_service = DraftService(WEB_SERVISES['draft'])
+            draft_service = DraftService(WEB_SERVISES['draft'])            
             response = draft_service.update_status(pk, request.user)
             status = True if response else False
             return HttpResponse(json.dumps({'status': status}), content_type="application/json")

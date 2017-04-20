@@ -40,7 +40,7 @@ class DraftService(BaseService):
             value.vessel = vessel
             is_diff = True
 
-        fields = ['name', 'etd', 'guid', 'flag']
+        fields = ['name', 'eta', 'guid', 'flag']
         for field in fields:  
             if not getattr(value, field) == getattr(xml_voyage, field):
                 setattr(value, field, getattr(xml_voyage, field))
@@ -67,7 +67,7 @@ class DraftService(BaseService):
             value = model.objects.create(guid=xml_value.guid,)
             value.name = xml_value.name
             value.vessel = vessel
-            value.etd = xml_value.etd
+            value.eta = xml_value.eta
             value.guid = xml_value.guid        
             value.save()        
         return value
@@ -136,7 +136,7 @@ class DraftService(BaseService):
         template.user = user 
         #if template.errors.all():
         #    raise Exception(u"Шаблон содержит ошибки, обновление новозможно")
-        response = self._client.service.GetStatus(pk)      
+        response = self._client.service.GetStatus(template.order.pk)      
         self.parse_response(response, template)
         return response
     
@@ -204,7 +204,7 @@ class DraftService(BaseService):
                 setattr(mission, field, xml_mission[field])                                            
             mission.draft = draft
             mission.save()
-            if xml_mission.attachments:
+            if hasattr(xml_mission, 'attachments') and xml_mission.attachments:
                 for xml_attachment in xml_mission.attachments.attachment:
                     filename = '%s.%s' %  (xml_attachment.name, xml_attachment.extension)
                     file_store = File()
