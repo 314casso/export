@@ -228,12 +228,12 @@ def upload_file(request):
                 return HttpResponse(u'Неверный формат шаблона: %s' % e.message, status=400)
             try:
                 ws = wb.active
-                vessel_name = ExcelHelper.get_value(ws, 'VESSEL', True)
-                voyage_name = ExcelHelper.get_value(ws, 'VOYAGE', True)
+                vessel_name = ExcelHelper.get_value(ws, 'VESSEL', True).upper()
+                voyage_name = ExcelHelper.get_value(ws, 'VOYAGE', True).upper()
             except Exception as e:
                 return HttpResponse(u'Шаблон заполнен некорректно: %s' % e.message, status=400)
 
-            q = Voyage.objects.filter(name=voyage_name, vessel__name=vessel_name)[:1]
+            q = Voyage.objects.filter(name__iexact=voyage_name, vessel__name__iexact=vessel_name)[:1]
 
             if q:
                 voyage = q.get()
@@ -246,6 +246,13 @@ def upload_file(request):
             
             
             order, created = Order.objects.get_or_create(voyage=voyage, contract=contract)  # @UnusedVariable
+            
+            if not created:
+                order_errors = UploadedTemplate.objects.for_user(request.user).filter(
+                    status=UploadedTemplate.ERROR).distinct()
+                for order_error in order_errors:
+                    order_error.deleted = True
+                    order_error.save()
                         
             try:
                 form.instance = UploadedTemplate.objects.get(order=order, md5_hash=md5_hash)
@@ -255,7 +262,7 @@ def upload_file(request):
             template = form.save(commit=False)            
             template.md5_hash = md5_hash
             template.order = order
-#             template.is_override = form.cleaned_data['is_override'] 
+            template.is_override = form.cleaned_data['is_override'] 
             template.user = request.user            
             template.status = UploadedTemplate.REFRESH
             template.attachment = form.cleaned_data['attachment']

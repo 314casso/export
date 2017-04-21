@@ -112,10 +112,10 @@ class DraftService(BaseService):
         xml_template = self._client.factory.create('ns0:Template')
         xml_template.id = template.order.id
         xml_template.userguid = user.profile.guid
-        xml_template.contractguid = template.contract.guid         
+        xml_template.contractguid = template.contract.guid
+        xml_template.override = template.is_override         
         xml_template.data = template.attachment.read().encode('base64')
-        
-                        
+                                
         xml_services = self._client.factory.create('ns0:Services')
         
         services = []  
