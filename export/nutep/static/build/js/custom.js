@@ -5314,11 +5314,13 @@ myApp = myApp || (function () {
     };
 })();
 
+
 /*
 $(function() {
-	$('.django-select2').djangoSelect2();
+
 });
 */
+
 
 $(function() {
 	$('#uploadtemplate').on('click', function (e) {
@@ -5335,7 +5337,7 @@ $(function() {
 		el: '#app-templates',
 		data: {
 			items: [
-			]
+			],			
 		},
 		delimiters: ["<%", "%>"],
 
@@ -5351,8 +5353,6 @@ $(function() {
 				xhr.open('GET', '/activetemplates/');
 				xhr.onload = function () {
 					self.items = JSON.parse(xhr.responseText);
-					
-					
 					var do_refresh = false;
 					self.items.forEach(function (item, i, arr) {		
 						if (item.refreshing) {
@@ -5366,7 +5366,7 @@ $(function() {
 					}
 				}
 				xhr.send()
-			},
+			},			
 			open: function (url) {
 				window.location.href = url;
 			},
@@ -5394,6 +5394,28 @@ $(function() {
 					});
 			},
 		}
+	});
+	
+	
+	var appVoyages = new Vue({
+		el: '#app-voyages',
+		data: {
+			items: [
+			],			
+		},
+		delimiters: ["<%", "%>"],
+
+		methods: {
+			fetchData: function () {
+				var xhr = new XMLHttpRequest()
+				var self = this;
+				xhr.open('GET', '/getlastvoyages/');
+				xhr.onload = function () {
+					self.items = JSON.parse(xhr.responseText);	
+				}
+				xhr.send()
+			},
+		},
 	});
 	
 	
@@ -5438,6 +5460,7 @@ $(function() {
 	});
 	
 	appTemplates.fetchData();
+	appVoyages.fetchData();
 		
 });
 

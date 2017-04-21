@@ -114,6 +114,12 @@ def get_active_templates(request):
     return JsonResponse([obj.as_dict() for obj in active_templates], safe=False)
 
 
+@login_required
+def get_last_voyages(request):
+    last_orders = Order.objects.for_user(request.user).all().distinct()[:10]
+    return JsonResponse([order.voyage.as_dict() for order in last_orders], safe=False)
+
+
 class TemplateDetailView(BaseView):
     template_name = 'template_details.html'
 
@@ -262,7 +268,7 @@ def upload_file(request):
             template = form.save(commit=False)            
             template.md5_hash = md5_hash
             template.order = order
-            template.is_override = form.cleaned_data['is_override'] 
+            template.is_override = True             
             template.user = request.user            
             template.status = UploadedTemplate.REFRESH
             template.attachment = form.cleaned_data['attachment']

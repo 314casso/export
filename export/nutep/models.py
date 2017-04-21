@@ -151,9 +151,18 @@ class Voyage(BaseModel):
     flag = models.CharField(max_length=100, null=True, blank=True) 
     eta = models.DateTimeField(null=True, blank=True)
     history = GenericRelation('HistoryMeta')    
+    
     class Meta:
         verbose_name = force_unicode('Рейс')
-        verbose_name_plural = force_unicode('Рейсы')        
+        verbose_name_plural = force_unicode('Рейсы')    
+    
+    def as_dict(self):
+        return {
+            "id": self.id,           
+            "vessel": force_text(self.vessel),
+            "voyage": force_text(self.name),
+            "eta": date_format(timezone.localtime(self.eta), "d.m.Y"),            
+        }        
 
 
 class ServiceProvided(models.Model):
@@ -232,7 +241,11 @@ class Draft(models.Model):
     order = models.ForeignKey("Order", related_name='drafts', blank=True, null=True)
     
     def __unicode__(self):
-        return u'{0}'.format(self.name) 
+        return u'{0}'.format(self.name)
+    
+    def contract(self):
+        return self.order.contract
+     
     class Meta:
         verbose_name = force_unicode('Коносамент')
         verbose_name_plural = force_unicode('Коносаменты')
@@ -390,12 +403,13 @@ class UploadedTemplate(PrivateModel):
             "status": self.get_status_display(),
             "vessel": force_text(self.vessel),
             "voyage": force_text(self.voyage),
+            "eta": date_format(timezone.localtime(self.voyage.eta), "d.m.Y"),
             "contract": force_text(self.contract),
             "line": force_text(self.line),
             "filename": force_text(self.filename()),
             "updated":  date_format(timezone.localtime(self.last_event().date), "d.m.Y H:i"),
             "user": force_text(self.last_event().user),
-            "url": reverse('template-details', kwargs={'pk': self.pk}),
+            "url": reverse('drafts', kwargs={'voyage': self.voyage.pk}),
             "status_class": self.status_class(),
             "status_id": "%s-status" % self.id,
             "refreshing": self.status == self.REFRESH,            

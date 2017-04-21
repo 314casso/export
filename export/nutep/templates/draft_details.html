@@ -23,8 +23,12 @@
 					    <dd>{{ draft.voyage.vessel }}</dd>					    
 					    <dt>Рейс</dt>
 					    <dd>{{ draft.voyage }}</dd>
+					    <dt>ETA</dt>
+                    	<dd>{{ draft.voyage.eta|date:"d.m.Y" }}</dd>   
 					    <dt>Линия</dt>
 					    <dd>{{ draft.line }}</dd>
+					    <dt>Договор</dt>
+						<dd>{{ draft.contract }}</dd>
 					    <dt>Пункт назначения</dt>
 					    <dd>{{ draft.finalDestination|default_if_none:"" }}</dd>
 					    <dt>POD</dt>
