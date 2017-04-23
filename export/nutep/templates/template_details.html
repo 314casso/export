@@ -22,7 +22,7 @@
 					<dt>Судно</dt>
 					<dd>{{ template.voyage.vessel }}</dd>
 					<dt>Рейс</dt>
-					<dd><a class="btn-link" href="{% url 'drafts' template.voyage.pk %}">{{ template.voyage }}</a></dd>
+					<dd><a class="btn-link" href="{% url 'drafts' template.order.pk %}">{{ template.voyage }}</a></dd>
 					<dt>Статус</dt>
 					<dd>{{ template.get_status_display }}</dd>
 					<dt>Договор</dt>
