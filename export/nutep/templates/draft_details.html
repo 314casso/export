@@ -51,6 +51,18 @@
 					    <dd>{{ draft.notify }}</dd>
 					    <dt>Автор</dt>
 					    <dd>{{ draft.user }}</dd>					    					    
+							<dt></dt>
+							<dd id="app-settings">
+							<br>
+								<a class="btn btn-primary" v-on:click="refresh({{ draft.active_template.id }})" href="#">
+									<i class="fa fa-spinner fa-pulse fa-lg fa-fw loading"></i> Обновить данные
+								</a>
+
+								<div id="error-message" class="alert alert-danger">
+									<strong>Ошибка!</strong> <% error %>
+								</div>
+							
+							</dd>
 					</dl>
 					
                  </div>
@@ -101,19 +113,19 @@
                 <div class="x_panel">
                   <div class="x_title">
                     <h2>Контейнеры</h2>
-                                       
-                    
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
                       <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+												<!--
                         <ul class="dropdown-menu" role="menu">
                           <li><a href="#">Settings 1</a>
                           </li>
                           <li><a href="#">Settings 2</a>
                           </li>
                         </ul>
+												-->
                       </li>
                       <li><a class="close-link"><i class="fa fa-close"></i></a>
                       </li>
@@ -121,6 +133,10 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content table-responsive">
+
+										<div class="input-group"> <span class="input-group-addon">Поиск</span>
+												<input id="filter" type="text" class="form-control" placeholder="Введите фразу для поиска...">
+										</div>
 
                     <table class="table table-hover">
                       <thead>
@@ -140,7 +156,7 @@
 							<th>Количество</th>														                          
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody class="searchable">
                       {% for container in draft.containers.all %}
                         <tr>
                         	<th scope="row">{{ forloop.counter }}</th>

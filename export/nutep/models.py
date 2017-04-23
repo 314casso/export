@@ -141,21 +141,22 @@ class BaseError(models.Model):
 
 class Vessel(BaseModel):
     history = GenericRelation('HistoryMeta')    
+
     class Meta:        
         verbose_name = force_unicode('Судно')
         verbose_name_plural = force_unicode('Суда')        
-    
     
 class Voyage(BaseModel):        
     vessel = models.ForeignKey(Vessel, null=True, related_name="voyages")
     flag = models.CharField(max_length=100, null=True, blank=True) 
     eta = models.DateTimeField(null=True, blank=True)
     history = GenericRelation('HistoryMeta')    
-    
+      
+
     class Meta:
         verbose_name = force_unicode('Рейс')
         verbose_name_plural = force_unicode('Рейсы')    
-    
+
     def as_dict(self):
         return {
             "id": self.id,           
@@ -243,6 +244,9 @@ class Draft(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.name)
     
+    def active_template(self):
+        return self.order.templates.first()
+
     def contract(self):
         return self.order.contract
      
@@ -306,7 +310,8 @@ class Order(PrivateModel):
     voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT,
                                related_name="orders")
     contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)
-    
+    history = GenericRelation('HistoryMeta')    
+
     def __unicode__(self):
         return u'{0} {1} {2}'.format(self.voyage, self.contract, self.contract.line) 
     
@@ -315,6 +320,20 @@ class Order(PrivateModel):
         verbose_name = force_unicode('Заявка')
         verbose_name_plural = force_unicode('Заявки')
     
+    def as_dict(self):
+        last_event = self.last_event()
+        result = {
+            "id": self.id,           
+            "vessel": force_text(self.voyage.vessel),
+            "voyage": force_text(self.voyage),
+            "eta": date_format(timezone.localtime(self.voyage.eta), "d.m.Y"),  
+            "url": reverse('drafts', kwargs={'voyage': self.voyage.pk}),                                
+        } 
+        if last_event:
+            result["updated"] = date_format(timezone.localtime(last_event.date), "d.m.Y H:i")
+        return result
+
+
     def drafts_done(self):        
         return self.drafts.filter(poruchenie=True)    
         
@@ -347,11 +366,8 @@ class UploadedTemplate(PrivateModel):
     attachment = models.FileField('Файл шаблона', upload_to=attachment_path) 
     status = models.IntegerField(choices=STATUS_CHOICES, default=NEW, db_index=True, blank=True)
     http_code = models.CharField('HTTP Код', max_length=50, null=True, blank=True)
-    xml_response = models.TextField('XML ответ', null=True, blank=True)    
-    #voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT,
-    #                           related_name="templates")
-    #contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)
-    order = models.ForeignKey(Order, blank=True, null=True, on_delete=models.CASCADE)
+    xml_response = models.TextField('XML ответ', null=True, blank=True)        
+    order = models.ForeignKey(Order, blank=True, null=True, on_delete=models.CASCADE, related_name="templates")
     history = GenericRelation('HistoryMeta')    
     errors = GenericRelation('BaseError')
     md5_hash = models.CharField('md5 hash', max_length=32, null=True, blank=True, db_index=True)
@@ -409,11 +425,12 @@ class UploadedTemplate(PrivateModel):
             "filename": force_text(self.filename()),
             "updated":  date_format(timezone.localtime(self.last_event().date), "d.m.Y H:i"),
             "user": force_text(self.last_event().user),
-            "url": reverse('drafts', kwargs={'voyage': self.voyage.pk}),
+            "url": reverse('template-details', kwargs={'pk': self.pk}),
             "status_class": self.status_class(),
             "status_id": "%s-status" % self.id,
             "refreshing": self.status == self.REFRESH,            
             "orderid": self.order.id,
+            "voyage_url": reverse('drafts', kwargs={'voyage': self.voyage.pk}),
         }
 
     class Meta:

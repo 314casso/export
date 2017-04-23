@@ -117,7 +117,7 @@ def get_active_templates(request):
 @login_required
 def get_last_voyages(request):
     last_orders = Order.objects.for_user(request.user).all().distinct()[:10]
-    return JsonResponse([order.voyage.as_dict() for order in last_orders], safe=False)
+    return JsonResponse([order.as_dict() for order in last_orders], safe=False)
 
 
 class TemplateDetailView(BaseView):
@@ -145,7 +145,6 @@ class DraftListView(BaseView):
         rediness = 0        
         if total:            
             rediness = int(len(draft_queryset.filter(poruchenie=True)) / total * 100)            
-            
 
         page = self.request.GET.get('page', 1)
         paginator = Paginator(draft_queryset, PER_PAGE)
@@ -247,9 +246,8 @@ def upload_file(request):
                 voyage = Voyage()
                 voyage.name = voyage_name
                 voyage.user = request.user
-                voyage.vessel, created = Vessel.objects.get_or_create(name=vessel_name)  # pylint: disable=W0612 @UnusedVariable
+                voyage.vessel, created = Vessel.objects.get_or_create(name=vessel_name)  # pylint: disable=W0612
                 voyage.save()
-            
             
             order, created = Order.objects.get_or_create(voyage=voyage, contract=contract)  # @UnusedVariable
             

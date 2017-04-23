@@ -209,7 +209,7 @@
                           <% item.updated %>
                         </td>
                         <td><% item.vessel %></td>
-                        <td><% item.voyage %></td>
+                        <td><a class="btn-link" :href="item.voyage_url"><% item.voyage %></a></td>
                         <td><% item.eta %></td>
                         <td><% item.filename %></td>
                         <td :id="item.status_id" :class="item.status_class">
@@ -229,13 +229,13 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Рейсы  <small>последние десять</small></h2>
+                    <h2>Рейсы  <small>список быстрого доступа к последним десяти рейсам</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
                       <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu" id="app-settings">
+                        <ul class="dropdown-menu" role="menu" id="app-voyage-settings">
                           <li>
                             <a v-on:click="fetchData" href="#"><i class="fa fa-refresh fa-fw"></i> Обновить</a>
                           </li>
@@ -250,49 +250,17 @@
 
                   <table class="table table-hover">
                     <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Действие</th>
-                        <th>Обновлено</th>
-                        <th>Судно</th>
+                      <tr>                        
                         <th>Рейс</th>
+                        <th>Судно</th>                        
                         <th>ETA</th>
-                        <th>Шаблон</th>
-                        <th>Статус</th>
                       </tr>
                     </thead>
                     <tbody id="app-voyages" v-cloak>
                       <tr class="datarow" v-for="item in items" v-on:dblclick="open(item.url)">
-                        <th scope="row"><a :href="item.url"><% item.id %></a></th>
-
-                        <td>
-                          <div class="dropdown">
-
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-                              <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-usermenu">
-                              <li>
-                                <a v-on:click="refresh(item.id)" href="#">
-                                  <i class="fa fa-spinner fa-fw"></i> Обновить
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </td>
-
-                        <td :title="item.user">
-                          <% item.updated %>
-                        </td>
-                        <td><% item.vessel %></td>
-                        <td><% item.voyage %></td>
+                        <th scope="row"><strong><a :href="item.url"><% item.voyage %></a></strong></th>                       
+                        <td><% item.vessel %></td>                        
                         <td><% item.eta %></td>
-                        <td><% item.filename %></td>
-                        <td :id="item.status_id" :class="item.status_class">
-                          <div v-html="item.load_image"></div>
-                          <% item.status %>
-                        </td>
                       </tr>                    
                     </tbody>
                   </table>

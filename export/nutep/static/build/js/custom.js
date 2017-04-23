@@ -5315,13 +5315,6 @@ myApp = myApp || (function () {
 })();
 
 
-/*
-$(function() {
-
-});
-*/
-
-
 $(function() {
 	$('#uploadtemplate').on('click', function (e) {
 		e.preventDefault();
@@ -5406,6 +5399,9 @@ $(function() {
 		delimiters: ["<%", "%>"],
 
 		methods: {
+			open: function (url) {
+				window.location.href = url;
+			},
 			fetchData: function () {
 				var xhr = new XMLHttpRequest()
 				var self = this;
@@ -5417,8 +5413,16 @@ $(function() {
 			},
 		},
 	});
-	
-	
+	 
+	var appVoygeSettings = new Vue({
+		el: '#app-voyage-settings',		
+		methods: {
+			fetchData: function () {
+				appVoyages.fetchData();
+			},
+		},		
+	});
+
 	var appSettings = new Vue({
 		el: '#app-settings',
 		data: {
@@ -5429,7 +5433,7 @@ $(function() {
 		methods: {
 			fetchData: function () {
 				appTemplates.fetchData();
-			},
+			},			
 			setItemLoading: function () {
 				 $(this.$el).find('.loading').fadeIn();				 
 				 this.error = "";
@@ -5464,7 +5468,23 @@ $(function() {
 		
 });
 
+$(document).ready(function () {
 
+    (function ($) {
+
+        $('#filter').keyup(function () {
+
+            var rex = new RegExp($(this).val(), 'i');
+            $('.searchable tr').hide();
+            $('.searchable tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+
+        })
+
+    }(jQuery));
+
+});
 
 
 

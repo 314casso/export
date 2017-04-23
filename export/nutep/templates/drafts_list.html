@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                         </div>
-                    </dd>
+                    </dd>                    
                 </dl>
             </div>
         </div>
@@ -62,6 +62,10 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content table-responsive">                
+                    <div class="input-group"> <span class="input-group-addon">Поиск</span>
+                        <input id="filter" type="text" class="form-control" placeholder="Введите фразу для поиска...">
+                    </div>
+
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -82,7 +86,7 @@
                                 <th>Автор</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="searchable">
                             {% for draft in object_list %}
                             <tr class="datarow" id="draft-details-{{ template.id }}" data-link="{% url 'draft-details' draft.id %}">
                                 <th scope="row"><a href="{% url 'draft-details' draft.id %}">
@@ -97,13 +101,15 @@
                                 <td>{% if draft.finstatus %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>
                                 <td>{% if draft.status %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>
                                 <td>{% if draft.poruchenie %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>
-                                <td>{{ draft.poruchenieNums|default_if_none:"" }}
+                                <td>
                                     {% for mission in draft.missions.all %}                                     
                                         {% for file in mission.files.all %}                                    
-                                            <a title="{{ file.title }}" class="btn btn-link" href="{{ file.file.url }}">{{ mission }}</a>
+                                            <a title="{{ file.title }}" class="btn-link" href="{{ file.file.url }}">{{ mission }}</a>
 										{% empty %}
 											{{ mission }}
                                         {% endfor %}    
+                                    {% empty %}
+                                        {{ draft.poruchenieNums|default_if_none:"" }}
                                     {% endfor %}
                                 </td>
                                 <td>{{ draft.shipper }}</td>

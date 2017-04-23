@@ -4,7 +4,7 @@
 
 	<div class="page-title">
 		<div class="title_left">
-			<h3>Заявка <small>{{ template.pk }}</small></h3>
+			<h3>Шаблон <small>{{ template.pk }}</small></h3>
 		</div>
 	</div>
 
@@ -15,12 +15,14 @@
 			<div class="x_panel">
 
 				<dl class="dl-horizontal">
+					<dt>Заявка</dt>
+					<dd><strong>{{ template.order.id }}</strong></dd>
 					<dt>Обновлено</dt>
 					<dd>{{ template.last_event.date|date:"d.m.Y H:i" }} ({{ template.last_event.user }})</dd>
 					<dt>Судно</dt>
 					<dd>{{ template.voyage.vessel }}</dd>
 					<dt>Рейс</dt>
-					<dd>{{ template.voyage }}</dd>
+					<dd><a class="btn-link" href="{% url 'drafts' template.voyage.pk %}">{{ template.voyage }}</a></dd>
 					<dt>Статус</dt>
 					<dd>{{ template.get_status_display }}</dd>
 					<dt>Договор</dt>
