@@ -245,7 +245,7 @@ class Draft(models.Model):
         return u'{0}'.format(self.name)
     
     def active_template(self):
-        return self.order.templates.first()
+        return self.order.active_template()
 
     def contract(self):
         return self.order.contract
@@ -320,15 +320,17 @@ class Order(PrivateModel):
         verbose_name = force_unicode('Заявка')
         verbose_name_plural = force_unicode('Заявки')
     
+    def active_template(self):
+        return self.templates.first()
+
     def as_dict(self):        
         return {
             "id": self.id,           
             "vessel": force_text(self.voyage.vessel),
             "voyage": force_text(self.voyage),
-            "eta": date_format(timezone.localtime(self.voyage.eta), "d.m.Y"),  
-            "url": reverse('drafts', kwargs={'voyage': self.voyage.pk}),                                
+            "eta": date_format(timezone.localtime(self.voyage.eta), "d.m.Y") if self.voyage.eta else '',  
+            "url": reverse('drafts', kwargs={'order': self.pk}),                                
         } 
-        
 
 
     def drafts_done(self):        
@@ -427,7 +429,7 @@ class UploadedTemplate(PrivateModel):
             "status_id": "%s-status" % self.id,
             "refreshing": self.status == self.REFRESH,            
             "orderid": self.order.id,
-            "voyage_url": reverse('drafts', kwargs={'voyage': self.voyage.pk}),
+            "drafts_url": reverse('drafts', kwargs={'order': self.order.pk}),
         }
 
     class Meta:

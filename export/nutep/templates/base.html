@@ -69,17 +69,18 @@
                   </li>                  
                   
                   <li><a><i class="fa fa-ship"></i> Рейсы <span class="fa fa-chevron-down"></span></a>
+
                     <ul class="nav child_menu">
-                    	{% for vessel in vessels  %}
+                      {% regroup orders by voyage.vessel as vessel_list %}
+                    	{% for vessel in vessel_list  %}
                         
-                        <li><a> {{ vessel }}<span class="fa fa-chevron-down"></span></a>
+                        <li><a> {{ vessel.grouper }}<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
-                          	{% for voyage in vessel.voyages.all  %}
-                              <li class="sub_menu"><a href="{% url 'drafts' voyage.pk %}"> {{ voyage }}</a></li>
+                          	{% for order in vessel.list  %}
+                              <li class="sub_menu"><a href="{% url 'drafts' order.pk %}"> {{ order.voyage }}</a></li>
                             {% endfor %}                            
                           </ul>
                         </li>
-                        
                         {% endfor %}
                         
                     </ul>
@@ -209,7 +210,7 @@
                           <% item.updated %>
                         </td>
                         <td><% item.vessel %></td>
-                        <td><a class="btn-link" :href="item.voyage_url"><% item.voyage %></a></td>
+                        <td><a class="btn-link" :href="item.drafts_url"><% item.voyage %></a></td>
                         <td><% item.eta %></td>
                         <td><% item.filename %></td>
                         <td :id="item.status_id" :class="item.status_class">

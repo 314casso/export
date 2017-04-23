@@ -30,6 +30,17 @@
                                 </div>
                             </div>
                         </div>
+                    </dd>
+                    <dt></dt>
+                    <dd id="app-settings">
+                        <a class="btn btn-primary" v-on:click="refresh({{ order.active_template.id }})" href="#">
+                            <i class="fa fa-spinner fa-pulse fa-lg fa-fw loading"></i> Обновить данные
+                        </a>
+
+                        <div id="error-message" class="alert alert-danger">
+                            <strong>Ошибка!</strong> <% error %>
+                        </div>
+                    
                     </dd>                    
                 </dl>
             </div>

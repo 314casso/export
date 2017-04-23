@@ -63,11 +63,13 @@ class BaseView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(BaseView, self).get_context_data(**kwargs)
-        vessel_list = Order.objects.for_user(self.request.user).values_list('voyage__vessel', flat=True).distinct()        
-        vessels = Vessel.objects.filter(id__in=set(vessel_list)).order_by('name')
+        orders = Order.objects.for_user(self.request.user).distinct()        
+        #vessel_list = Order.objects.for_user(self.request.user).values_list('voyage__vessel', flat=True).distinct()        
+        #vessels = Vessel.objects.filter(id__in=set(vessel_list)).order_by('name')
         context.update({
             'title': force_unicode('Рускон Онлайн'),
-            'vessels': vessels,
+        #    'vessels': vessels,
+            'orders': orders,
         })
         return context
 
@@ -138,10 +140,10 @@ class DraftListView(BaseView):
     template_name = 'drafts_list.html'
     def get_context_data(self, **kwargs):
         PER_PAGE = 10
-        voyage_id = kwargs.get('voyage')
-        voyage = Voyage.objects.get(pk=voyage_id)
-        draft_queryset = Draft.objects.filter(voyage=voyage)
-        total = len(draft_queryset)
+        order_id = kwargs.get('order')
+        order = Order.objects.get(pk=order_id)
+        draft_queryset = Draft.objects.filter(order=order)        
+        total = len(draft_queryset)        
         rediness = 0        
         if total:            
             rediness = int(len(draft_queryset.filter(poruchenie=True)) / total * 100)            
@@ -162,8 +164,9 @@ class DraftListView(BaseView):
             'page_obj': drafts,
             'is_paginated': drafts.has_other_pages(),
             'object_list': drafts.object_list,
-            'voyage': voyage,
+            'voyage': order.voyage,
             'rediness': rediness,
+            'order': order,
         })
         return context
 

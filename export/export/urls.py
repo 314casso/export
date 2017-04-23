@@ -30,7 +30,7 @@ urlpatterns += patterns('',
     url(r'^deletetemplate/(?P<pk>[0-9]+)$', TemplateDeleteView.as_view(), name='delete-template'),  
     url(r'^gettemplate/(?P<pk>[0-9]+)$', get_template_status, name='get-template'),
     url(r'^templatedetails/(?P<pk>[0-9]+)$', TemplateDetailView.as_view(), name='template-details'),
-    url(r'^drafts/(?P<voyage>[0-9]+)$', DraftListView.as_view(), name='drafts'),
+    url(r'^drafts/(?P<order>[0-9]+)$', DraftListView.as_view(), name='drafts'),
     url(r'^draftdetails/(?P<pk>[0-9]+)$', DraftDetailView.as_view(), name='draft-details'),
 )
 
