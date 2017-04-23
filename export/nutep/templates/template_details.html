@@ -94,7 +94,7 @@
 	<form enctype="multipart/form-data" action="{% url 'upload' %}" method="post">
 		{% csrf_token %} {{ template_form }}
 	</form>
-	{% if template.drafts.all %}
+	{% if template.order.drafts.all %}
 	<div class="row">
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
@@ -140,7 +140,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							{% for draft in template.drafts.all %}
+							{% for draft in template.order.drafts.all %}
 							<tr class="datarow" id="draft-details-{{ template.id }}" data-link="{% url 'draft-details' draft.id %}">
 								<th scope="row"><a href="{% url 'draft-details' draft.id %}">
 																							{{ draft.name }}
