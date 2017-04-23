@@ -320,19 +320,14 @@ class Order(PrivateModel):
         verbose_name = force_unicode('Заявка')
         verbose_name_plural = force_unicode('Заявки')
     
-    def as_dict(self):
-        last_event = self.last_event()
+    def as_dict(self):        
         result = {
             "id": self.id,           
             "vessel": force_text(self.voyage.vessel),
             "voyage": force_text(self.voyage),
             "eta": date_format(timezone.localtime(self.voyage.eta), "d.m.Y"),  
             "url": reverse('drafts', kwargs={'voyage': self.voyage.pk}),                                
-        } 
-        if last_event:
-            result["updated"] = date_format(timezone.localtime(last_event.date), "d.m.Y H:i")
-        return result
-
+        }        
 
     def drafts_done(self):        
         return self.drafts.filter(poruchenie=True)    
