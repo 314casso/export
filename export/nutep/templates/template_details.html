@@ -31,15 +31,15 @@
 					<dd><a class="btn-link" href="{{ template.attachment.url }}">{{ template.filename }}</a> {{ template.attachment.size|filesizeformat }}</dd>
 					<dt>Готовность</dt>
 					<dd>
-						<div class="row">
-							<div class="col-md-6 col-sm-6 col-xs-6">
-								<div class="progress">
-									<div class="progress-bar progress-bar-success" data-transitiongoal="{{ template.drafts_readiness }}" aria-valuenow="{{ template.drafts_readiness }}"
-									 style="width:'{{ template.drafts_readiness }}%'">{{ template.order.drafts_readiness }}%</div>
-								</div>
-							</div>
-						</div>
-					</dd>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-xs-6">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-success" data-transitiongoal="{{ rediness }}" aria-valuenow="{{ rediness }}"
+                                        style="width:'{{ rediness }}%'">{{ rediness }}%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </dd>
 					<dt></dt>
 					<dd id="app-settings">
 						

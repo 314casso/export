@@ -129,9 +129,16 @@ class TemplateDetailView(BaseView):
         pk = kwargs.get('pk')
         template = UploadedTemplate.objects.get(pk=pk)
         context = super(TemplateDetailView, self).get_context_data(**kwargs)
+        draft_queryset = Draft.objects.filter(order=template.order)
+        total = len(draft_queryset)
+        rediness = 0        
+        if total:            
+            rediness = int(len(draft_queryset.filter(poruchenie=True)) / total * 100)
+        
         context.update({
             'title': force_unicode('Рускон Онлайн'),
             'template': template,
+            'rediness': rediness,
         })
         return context
 
