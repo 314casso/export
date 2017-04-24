@@ -157,10 +157,12 @@
 								<td>{{ draft.poruchenieNums|default_if_none:"" }}
 									{% for mission in draft.missions.all %}                                     
                                         {% for file in mission.files.all %}                                    
-                                            <a title="{{ file.title }}" class="btn btn-link" href="{{ file.file.url }}">{{ mission }}</a>
+                                            <a title="{{ file.title }}" class="btn-link" href="{{ file.file.url }}">{{ mission }}</a>
 										{% empty %}
 											{{ mission }}
                                         {% endfor %}    
+                                    {% empty %}
+                                        {{ draft.poruchenieNums|default_if_none:"" }}
                                     {% endfor %}
 								</td>
 								<td>{{ draft.shipper }}</td>
