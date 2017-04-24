@@ -154,7 +154,7 @@
 								<td>{% if draft.finstatus %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>
 								<td>{% if draft.status %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>
 								<td>{% if draft.poruchenie %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>
-								<td>{{ draft.poruchenieNums|default_if_none:"" }}
+								<td>
 									{% for mission in draft.missions.all %}                                     
                                         {% for file in mission.files.all %}                                    
                                             <a title="{{ file.title }}" class="btn-link" href="{{ file.file.url }}">{{ mission }}</a>
