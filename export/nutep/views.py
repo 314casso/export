@@ -243,8 +243,8 @@ def upload_file(request):
                 return HttpResponse(u'Неверный формат шаблона: %s' % e.message, status=400)
             try:
                 ws = wb.active
-                vessel_name = ExcelHelper.get_value(ws, 'VESSEL', True).upper()
-                voyage_name = ExcelHelper.get_value(ws, 'VOYAGE', True).upper()
+                vessel_name = force_text(ExcelHelper.get_value(ws, 'VESSEL', True)).upper()
+                voyage_name = force_text(ExcelHelper.get_value(ws, 'VOYAGE', True)).upper()               
             except Exception as e:
                 return HttpResponse(u'Шаблон заполнен некорректно: %s' % e.message, status=400)
 
