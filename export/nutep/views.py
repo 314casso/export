@@ -63,7 +63,7 @@ class BaseView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(BaseView, self).get_context_data(**kwargs)
-        orders = Order.objects.for_user(self.request.user).distinct().order_by('voyage__vessel', 'contract__line')        
+        orders = Order.objects.for_user(self.request.user).distinct().order_by('voyage__vessel__name', 'contract__line__name')        
         #vessel_list = Order.objects.for_user(self.request.user).values_list('voyage__vessel', flat=True).distinct()        
         #vessels = Vessel.objects.filter(id__in=set(vessel_list)).order_by('name')
         context.update({
