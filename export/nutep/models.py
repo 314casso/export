@@ -325,7 +325,9 @@ class Order(PrivateModel):
 
     def as_dict(self):        
         return {
-            "id": self.id,           
+            "id": self.id,
+            "line": self.contract.line.name,
+            "contract": self.contract.name,           
             "vessel": force_text(self.voyage.vessel),
             "voyage": force_text(self.voyage),
             "eta": date_format(timezone.localtime(self.voyage.eta), "d.m.Y") if self.voyage.eta else '',  

@@ -6,7 +6,7 @@ from django.contrib.auth import views as auth_views
 from nutep.views import (DraftDetailView, DraftListView, ServiceView,
                          TemplateDeleteView, TemplateDetailView,
                          get_active_templates, get_template_status, landing,
-                         upload_file, get_last_voyages)
+                         upload_file, get_last_orders)
 
 admin.autodiscover()
 
@@ -44,7 +44,7 @@ urlpatterns += patterns('',
 
 urlpatterns += patterns('',
     url(r'^activetemplates/', get_active_templates, name="active-templates"),
-    url(r'^getlastvoyages/', get_last_voyages, name="get-last-voyages"),
+    url(r'^getlastorders/', get_last_orders, name="get-last-orders"),
 )
 
 if settings.DEBUG:

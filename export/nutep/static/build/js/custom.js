@@ -5391,7 +5391,7 @@ $(function() {
 	
 	
 	var appVoyages = new Vue({
-		el: '#app-voyages',
+		el: '#app-orders',
 		data: {
 			items: [
 			],			
@@ -5405,7 +5405,7 @@ $(function() {
 			fetchData: function () {
 				var xhr = new XMLHttpRequest()
 				var self = this;
-				xhr.open('GET', '/getlastvoyages/');
+				xhr.open('GET', '/getlastorders/');
 				xhr.onload = function () {
 					self.items = JSON.parse(xhr.responseText);	
 				}

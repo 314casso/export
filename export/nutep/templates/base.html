@@ -73,16 +73,14 @@
                     <ul class="nav child_menu">
                       {% regroup orders by voyage.vessel as vessel_list %}
                     	{% for vessel in vessel_list  %}
-                        
                         <li><a> {{ vessel.grouper }}<span class="fa fa-chevron-down"></span></a>
                           <ul class="nav child_menu">
                           	{% for order in vessel.list  %}
-                              <li class="sub_menu"><a href="{% url 'drafts' order.pk %}"> {{ order.voyage }}</a></li>
+                              <li class="sub_menu"><a href="{% url 'drafts' order.pk %}"> {{ order.voyage }} ({{ order.contract.line }})</a></li>
                             {% endfor %}                            
                           </ul>
                         </li>
                         {% endfor %}
-                        
                     </ul>
                   </li>
                   
@@ -231,7 +229,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Рейсы  <small>список быстрого доступа к последним десяти рейсам</small></h2>
+                    <h2>Заявки  <small>шаблоны группируются в заявки по договору и рейсу</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -252,17 +250,23 @@
 
                   <table class="table table-hover">
                     <thead>
-                      <tr>                        
+                      <tr>           
+                      	<th>Заявка</th>
+                      	<th>Линия</th>
+                      	<th>Договор</th>                      	             
                         <th>Рейс</th>
                         <th>Судно</th>                        
                         <th>ETA</th>
                       </tr>
                     </thead>
-                    <tbody id="app-voyages" v-cloak>
+                    <tbody id="app-orders" v-cloak>
                       <tr class="datarow" v-for="item in items" v-on:dblclick="open(item.url)">
-                        <th scope="row"><strong><a :href="item.url"><% item.voyage %></a></strong></th>                       
+                      	<th scope="row"><strong><a :href="item.url"><% item.id %></a></strong></th>
+                      	<td><% item.line %></td>
+                      	<td><% item.contract %></td>
+                        <td><a :href="item.url"><% item.voyage %></a></td>                       
                         <td><% item.vessel %></td>                        
-                        <td><% item.eta %></td>
+                        <td><% item.eta %></td>                        
                       </tr>                    
                     </tbody>
                   </table>

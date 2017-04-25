@@ -99,7 +99,7 @@
 		<div class="col-md-12 col-sm-12 col-xs-12">
 			<div class="x_panel">
 				<div class="x_title">
-					<h2>Коносаменты</h2>
+					<h2>Коносаменты<small> по заявке <strong>{{ template.order.id }}</strong></small></h2> 
 					<ul class="nav navbar-right panel_toolbox">
 						<li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
 						</li>
@@ -148,7 +148,7 @@
 								<td>{{ draft.date|date:"d.m.Y" }}</td>
 								<td>{{ draft.voyage }}</td>
 								<td>{{ draft.line }}</td>
-								<td>{{ draft.finalDestination }}</td>
+								<td>{{ draft.finalDestination|default_if_none:"" }}</td>
 								<td>{{ draft.POD }}</td>
 								<td>{{ draft.POL }}</td>
 								<td>{% if draft.finstatus %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>

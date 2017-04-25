@@ -4,7 +4,7 @@
 
     <div class="page-title">
         <div class="title_left">
-            <h3>Рейс <small>{{ voyage }}</small></h3>
+            <h3>Заявка <small>{{ order.id }}</small></h3>
         </div>
     </div>
 
@@ -19,7 +19,14 @@
                     <dt>Рейс</dt>
                     <dd>{{ voyage }}</dd>
                     <dt>ETA</dt>
-                    <dd>{{ voyage.eta|date:"d.m.Y" }}</dd>                    
+                    <dd>{{ voyage.eta|date:"d.m.Y" }}</dd>
+                    
+                    <dt>Линия</dt>
+                    <dd>{{ order.contract.line }}</dd>
+                    
+                    <dt>Договор</dt>
+                    <dd>{{ order.contract.name }}</dd>
+                                        
                     <dt>Готовность</dt>
                     <dd>
                         <div class="row">
@@ -106,7 +113,7 @@
                                 <td>{{ draft.date|date:"d.m.Y" }}</td>
                                 <td>{{ draft.voyage }}</td>
                                 <td>{{ draft.line }}</td>
-                                <td>{{ draft.finalDestination }}</td>
+                                <td>{{ draft.finalDestination|default_if_none:"" }}</td>
                                 <td>{{ draft.POD }}</td>
                                 <td>{{ draft.POL }}</td>
                                 <td>{% if draft.finstatus %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>

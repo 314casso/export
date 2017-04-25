@@ -63,7 +63,7 @@ class BaseView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(BaseView, self).get_context_data(**kwargs)
-        orders = Order.objects.for_user(self.request.user).distinct()        
+        orders = Order.objects.for_user(self.request.user).distinct().order_by('contract__line__name', 'voyage__vessel__name')        
         #vessel_list = Order.objects.for_user(self.request.user).values_list('voyage__vessel', flat=True).distinct()        
         #vessels = Vessel.objects.filter(id__in=set(vessel_list)).order_by('name')
         context.update({
@@ -117,7 +117,7 @@ def get_active_templates(request):
 
 
 @login_required
-def get_last_voyages(request):
+def get_last_orders(request):
     last_orders = Order.objects.for_user(request.user).all().distinct()[:10]
     return JsonResponse([order.as_dict() for order in last_orders], safe=False)
 
@@ -146,7 +146,7 @@ class TemplateDetailView(BaseView):
 class DraftListView(BaseView):
     template_name = 'drafts_list.html'
     def get_context_data(self, **kwargs):
-        PER_PAGE = 10
+        PER_PAGE = 100
         order_id = kwargs.get('order')
         order = Order.objects.get(pk=order_id)
         draft_queryset = Draft.objects.filter(order=order)        
