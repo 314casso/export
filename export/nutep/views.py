@@ -130,6 +130,7 @@ class TemplateDetailView(BaseView):
         template = UploadedTemplate.objects.get(pk=pk)
         context = super(TemplateDetailView, self).get_context_data(**kwargs)
         draft_queryset = Draft.objects.filter(order=template.order)
+        missions = Mission.objects.filter(draft__order=template.order).exclude(files__isnull=True)
         total = len(draft_queryset)
         rediness = 0        
         if total:            
@@ -139,6 +140,7 @@ class TemplateDetailView(BaseView):
             'title': force_unicode('Рускон Онлайн'),
             'template': template,
             'rediness': rediness,
+            'missions': missions,
         })
         return context
 
