@@ -10,6 +10,7 @@ from suds.client import Client
 
 from nutep.models import (BaseError, Container, Contract, Draft, File, Line,
                           Mission, Readiness, UploadedTemplate, Voyage, Order)
+from django.utils.encoding import force_text
 
 
 class BaseService(object):
@@ -210,6 +211,7 @@ class DraftService(BaseService):
                     file_store = File()
                     file_store.content_object = mission
                     file_store.title = filename
+                    file_store.note = u"%s" % xml_attachment.note if xml_attachment.note else None 
                     file_store.file.save(filename, ContentFile(base64.b64decode(xml_attachment.data)))        
 
     def parse_response(self, response, template):        

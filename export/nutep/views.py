@@ -23,7 +23,7 @@ from django_rq.decorators import job
 from export.local_settings import WEB_SERVISES
 from nutep.forms import TemplateForm
 from nutep.models import (BaseError, Contract, Draft, UploadedTemplate, Vessel,
-                          Voyage, Order)
+                          Voyage, Order, Mission)
 from nutep.services import DraftService, ExcelHelper
 import hashlib
 
@@ -149,7 +149,10 @@ class DraftListView(BaseView):
         PER_PAGE = 100
         order_id = kwargs.get('order')
         order = Order.objects.get(pk=order_id)
-        draft_queryset = Draft.objects.filter(order=order)        
+        draft_queryset = Draft.objects.filter(order=order)
+        
+        missions = Mission.objects.filter(draft__order=order).exclude(files__isnull=True)
+                
         total = len(draft_queryset)        
         rediness = 0        
         if total:            
@@ -174,6 +177,7 @@ class DraftListView(BaseView):
             'voyage': order.voyage,
             'rediness': rediness,
             'order': order,
+            'missions': missions,
         })
         return context
 

@@ -29,6 +29,7 @@ class File(models.Model):
     content_object = GenericForeignKey('content_type', 'object_id')
     title = models.CharField(blank=True, null=True, max_length=255)    
     file = models.FileField(upload_to=attachment_path, blank=True, null=True,)
+    note = models.CharField(blank=True, null=True, max_length=255)
         
     def __unicode__(self):
         return force_unicode(self.title) 
