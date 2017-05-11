@@ -314,7 +314,7 @@ class Order(PrivateModel):
     history = GenericRelation('HistoryMeta')    
 
     def __unicode__(self):
-        return u'{0} {1} {2}'.format(self.voyage, self.contract, self.contract.line) 
+        return u'{0} {1} {2}'.format(self.voyage, self.contract) 
     
     class Meta:
         unique_together = ('voyage', 'contract')
