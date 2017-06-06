@@ -298,7 +298,15 @@
     <!-- jQuery -->
     <script src="{{ STATIC_URL }}vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script src="{{ STATIC_URL }}vendors/bootstrap/dist/js/bootstrap.min.js"></script>    
+    <script src="{{ STATIC_URL }}vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    
+    <script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js"></script>
+
+    {{ template_form.media.js }}
+    
+    <!-- Custom Theme Scripts -->
+    <script src="{{ STATIC_URL }}build/js/custom.js?0.006"></script>
+        
     <!-- FastClick -->
     <script src="{{ STATIC_URL }}/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
@@ -314,13 +322,7 @@
     <script src="{{ STATIC_URL }}/vendors/bootbox/bootbox.min.js"></script>
     
     <!-- Datatables -->      
-    
-    <script src="https://unpkg.com/vue"></script>
-
-    {{ template_form.media.js }}
-    
-    <!-- Custom Theme Scripts -->
-    <script src="{{ STATIC_URL }}build/js/custom.js?0.006"></script>
+       
 	
   </body>
 </html>

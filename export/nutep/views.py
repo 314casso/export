@@ -66,6 +66,7 @@ class BaseView(TemplateView):
         orders = Order.objects.for_user(self.request.user).distinct().order_by('voyage__vessel__name', 'voyage__name', 'contract__line__name')        
         #vessel_list = Order.objects.for_user(self.request.user).values_list('voyage__vessel', flat=True).distinct()        
         #vessels = Vessel.objects.filter(id__in=set(vessel_list)).order_by('name')
+        temp = get_active_templates(self.request)
         context.update({
             'title': force_unicode('Рускон Онлайн'),
         #    'vessels': vessels,

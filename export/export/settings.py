@@ -24,7 +24,7 @@ from local_settings import * #@UnusedWildImport
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'export.ruscon.global']
-
+INTERNAL_IPS = ['localhost', '127.0.0.1', ]
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -98,12 +98,13 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'nutep.middleware.ThreadLocalMiddleware',
+    'nutep.middleware.ThreadLocalMiddleware',    
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -133,6 +134,7 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'django_select2',
     'django_rq',
+    'debug_toolbar',
 )
 
 RQ_QUEUES = {
