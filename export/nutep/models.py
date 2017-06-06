@@ -311,7 +311,9 @@ class Order(PrivateModel):
     voyage = models.ForeignKey(Voyage, blank=True, null=True, on_delete=models.PROTECT,
                                related_name="orders")
     contract = models.ForeignKey(Contract, blank=True, null=True, on_delete=models.PROTECT)
-    history = GenericRelation('HistoryMeta')    
+    history = GenericRelation('HistoryMeta')
+    
+    files = GenericRelation(File)    
 
     def __unicode__(self):
         return u'%s %s' % (self.voyage, self.contract) 

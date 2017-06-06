@@ -24,7 +24,7 @@ from export.local_settings import WEB_SERVISES
 from nutep.forms import TemplateForm
 from nutep.models import (BaseError, Contract, Draft, UploadedTemplate, Vessel,
                           Voyage, Order, Mission)
-from nutep.services import DraftService, ExcelHelper
+from nutep.services import DraftService, ExcelHelper, LoadingListService
 import hashlib
 
 logger = logging.getLogger('django.request')
@@ -63,13 +63,9 @@ class BaseView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(BaseView, self).get_context_data(**kwargs)
-        orders = Order.objects.for_user(self.request.user).distinct().order_by('voyage__vessel__name', 'voyage__name', 'contract__line__name')        
-        #vessel_list = Order.objects.for_user(self.request.user).values_list('voyage__vessel', flat=True).distinct()        
-        #vessels = Vessel.objects.filter(id__in=set(vessel_list)).order_by('name')
-        temp = get_active_templates(self.request)
+        orders = Order.objects.for_user(self.request.user).distinct().order_by('voyage__vessel__name', 'voyage__name', 'contract__line__name')       
         context.update({
             'title': force_unicode('Рускон Онлайн'),
-        #    'vessels': vessels,
             'orders': orders,
         })
         return context
@@ -107,6 +103,19 @@ class ServiceView(BaseView):
             'object_list': templates.object_list,
         })
         return context
+
+
+@require_http_methods(["POST"])
+@login_required
+def get_loading_list(request, pk):
+    if request.method == 'POST':
+        try:
+            ll_service = LoadingListService(WEB_SERVISES['draft'])            
+            response = ll_service.get_loading_list(pk, request.user)            
+            status = True if response else False                        
+            return HttpResponse(json.dumps({'status': status, 'url': response.file.url }), content_type="application/json")
+        except Exception as e:
+            return HttpResponse(force_text(e), status=400)
 
 
 @login_required

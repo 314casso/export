@@ -32,6 +32,25 @@ class BaseService(object):
         self._client = Client(self.url, headers=authenticationHeader, cache=NoCache(), timeout=500)        
                                      
 
+class LoadingListService(BaseService):
+    def get_loading_list(self, pk, user): 
+        template = UploadedTemplate.objects.get(pk=pk) # pylint: disable=E1101
+        template.user = user        
+        response = self._client.service.GetLL(template.order.pk, u'Общий')
+        
+        if hasattr(response, 'attachments') and response.attachments:
+            template.order.files.all().delete()
+            for xml_attachment in response.attachments.attachment:
+                filename = '%s.%s' %  (xml_attachment.name, xml_attachment.extension)
+                file_store = File()
+                file_store.content_object = template.order
+                file_store.title = filename
+                file_store.note = u"%s" % xml_attachment.note if xml_attachment.note else None 
+                file_store.file.save(filename, ContentFile(base64.b64decode(xml_attachment.data)))
+        if template.order.files:
+            return template.order.files.first()               
+
+
 class DraftService(BaseService):       
     def update_voyage(self, template, xml_voyage):
         vessel = self.get_value('Vessel', xml_voyage.vessel) 

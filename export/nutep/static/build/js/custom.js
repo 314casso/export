@@ -5463,6 +5463,28 @@ $(function() {
 		},
 	});
 	
+	$('#loadinglist').on('click', function (e) {
+		e.preventDefault();
+		$('#error-message').fadeOut();
+		var id = $(this).data("pk");
+		$.post(					
+				"/getloadinglist/" + id,
+				{
+					csrfmiddlewaretoken: getCookie('csrftoken'),
+				},
+				function (data) {
+					if (data.status == true) {
+						window.location.assign(data.url);						
+					}
+				}
+			)
+				.fail(function (response) {
+					appSettings.error = response.responseText;											
+					$('#error-message').fadeIn();					
+				});
+				
+	});
+	
 	appTemplates.fetchData();
 	appVoyages.fetchData();
 		
@@ -5485,6 +5507,7 @@ $(document).ready(function () {
     }(jQuery));
 
 });
+
 
 
 

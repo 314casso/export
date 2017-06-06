@@ -27,8 +27,12 @@
 					<dd>{{ template.get_status_display }}</dd>
 					<dt>Договор</dt>
 					<dd>{{ template.contract }}</dd>
-					<dt><i class="fa fa-paperclip" aria-hidden="true"></i>
-                     Сканы поручений</dt>
+					
+					<dt><i class="fa fa-file-excel-o" aria-hidden="true"></i> Loading List</dt>
+					<dd>
+						<a data-pk="{{ template.pk }}" id="loadinglist" title="Получть погрузочный лист в формате Microsoft Excel" class="btn-link" href="#">Сформировать</a>
+					</dd>					
+					<dt><i class="fa fa-paperclip" aria-hidden="true"></i> Сканы поручений</dt>
                     <dd>
                    	<ul class="list-inline"> 
                     {% for mission in missions %}                                     
