@@ -28,28 +28,8 @@
 					<dt>Договор</dt>
 					<dd>{{ template.contract }}</dd>
 					
-					<dt><i class="fa fa-file-excel-o" aria-hidden="true"></i> Loading List</dt>
-					<dd>
-						<a data-pk="{{ template.pk }}" id="loadinglist" title="Получть погрузочный лист в формате Microsoft Excel" class="btn-link" href="#">Сформировать</a>
-					</dd>					
-					<dt><i class="fa fa-paperclip" aria-hidden="true"></i> Сканы поручений</dt>
-                    <dd>
-                   	<ul class="list-inline"> 
-                    {% for mission in missions %}                                     
-                       {% for file in mission.files.all %}
-                       <li class="list-inline-item">
-                           <a title="{{ file.title }}" class="btn-link" href="{{ file.file.url }}">
-                           {% if file.note %}
-                           		{{ file.note }}
-                           {% else %}
-                           		{{ file.title }}
-                           {% endif %}                           
-                           </a>
-                        </li>						
-                        {% endfor %}   
-                    {% endfor %}
-                    </ul>    
-                    </dd>
+					{% include 'include/order_details.html' %}
+					
 					<dt>Файл шаблона</dt>
 					<dd><a class="btn-link" href="{{ template.attachment.url }}">{{ template.filename }}</a> {{ template.attachment.size|filesizeformat }}</dd>
 					<dt>Готовность</dt>

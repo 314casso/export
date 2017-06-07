@@ -41,10 +41,10 @@ class LoadingListService(BaseService):
         if hasattr(response, 'attachments') and response.attachments:
             template.order.files.all().delete()
             for xml_attachment in response.attachments.attachment:
-                filename = '%s.%s' %  (xml_attachment.name, xml_attachment.extension)
+                filename = u'%s.%s.%s' %  (template.order.voyage.vessel, template.order.voyage, xml_attachment.extension)
                 file_store = File()
                 file_store.content_object = template.order
-                file_store.title = filename
+                file_store.title = filename 
                 file_store.note = u"%s" % xml_attachment.note if xml_attachment.note else None 
                 file_store.file.save(filename, ContentFile(base64.b64decode(xml_attachment.data)))
         if template.order.files:
