@@ -28,7 +28,7 @@
 					<dt>Договор</dt>
 					<dd>{{ template.contract }}</dd>
 					
-					{% include 'include/order_details.html' %}
+					{% include 'inc/order_details.html' %}
 					
 					<dt>Файл шаблона</dt>
 					<dd><a class="btn-link" href="{{ template.attachment.url }}">{{ template.filename }}</a> {{ template.attachment.size|filesizeformat }}</dd>
