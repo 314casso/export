@@ -352,6 +352,11 @@ class Order(PrivateModel):
         return int(done / total * 100) 
     
 
+class UploadedTemplateManager(PrivateModelManager):
+    def get_queryset(self):        
+        return super(BaseModelManager, self).get_queryset().defer("xml_response")
+    
+
 class UploadedTemplate(PrivateModel):
     NEW = 1
     INPROCESS = 2
@@ -366,7 +371,8 @@ class UploadedTemplate(PrivateModel):
         (ERROR, force_unicode('Ошибка')),     
         (REFRESH, force_unicode('Обновление данных')),
     )
-        
+    
+    objects = UploadedTemplateManager()    
     attachment = models.FileField('Файл шаблона', upload_to=attachment_path) 
     status = models.IntegerField(choices=STATUS_CHOICES, default=NEW, db_index=True, blank=True)
     http_code = models.CharField('HTTP Код', max_length=50, null=True, blank=True)
