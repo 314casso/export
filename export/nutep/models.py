@@ -352,9 +352,9 @@ class Order(PrivateModel):
         return int(done / total * 100) 
     
 
-class UploadedTemplateManager(PrivateModelManager):
-    def get_queryset(self):        
-        return super(BaseModelManager, self).get_queryset().defer("xml_response")
+class UploadedTemplateManager(PrivateModelManager):    
+    def for_user(self, user):        
+        return super(UploadedTemplateManager, self).for_user(user).defer("xml_response")
     
 
 class UploadedTemplate(PrivateModel):
