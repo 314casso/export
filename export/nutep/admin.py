@@ -41,10 +41,13 @@ class TerminalAdmin(admin.ModelAdmin):
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
-
+    
+class TeamInline(admin.TabularInline):
+     model = Team.users.through 
+     extra = 1
 
 class UserProfileAdmin(UserAdmin):
-    inlines = [UserProfileInline, ]
+    inlines = [UserProfileInline, TeamInline]
 
 class TeamAdmin(admin.ModelAdmin):
     pass
