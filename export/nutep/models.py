@@ -262,9 +262,16 @@ class Mission(models.Model):
     guid = models.CharField(max_length=50)        
     draft = models.ForeignKey(Draft, related_name="missions", on_delete=models.CASCADE)
     files = GenericRelation(File)
-    
+        
     def __unicode__(self):
-        return u'{0}'.format(self.name) 
+        return u'{0}'.format(self.name)
+    
+    def pdf_files(self):
+        return self.files.filter(title__iendswith='pdf')
+    
+    def xlsx_files(self):
+        return self.files.filter(title__iendswith='xlsx')
+    
     class Meta:
         verbose_name = force_unicode('Поручение')
         verbose_name_plural = force_unicode('Поручения')
@@ -295,7 +302,7 @@ class Container(models.Model):
 
 class Readiness(models.Model):
     size = models.CharField(max_length=2, db_index=True)
-    type = models.CharField(max_length=3, db_index=True)
+    type = models.CharField(max_length=4, db_index=True)
     ordered = models.PositiveIntegerField(null=True, blank=True)
     done = models.PositiveIntegerField(null=True, blank=True)
     draft = models.ForeignKey(Draft, related_name="readiness", on_delete=models.CASCADE)

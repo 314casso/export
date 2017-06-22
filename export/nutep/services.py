@@ -30,7 +30,23 @@ class BaseService(object):
             "Authorization" : "Basic %s" % base64string
         } 
         self._client = Client(self.url, headers=authenticationHeader, cache=NoCache(), timeout=500)        
-                                     
+
+
+class MissionService(BaseService):
+    def get_mission_xlsx(self, pk, user): 
+        mission = Mission.objects.get(pk=pk) # pylint: disable=E1101                
+        response = self._client.service.GetMission(mission.guid)
+         
+        if hasattr(response, 'attachments') and response.attachments:
+            mission.xlsx_files.delete()
+            for xml_attachment in response.attachments.attachment:
+                filename = u'%s.%s' %  (mission, xml_attachment.extension)
+                file_store = File()
+                file_store.content_object = mission
+                file_store.title = filename 
+                file_store.note = u"%s" % xml_attachment.note if xml_attachment.note else None 
+                file_store.file.save(filename, ContentFile(base64.b64decode(xml_attachment.data)))
+    
 
 class LoadingListService(BaseService):
     def get_loading_list(self, pk, user): 

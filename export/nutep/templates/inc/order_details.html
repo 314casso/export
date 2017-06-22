@@ -6,7 +6,7 @@
 <dd>
 	<ul class="list-inline"> 
 	{% for mission in missions %}                                     
-	   {% for file in mission.files.all %}
+	   {% for file in mission.pdf_files %}
 	   <li class="list-inline-item">
 	       <a title="{{ file.title }}" class="btn-link" href="{{ file.file.url }}">
 	       {% if file.note %}
