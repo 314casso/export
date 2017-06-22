@@ -282,7 +282,7 @@ class Container(models.Model):
     name = models.CharField(max_length=12, db_index=True)
     SOC = models.BooleanField(default=False)
     size = models.CharField(max_length=2, db_index=True)
-    type = models.CharField(max_length=3, db_index=True)
+    type = models.CharField(max_length=4, db_index=True)
     line = models.ForeignKey(Line, null=True, blank=True)
     seal = models.CharField(max_length=150, null=True, blank=True)
     cargo = models.CharField(max_length=255, null=True, blank=True)
