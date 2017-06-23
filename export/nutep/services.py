@@ -35,10 +35,10 @@ class BaseService(object):
 class MissionService(BaseService):
     def get_mission_xlsx(self, pk, user): 
         mission = Mission.objects.get(pk=pk) # pylint: disable=E1101                
-        response = self._client.service.GetMission(mission.guid)
+        response = self._client.service.GetMissionXlsx(mission.guid)
          
         if hasattr(response, 'attachments') and response.attachments:
-            mission.xlsx_files.delete()
+            mission.xlsx_files().delete()
             for xml_attachment in response.attachments.attachment:
                 filename = u'%s.%s' %  (mission, xml_attachment.extension)
                 file_store = File()
@@ -46,6 +46,7 @@ class MissionService(BaseService):
                 file_store.title = filename 
                 file_store.note = u"%s" % xml_attachment.note if xml_attachment.note else None 
                 file_store.file.save(filename, ContentFile(base64.b64decode(xml_attachment.data)))
+                return file_store
     
 
 class LoadingListService(BaseService):

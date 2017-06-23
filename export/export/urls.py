@@ -6,7 +6,8 @@ from django.contrib.auth import views as auth_views
 from nutep.views import (DraftDetailView, DraftListView, ServiceView,
                          TemplateDeleteView, TemplateDetailView,
                          get_active_templates, get_template_status, landing,
-                         upload_file, get_last_orders, get_loading_list)
+                         upload_file, get_last_orders, get_loading_list,
+    get_mission_xlsx)
 
 admin.autodiscover()
 
@@ -46,6 +47,7 @@ urlpatterns += patterns('',
     url(r'^activetemplates/', get_active_templates, name="active-templates"),
     url(r'^getlastorders/', get_last_orders, name="get-last-orders"),
     url(r'^getloadinglist/(?P<pk>[0-9]+)$', get_loading_list, name="get-loading-list"),
+    url(r'^getmissionxlsx/(?P<pk>[0-9]+)$', get_mission_xlsx, name="get-mission-xlsx"),
     
 )
 

@@ -1,6 +1,6 @@
 <dt><i class="fa fa-file-excel-o" aria-hidden="true"></i> Loading List</dt>
 <dd>
- <a data-pk="{{ template.pk }}" id="loadinglist" title="Получть погрузочный лист в формате Microsoft Excel" class="btn-link" href="#">Сформировать</a>
+ <a data-url="{% url 'get-loading-list' template.pk %}" id="loadinglist" title="Получть погрузочный лист в формате Microsoft Excel" class="btn-link" href="#">Сформировать</a>
 </dd>					
 <dt><i class="fa fa-paperclip" aria-hidden="true"></i> Сканы поручений</dt>
 <dd>

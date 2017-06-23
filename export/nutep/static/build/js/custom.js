@@ -5464,27 +5464,42 @@ $(function() {
 	});
 	
 	$('#loadinglist').on('click', function (e) {
-		e.preventDefault();
+		e.preventDefault();		
+		getfile($(this));				
+	});
+	
+	$('.mission-xlsx').on('click', function (e) {
+		e.preventDefault();		
+		getfile($(this));				
+	});
+	
+	function getfile(self){
 		$('#error-message').fadeOut();
-		var id = $(this).data("pk");
+					
+		var url = self.data("url");
+		var saved = self.html();
+		
+		self.html("<div class='cssload-jumping'><span></span><span></span><span></span><span></span><span></span></div>");
+		
 		$.post(					
-				"/getloadinglist/" + id,
+				url,
 				{
 					csrfmiddlewaretoken: getCookie('csrftoken'),
 				},
 				function (data) {
-					if (data.status == true) {
+					self.html(saved);
+					if (data.status == true) {						
 						window.location.assign(data.url);						
 					}
 				}
 			)
 				.fail(function (response) {
+					self.html(saved);
 					appSettings.error = response.responseText;											
 					$('#error-message').fadeIn();					
 				});
-				
-	});
-	
+	}
+		
 	appTemplates.fetchData();
 	appVoyages.fetchData();
 		

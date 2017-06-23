@@ -24,7 +24,8 @@ from export.local_settings import WEB_SERVISES
 from nutep.forms import TemplateForm
 from nutep.models import (BaseError, Contract, Draft, UploadedTemplate, Vessel,
                           Voyage, Order, Mission)
-from nutep.services import DraftService, ExcelHelper, LoadingListService
+from nutep.services import DraftService, ExcelHelper, LoadingListService,\
+    MissionService
 import hashlib
 
 logger = logging.getLogger('django.request')
@@ -116,6 +117,19 @@ def get_loading_list(request, pk):
             return HttpResponse(json.dumps({'status': status, 'url': response.file.url }), content_type="application/json")
         except Exception as e:
             return HttpResponse(force_text(e), status=400)
+        
+        
+@require_http_methods(["POST"])
+@login_required
+def get_mission_xlsx(request, pk):
+    if request.method == 'POST':
+        try:
+            mission_service = MissionService(WEB_SERVISES['draft'])            
+            response = mission_service.get_mission_xlsx(pk, request.user)            
+            status = True if response else False                        
+            return HttpResponse(json.dumps({'status': status, 'url': response.file.url }), content_type="application/json")
+        except Exception as e:
+            return HttpResponse(force_text(e), status=400)        
 
 
 @login_required
