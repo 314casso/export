@@ -213,6 +213,8 @@ class DraftService(BaseService):
     def parse_container(self, xml_draft, draft):        
         fields = ['name', 'SOC', 'size', 'type', 'seal', 'cargo',
                           'netto', 'gross', 'tare', 'package', 'quantity']
+        if not xml_draft.containers.container:
+            return
         for xml_container in xml_draft.containers.container:
             container = Container()
             for field in fields:
@@ -224,6 +226,8 @@ class DraftService(BaseService):
 
     def parse_readiness(self, xml_draft, draft):
         fields = ['size', 'type', 'ordered', 'done', ]
+        if not xml_draft.readiness.row:
+            return
         for xml_readiness in xml_draft.readiness.row:
             readiness = Readiness()
             for field in fields:                    
