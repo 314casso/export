@@ -16,7 +16,7 @@ class UploadedTemplateAdmin(admin.ModelAdmin):
 
 
 class VoyageAdmin(admin.ModelAdmin):
-    list_display = ('name', )
+    list_display = ('name', 'guid')
 
 
 class ContractAdmin(admin.ModelAdmin):
@@ -43,8 +43,8 @@ class UserProfileInline(admin.StackedInline):
     model = UserProfile
     
 class TeamInline(admin.TabularInline):
-     model = Team.users.through 
-     extra = 1
+    model = Team.users.through  # @UndefinedVariable
+    extra = 1
 
 class UserProfileAdmin(UserAdmin):
     inlines = [UserProfileInline, TeamInline]
