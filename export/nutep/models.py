@@ -91,7 +91,7 @@ class PrivateModel(ProcessDeletedModel):
 
 class BaseModel(ProcessDeletedModel):
     name = models.CharField('Наименование', max_length=150, db_index=True)
-    guid = models.CharField(max_length=50, null=True, db_index=True)
+    guid = models.CharField(max_length=50, null=True, db_index=True, unique=True)
     def __unicode__(self):
         return u'{0}'.format(self.name) 
     class Meta:
@@ -153,10 +153,10 @@ class Voyage(BaseModel):
     eta = models.DateTimeField(null=True, blank=True)
     history = GenericRelation('HistoryMeta')    
       
-
     class Meta:
         verbose_name = force_unicode('Рейс')
-        verbose_name_plural = force_unicode('Рейсы')    
+        verbose_name_plural = force_unicode('Рейсы')
+        unique_together = ('vessel', 'name')    
 
     def as_dict(self):
         return {
