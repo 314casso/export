@@ -59,7 +59,8 @@ class MissionAdmin(admin.ModelAdmin):
     pass
 
 class OrderAdmin(admin.ModelAdmin):
-    pass  
+    def get_queryset(self, request):
+        return Order.all_objects.all()  # pylint: disable=E1101  
 
 
 admin.site.register(User, UserProfileAdmin)
