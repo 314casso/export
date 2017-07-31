@@ -11,7 +11,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.encoding import force_text, force_unicode
 from django.utils.formats import date_format
-from django.utils.text import slugify
+from uuslug import slugify
 
 
 def attachment_path(instance, filename):    
