@@ -11,6 +11,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.encoding import force_text, force_unicode
 from django.utils.formats import date_format
+from django.utils.text import slugify
 
 
 def attachment_path(instance, filename):    
@@ -19,10 +20,8 @@ def attachment_path(instance, filename):
     path = u'attachments/%s_%s' % (datetime.date.today().month, datetime.date.today().year,)
     att_path = os.path.join(settings.MEDIA_ROOT, path)
     if not os.path.exists(att_path):
-        os.makedirs(att_path, 0777)
-    return u'%s/%s' % (path, filename)
-#     return os.path.join(path, force_text(filename))
-
+        os.makedirs(att_path, 0777)    
+    return os.path.join(path, slugify(filename))
 
 
 class File(models.Model):
