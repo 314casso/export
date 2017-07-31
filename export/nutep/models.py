@@ -21,7 +21,7 @@ def attachment_path(instance, filename):
     att_path = os.path.join(settings.MEDIA_ROOT, path)
     if not os.path.exists(att_path):
         os.makedirs(att_path, 0777)    
-    return os.path.join(path, slugify(filename))
+    return os.path.join(path, slugify(filename, separator="."))
 
 
 class File(models.Model):
