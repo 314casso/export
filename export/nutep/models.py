@@ -263,6 +263,9 @@ class Mission(models.Model):
     guid = models.CharField(max_length=50)        
     draft = models.ForeignKey(Draft, related_name="missions", on_delete=models.CASCADE)
     files = GenericRelation(File)
+    reception_date = models.DateTimeField(blank=True, null=True)
+    issue_date = models.DateTimeField(blank=True, null=True)
+    
         
     def __unicode__(self):
         return u'{0}'.format(self.name)

@@ -238,11 +238,12 @@ class DraftService(BaseService):
     def parse_missions(self, xml_draft, draft): 
         if not xml_draft.missions:
             return
-        fields = ['name', 'guid']                
+        fields = ['name', 'guid', 'reception_date', 'issue_date']                
         for xml_mission in xml_draft.missions.mission:
             mission = Mission()
-            for field in fields:                    
-                setattr(mission, field, xml_mission[field])                                            
+            for field in fields: 
+                if hasattr(xml_mission, field):                                        
+                    setattr(mission, field, xml_mission[field])                                            
             mission.draft = draft
             mission.save()
             if hasattr(xml_mission, 'attachments') and xml_mission.attachments:

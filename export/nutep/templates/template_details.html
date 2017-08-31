@@ -159,7 +159,9 @@
 								<td>{% if draft.poruchenie %}<i class="fa fa-check" aria-hidden="true"></i>{% endif %}</td>
 								<td>
 									{% for mission in draft.missions.all %}                                    
-										<a data-url="{% url 'get-mission-xlsx' mission.pk %}" title="Скачать поручение в формате Microsoft Excel" class="btn-link mission-xlsx" href="#">{{ mission }}</a>
+										<a data-url="{% url 'get-mission-xlsx' mission.pk %}" class="btn-link mission-xlsx" href="#">
+										<span title="Скачать поручение в формате Microsoft Excel&#013;Дата подачи документов: {{ mission.reception_date|default_if_none:'не указана' }}&#013;Дата оформления документов: {{ mission.issue_date|default_if_none:'не указана' }}">{{ mission }}</span>
+										</a>
                                     {% empty %}
                                         {{ draft.poruchenieNums|default_if_none:"" }}
                                     {% endfor %}
