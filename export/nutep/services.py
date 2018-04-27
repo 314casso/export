@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
 from suds.cache import NoCache
 from suds.client import Client
+from suds.transport.http import HttpAuthenticated
 
 from nutep.models import (BaseError, Container, Contract, Draft, File, Line,
                           Mission, Readiness, UploadedTemplate, Voyage, Order)
@@ -23,13 +24,8 @@ class BaseService(object):
     def set_client(self, settings):
         for key in settings.iterkeys():             
             setattr(self, key, settings.get(key))   
-        base64string = base64.encodestring(
-            '%s:%s' % (self.username, self.password)).replace('\n', '')
-        authenticationHeader = {
-            "SOAPAction" : "ActionName",
-            "Authorization" : "Basic %s" % base64string
-        } 
-        self._client = Client(self.url, headers=authenticationHeader, cache=NoCache(), timeout=500)        
+        t = HttpAuthenticated(username=self.username, password=self.password)        
+        self._client = Client(self.url, transport=t, cache=NoCache(), timeout=500)        
 
 
 class MissionService(BaseService):
