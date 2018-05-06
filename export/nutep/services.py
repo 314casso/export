@@ -11,6 +11,7 @@ from suds.client import Client
 from nutep.models import (BaseError, Container, Contract, Draft, File, Line,
                           Mission, Readiness, UploadedTemplate, Voyage, Order)
 from django.utils.encoding import force_text
+from suds.transport.https import HttpAuthenticated
 
 
 class BaseService(object):
@@ -29,7 +30,8 @@ class BaseService(object):
             "SOAPAction" : "ActionName",
             "Authorization" : "Basic %s" % base64string
         } 
-        self._client = Client(self.url, headers=authenticationHeader, cache=NoCache(), timeout=500)        
+        t = HttpAuthenticated(username=self.username, password=self.password)
+        self._client = Client(self.url, headers=authenticationHeader, transport=t, cache=NoCache(), timeout=500)
 
 
 class MissionService(BaseService):
