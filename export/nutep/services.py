@@ -301,9 +301,14 @@ class ExcelHelper(object):
     def get_cell_value(ws, cell):
         rng = "%s%s:%s%s" % (cell.column, int(cell.row) + 1,
                              cell.column, int(cell.row) + 1)
-        result = set() 
-        for row in ws.iter_rows(rng):
-            result.add(row[0].value)            
+        
+	result = set() 
+	try:
+            for row in ws.iter_rows(int(cell.row) + 1,int(cell.row) + 1,cell.column,cell.column):
+                result.add(row[0].value)
+	except Exception as e:
+	    raise TemplateException(u'Ошибка %s' % e.message)
+            
         if len(result) == 1:
             return result.pop()
         elif len(result) == 0:

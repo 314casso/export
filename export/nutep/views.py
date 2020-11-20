@@ -273,8 +273,8 @@ def upload_file(request):
                 return HttpResponse(u'Неверный формат шаблона: %s' % e.message, status=400)
             try:
                 ws = wb.active
-                vessel_name = force_text(ExcelHelper.get_value(ws, 'VESSEL', True)).upper()
-                voyage_name = force_text(ExcelHelper.get_value(ws, 'VOYAGE', True)).upper()               
+                vessel_name = ExcelHelper.get_value(ws, 'VESSEL', True).upper()
+                voyage_name = ExcelHelper.get_value(ws, 'VOYAGE', True).upper()               
             except Exception as e:
                 return HttpResponse(u'Шаблон заполнен некорректно: %s' % e.message, status=400)
 
@@ -313,7 +313,7 @@ def upload_file(request):
             template.save()
             template.services = contract.line.services.values_list('id', flat=True)
             upload_template.delay(template, request.user)
-#             upload_template(template, request.user)
+#            upload_template(template, request.user)
             return HttpResponseRedirect(reverse('services'))
         return HttpResponse(u'Неверный формат шаблона: %s' %
                             u''.join([u'%s: %s' % (key, val) for key,
